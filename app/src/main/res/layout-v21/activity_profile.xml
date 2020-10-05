@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="60dp"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     tools:context=".profileActivity">
@@ -11,25 +13,26 @@
         android:id="@+id/profile_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        custom:title="Profile"/>
+        custom:title="Profile"
+        custom:backable="false"
+
+        />
 
 
     <ScrollView
         android:layout_height="wrap_content"
-        android:layout_width="350dp"
-        android:layout_marginHorizontal="30dp"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="10dp"
         android:background="@drawable/rectangle_round"
-        android:layout_above="@+id/profile_nav"
         android:layout_below="@+id/profile_title"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
         android:layout_centerVertical="true"
-        android:elevation="15dp">
+        >
         <LinearLayout
             android:layout_height="match_parent"
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
 
             >
             <androidx.cardview.widget.CardView
@@ -106,11 +109,4 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <com.example.joinme.reusableComponent.NavBar
-        android:id="@+id/profile_nav"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
 </RelativeLayout>

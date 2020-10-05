@@ -4,7 +4,6 @@
     android:background="@drawable/rectangle_botround"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:elevation="15dp"
     >
     <ImageButton
         android:id="@+id/backBtn"

@@ -9,14 +9,14 @@
     android:background="@color/colorPrimary"
     tools:context=".MainActivity">
 
-
-    <TextView
+    <FrameLayout
+        android:id="@+id/main_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="Hello World!"
-        android:background="@color/colorPrimary"/>
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
     <com.example.joinme.reusableComponent.NavBar
+        android:id="@+id/navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>

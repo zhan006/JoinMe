@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if(actionbar != null) actionbar.hide();
         TitleBar titleBar = (TitleBar)findViewById(R.id.main_title);
+        NavBar nav = (NavBar) findViewById(R.id.navbar);
+        nav.setNavigationItemListener(getSupportFragmentManager());
+
+
 
 
     }

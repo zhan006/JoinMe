@@ -21,15 +21,19 @@ public class TitleBar extends LinearLayout {
         this.attrs = attrs;
         LayoutInflater.from(context).inflate(R.layout.titlebar,this);
         String newTitle = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto","title");
-        setTitle(newTitle);
+        String backable = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto","backable");
         ImageButton back = (ImageButton) this.findViewById(R.id.backBtn);
-        back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((Activity)getContext()).finish();
-            }
-        });
-
+        setTitle(newTitle);
+        if(backable.equals("false")){
+            back.setVisibility(INVISIBLE);
+        }else{
+            back.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((Activity)getContext()).finish();
+                }
+            });
+        }
     }
     public void setTitle(String title){
         TextView text = (TextView)findViewById(R.id.title);

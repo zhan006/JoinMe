@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/tab_home"
+        android:icon="@drawable/home_button"
+        android:title="home"
+        />
+    <item android:id="@+id/tab_account"
+        android:icon="@drawable/profile_button"
+        android:title="account"/>
+    <item android:id="@+id/tab_event"
+        android:icon="@drawable/event_button"
+        android:title="event"/>
+    <item android:id="@+id/tab_friend"
+        android:icon="@drawable/friend_button"
+        android:title="friend"/>
+</menu>

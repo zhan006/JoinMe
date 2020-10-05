@@ -15,7 +15,5 @@ public class profileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ActionBar actionbar = getSupportActionBar();
         if(actionbar != null) actionbar.hide();
-        NavBar nav = (NavBar) findViewById(R.id.profile_nav);
-        nav.setBtnSelected("profile",true);
     }
 }
