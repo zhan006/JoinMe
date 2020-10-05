@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/rectangle_botround"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:elevation="15dp"
+    >
+    <ImageButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/TitleBar_backBtn"
+        android:src="@drawable/baseline_arrow_back_ios_black_18dp">
+
+    </ImageButton>
+
+    <TextView
+        style="@style/TitleBar_title"
+        android:text="title"
+
+        >
+
+    </TextView>
+</RelativeLayout>

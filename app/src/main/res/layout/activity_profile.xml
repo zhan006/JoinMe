@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    tools:context=".profileActivity">
+    <com.example.joinme.reusableComponent.TitleBar
+        android:id="@+id/profile_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:title="Profile"/>
+
+
+    <ScrollView
+        android:layout_height="525dp"
+        android:layout_width="350dp"
+        android:layout_marginHorizontal="30dp"
+        android:background="@drawable/rectangle_round"
+        android:layout_marginTop="120dp"
+        android:elevation="15dp">
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="350dp"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="00dp"
+                android:background="#FFFFFF"
+                android:layout_gravity="center_horizontal"
+                android:elevation="5dp"
+                app:cardBackgroundColor="#FFFCFC"
+                app:cardCornerRadius="75dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:width="150dp"
+                android:background="@color/colorSecondary"
+                android:text="zipinggao"
+                android:scrollHorizontally="false"
+                android:textSize="40sp"/>
+            <RelativeLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                android:paddingHorizontal="20dp">
+                <Button
+                    android:id="@+id/follow"
+                    style="@style/normal_button"
+                    android:text="follow"/>
+                <Button
+                    style="@style/normal_button"
+                    android:layout_alignParentRight="true"
+                    android:text="add friend"/>
+                <Button
+                    style="@style/long_button"
+                    android:layout_alignParentBottom="true"
+                    android:text="Message"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="User Profile"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:text="Hi I am a student of University of Melbourne. I am a outcoming person."/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="Badges"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:text="This User have not badges, kskljf asdlkfj slkfjas dlkjxc zxcv"/>
+
+        </LinearLayout>
+    </ScrollView>>
+
+    <com.example.joinme.reusableComponent.NavBar
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
