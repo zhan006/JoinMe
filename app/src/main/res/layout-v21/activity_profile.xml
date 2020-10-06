@@ -8,7 +8,7 @@
     android:layout_marginBottom="60dp"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
-    tools:context=".profileActivity">
+    >
     <com.example.joinme.reusableComponent.TitleBar
         android:id="@+id/profile_title"
         android:layout_width="match_parent"
@@ -20,12 +20,13 @@
 
 
     <ScrollView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         android:layout_marginHorizontal="10dp"
         android:background="@drawable/rectangle_round"
         android:layout_below="@+id/profile_title"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_centerVertical="true"
         >
         <LinearLayout
@@ -51,62 +52,184 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:background="@color/colorSecondary"
+                android:textStyle="bold"
                 android:scrollHorizontally="false"
                 android:text="zipinggao"
-                android:textSize="40sp" />
+                android:textSize="30sp" />
             <RelativeLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
+                android:layout_height="wrap_content"
                 android:paddingHorizontal="20dp">
-                <Button
-                    android:id="@+id/follow"
-                    style="@style/normal_button"
-                    android:text="follow"/>
+
                 <Button
                     style="@style/normal_button"
-                    android:layout_alignParentRight="true"
-                    android:text="add friend"/>
-                <Button
-                    style="@style/long_button"
+                    android:id="@+id/edit_profile"
                     android:layout_alignParentBottom="true"
-                    android:text="Message"/>
+                    android:layout_centerHorizontal="true"
+                    android:text="Edit My profile"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/place_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/baseline_place_black_18dp"/>
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/place_icon"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="University Of Melbourne"
+                    style="@style/normal_text"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/friend_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/baseline_groups_black_18dp"/>
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/friend_icon"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Friends"
+                    style="@style/bold_text"/>
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/friend_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/default_icon"/>
+            </LinearLayout>
+            <Button
+                style="@style/label_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="See All Friends"/>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/star_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/baseline_stars_black_18dp"/>
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/star_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="About"
+                    style="@style/bold_text"/>
             </RelativeLayout>
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/aboutMe"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:text="User Profile"
-                android:textSize="20sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:textSize="20dp"
-                android:text="Hi I am a student of University of Melbourne. I am a outcoming person."/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:text="Badges"
-                android:textSize="20sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:textSize="20sp"
-                android:text="This User have not badges, kskljf asdlkfj slkfjas dlkjxc zxcv"/>
+                style="@style/normal_text"
+                android:paddingLeft="45dp"
+                android:paddingRight="25dp"
+                android:text="I am a food Lover"/>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Upcomming Event"
+                    style="@style/bold_text"/>
+            </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="45dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/album_text"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Albums"
+                    style="@style/bold_text"/>
+                <ImageButton
+                    android:id="@+id/addAlbum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorSecondary"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/album_text"
+                    android:src="@drawable/baseline_add_circle_outline_black_18dp"/>
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/albums"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/default_icon"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/archive_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/baseline_archive_black_18dp"/>
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/archive_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Check my past events"
+                    style="@style/bold_text"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

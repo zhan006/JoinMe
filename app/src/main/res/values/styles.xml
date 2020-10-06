@@ -32,9 +32,14 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
-    <style name="normal_button">
+    <style name="small_button">
         <item name="android:layout_width">125dp</item>
         <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/normal_button_background</item>
+    </style>
+    <style name="normal_button">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/normal_button_background</item>
     </style>
     <style name="long_button">
@@ -44,6 +49,17 @@
     </style>
     <style name="normal_text">
         <item name="android:textSize">20dp</item>
+    </style>
+    <style name="bold_text">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="label_button">
+        <item name="android:background">@color/grey</item>
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
 </resources>
