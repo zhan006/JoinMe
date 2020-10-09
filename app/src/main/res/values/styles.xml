@@ -6,6 +6,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="relativeFragment">
+        <item name = "android:layout_marginBottom">60dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
     <style name="TitleBar_backBtn">
         <item name="android:background">@color/colorSecondary</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -58,6 +62,13 @@
         <item name="android:background">@color/grey</item>
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">35dp</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="bright_button">
+        <item name="android:background">@drawable/bright_button_background</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">30dp</item>
         <item name="android:textSize">15dp</item>
         <item name="android:textStyle">normal</item>
     </style>
