@@ -16,32 +16,34 @@ import com.example.joinme.objects.Event;
 
 import java.util.List;
 
-public class EventAdapter extends RecyclerView.Adapter {
+public class ManageEventAdapter extends RecyclerView.Adapter {
     private List<Event> mEventList;
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView eventName,eventLocation,eventDatetime;
-        Button detail;
+        Button cancel,update;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = (TextView) itemView.findViewById(R.id.event_name);
             eventLocation = (TextView) itemView.findViewById(R.id.event_location);
             eventDatetime = (TextView) itemView.findViewById(R.id.event_datetime);
-            detail=(Button)itemView.findViewById(R.id.detail_button);
-            //for testing use, it should redirect to event details page
-            detail.setOnClickListener((v)->{
+            cancel=(Button)itemView.findViewById(R.id.cancel_button);
+            update=(Button)itemView.findViewById(R.id.update_button);
+
+            cancel.setOnClickListener((v)->{});
+            update.setOnClickListener((v)->{
                 ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
                         new HomePageFragment(),null).commit();
             });
         }
     }
 
-    public EventAdapter(List<Event> eventList){
+    public ManageEventAdapter(List<Event> eventList){
         mEventList=eventList;
     }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mng_event_item,parent,false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }

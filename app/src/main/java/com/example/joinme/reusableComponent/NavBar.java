@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.joinme.R;
+import com.example.joinme.fragments.EventManagementFragment;
 import com.example.joinme.fragments.HomePageFragment;
 import com.example.joinme.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,17 +31,22 @@ public class NavBar extends LinearLayout {
             switch (item.getItemId()) {
                 case R.id.tab_account:
                     selected = R.id.tab_account;
-                    ProfileFragment pro_frag = new ProfileFragment();
-                    manager.beginTransaction().replace(R.id.main_fragment_container,pro_frag).commit();
+                    ProfileFragment pro_frag = (ProfileFragment) manager.findFragmentByTag("account");
+                    if(pro_frag == null){pro_frag = new ProfileFragment();}
+                    manager.beginTransaction().replace(R.id.main_fragment_container,pro_frag,"account").addToBackStack(null).commit();
 
                     break;
                 case R.id.tab_home:
-                    HomePageFragment home_frag = new HomePageFragment();
-                    manager.beginTransaction().replace(R.id.main_fragment_container,home_frag).commit();
+                    HomePageFragment home_frag = (HomePageFragment) manager.findFragmentByTag("home");
+                    if(home_frag == null) home_frag = new HomePageFragment();
+                    manager.beginTransaction().replace(R.id.main_fragment_container,home_frag,"home").addToBackStack(null).commit();
                     selected = R.id.tab_home;
                     break;
                 case R.id.tab_event:
                     selected=R.id.tab_event;
+                    EventManagementFragment mng_event_frag = (EventManagementFragment) manager.findFragmentByTag("event");
+                    if(mng_event_frag==null) mng_event_frag = new EventManagementFragment();
+                    manager.beginTransaction().replace(R.id.main_fragment_container,mng_event_frag,"event").addToBackStack(null).commit();
                     break;
                 case R.id.tab_friend:
                     selected=R.id.tab_friend;
