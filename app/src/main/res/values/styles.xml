@@ -10,6 +10,10 @@
         <item name = "android:layout_marginBottom">60dp</item>
         <item name="android:background">@color/colorPrimary</item>
     </style>
+    <style name="icon">
+        <item name = "android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
     <style name="TitleBar_backBtn">
         <item name="android:background">@color/colorSecondary</item>
         <item name="android:layout_alignParentLeft">true</item>

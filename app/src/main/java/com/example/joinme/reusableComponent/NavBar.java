@@ -11,8 +11,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.joinme.R;
 import com.example.joinme.fragments.EventManagementFragment;
+import com.example.joinme.fragments.FriendFragment;
 import com.example.joinme.fragments.HomePageFragment;
 import com.example.joinme.fragments.ProfileFragment;
+import com.example.joinme.objects.Friend;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NavBar extends LinearLayout {
@@ -50,6 +52,9 @@ public class NavBar extends LinearLayout {
                     break;
                 case R.id.tab_friend:
                     selected=R.id.tab_friend;
+                    FriendFragment friend_frag = (FriendFragment) manager.findFragmentByTag("friend");
+                    if(friend_frag==null) friend_frag = new FriendFragment();
+                    manager.beginTransaction().replace(R.id.main_fragment_container,friend_frag,"friend").addToBackStack(null).commit();
                     break;
 
             }
