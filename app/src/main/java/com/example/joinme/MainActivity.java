@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         FragmentManager fm = getSupportFragmentManager();
         if(actionbar != null) actionbar.hide();
-        TitleBar titleBar = (TitleBar)findViewById(R.id.main_title);
         NavBar nav = (NavBar) findViewById(R.id.navbar);
         nav.setSelectedItem(R.id.tab_home);
 
