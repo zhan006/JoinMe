@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    style="@style/relativeFragment">
+    <com.example.joinme.reusableComponent.TitleBar
+        android:id="@+id/event_manage_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:backable="false"
+        custom:title="Manage Your Event"/>
+
+    <include layout="@layout/search_bar"
+        android:id="@+id/search_bar"
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/event_manage_title"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        style="@style/label_button"
+        android:id="@+id/see_invited"
+        android:layout_height="25dp"
+        android:layout_below="@id/search_bar"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="see all invited events"/>
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/see_invited">
+        <Button
+            android:id="@+id/organised_event"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            style="@style/small_button"
+            android:text="Organised EVENTs"/>
+        <Button
+            android:id="@+id/attending_event"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            style="@style/small_button"
+            android:text="attending events"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/event_mng_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:paddingHorizontal="15dp"
+        android:layout_below="@id/buttonPanel"/>
+</RelativeLayout>

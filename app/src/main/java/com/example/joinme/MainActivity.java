@@ -2,6 +2,7 @@ package com.example.joinme;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +19,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionbar = getSupportActionBar();
+        FragmentManager fm = getSupportFragmentManager();
         if(actionbar != null) actionbar.hide();
         TitleBar titleBar = (TitleBar)findViewById(R.id.main_title);
         NavBar nav = (NavBar) findViewById(R.id.navbar);
-        nav.setNavigationItemListener(getSupportFragmentManager());
-
+        nav.setSelectedItem(R.id.tab_home);
 
 
 
