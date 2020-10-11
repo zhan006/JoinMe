@@ -18,7 +18,8 @@
         android:id="@+id/title"
         style="@style/TitleBar_title"
         android:text="title"
-
+        android:textStyle="bold"
+        android:textColor="@color/black"
         >
 
     </TextView>
