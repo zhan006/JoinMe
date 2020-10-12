@@ -15,9 +15,15 @@
 
     <TextView
         style="@style/TitleBar_title"
-        android:text="title"
-
-        >
-
+        android:text="title">
     </TextView>
+
+    <ImageButton
+        android:id="@+id/add_people_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TitleBar_addPeopleBtn"
+        android:src="@drawable/add_people_icon"/>
+
+
 </RelativeLayout>
