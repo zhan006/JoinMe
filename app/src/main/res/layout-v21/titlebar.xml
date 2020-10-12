@@ -23,4 +23,10 @@
         >
 
     </TextView>
+
+    <ImageButton
+        android:id="@+id/icon_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TitleBar_icon" />
 </RelativeLayout>

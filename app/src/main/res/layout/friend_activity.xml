@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:title="Friends"
-        custom:backable="false"/>
+        custom:backable="false"
+        custom:icon="@drawable/add_people_icon"/>
     <include layout="@layout/search_bar"
         android:id="@+id/search_bar"
         android:layout_height="35dp"

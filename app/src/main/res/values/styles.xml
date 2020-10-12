@@ -31,7 +31,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TitleBar_addPeopleBtn">
+    <style name="TitleBar_icon">
         <item name="android:background">@color/colorSecondary</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">15dp</item>

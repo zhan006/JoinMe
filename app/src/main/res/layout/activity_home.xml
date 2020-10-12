@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:title="Home"
-        custom:backable="false"/>
+        custom:backable="false"
+        custom:icon="@drawable/setting_icon"/>
     <LinearLayout
         android:id="@+id/welcomebar"
         android:layout_below="@id/home_title"
