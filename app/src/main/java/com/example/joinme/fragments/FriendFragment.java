@@ -74,6 +74,5 @@ public class FriendFragment extends Fragment {
                 .replace(R.id.main_fragment_container, addFriendFragment, null)
                 .addToBackStack(null)
                 .commit();
-
     }
 }

@@ -20,9 +20,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/addFriend_search_condition"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_friend_search_bar"
         android:orientation="vertical">
@@ -36,9 +36,50 @@
                 android:layout_height="wrap_content"
                 android:text="Hobby"
                 style="@style/bold_text"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hobby_search_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp" />
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                style="@style/bold_text"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gender_search_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age"
+                style="@style/bold_text"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/age_search_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp" />
+        </LinearLayout>
+
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/add_friends_list"
         android:layout_below="@id/addFriend_search_condition"
