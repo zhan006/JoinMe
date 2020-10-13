@@ -7,16 +7,19 @@ public class User {
     public String lastName;
     public String profileImage;
     public String username;
+    public String about;
     public List<String> album;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String profileImage, String username, List<String> album) {
+    public User(String firstName, String lastName, String profileImage,
+                String username, String about, List<String> album) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.profileImage = profileImage;
         this.username = username;
+        this.about = about;
         this.album = album;
     }
 
@@ -50,6 +53,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public List<String> getAlbum() {
