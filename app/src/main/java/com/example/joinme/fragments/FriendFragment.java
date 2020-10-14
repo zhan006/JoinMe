@@ -47,6 +47,7 @@ public class FriendFragment extends Fragment {
         friends.setAdapter(new FriendAdapter(initFriend()));
         return v;
     }
+
     List<Friend> initFriend(){
         ArrayList<Friend> friendArrayList = new ArrayList<>();
         friendArrayList.add(new Friend("Abby",new Message("Yuema",new Time(23,33))));

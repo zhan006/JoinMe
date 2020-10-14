@@ -1,8 +1,9 @@
 package com.example.joinme.objects;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     public String firstName;
     public String lastName;
     public String profileImage;
