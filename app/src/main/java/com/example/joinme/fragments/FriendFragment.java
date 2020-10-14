@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +48,8 @@ public class FriendFragment extends Fragment {
         RecyclerView friends = v.findViewById(R.id.friends);
         friends.setLayoutManager(new LinearLayoutManager(getContext()));
         friends.setAdapter(new FriendAdapter(initFriend()));
+        ImageButton addFriendBtn = v.findViewById(R.id.icon_btn);
+        addFriendBtn.setOnClickListener(v1 -> addFriendFragment());
         return v;
     }
 
@@ -56,5 +61,19 @@ public class FriendFragment extends Fragment {
         friendArrayList.add(new Friend("Shit",new Message("niubiniubi",new Time(23,33))));
         friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi",new Time(13,32))));
         return friendArrayList;
+    }
+
+    /**
+     * Replace by Add Friend Fragment
+     */
+    private void addFriendFragment() {
+        FragmentManager fragmentManager = ((AppCompatActivity)getContext()).getSupportFragmentManager();
+
+        AddFriendFragment addFriendFragment = new AddFriendFragment();
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.main_fragment_container, addFriendFragment, null)
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -79,4 +79,14 @@ public class MainActivity extends AppCompatActivity {
     public String getUser(){
         return uid;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStackImmediate();
+            getFragmentManager().beginTransaction().commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
