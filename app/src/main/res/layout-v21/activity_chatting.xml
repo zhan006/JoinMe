@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+    <com.example.joinme.reusableComponent.TitleBar
+        android:id="@+id/chat_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:title="Abby"
+        custom:backable="true"
+        custom:icon="@drawable/setting_icon"/>
+    <TextView
+        android:id="@+id/chat_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="August 8th, 13:48"
+        android:layout_below="@id/chat_title_bar"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_message_list"
+        android:layout_width="397dp"
+        android:layout_height="589dp"
+        android:layout_below="@id/chat_time"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/chat_bom_bar"
+        android:background="@drawable/rectangle_topround"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:elevation="15dp"
+        android:layout_below="@+id/chat_message_list">
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="centerInside"
+            android:layout_marginVertical="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/photo_icon"
+            android:background="@color/colorSecondary"
+            />
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="centerInside"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:src="@drawable/phone_icon"
+            android:background="@color/colorSecondary"/>
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="centerInside"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:src="@drawable/play_icon"
+            android:background="@color/colorSecondary" />
+
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rectangular_round_white"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/chat_input_message"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@null"/>
+            <ImageButton
+                android:id="@+id/send_message_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/send_icon"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/rectangular_round_white"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
