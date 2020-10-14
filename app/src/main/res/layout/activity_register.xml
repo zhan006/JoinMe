@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:text="Create Account"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textColor="#000000"/>
 
     <TextView
@@ -34,8 +34,8 @@
         android:layout_marginLeft="35dp"
         android:layout_marginTop="11dp"
         android:textStyle="bold"
-        android:text="Create Account"
-        android:textSize="18sp"
+        android:text="Account"
+        android:textSize="16sp"
         android:textColor="#000000"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -44,7 +44,7 @@
         android:background="@drawable/rectangular_round_white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         >
         <EditText
             android:id="@+id/register_account_text"
@@ -61,10 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
         android:text="Email"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="#000000"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -73,7 +73,7 @@
         android:background="@drawable/rectangular_round_white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         >
         <EditText
             android:id="@+id/register_email_text"
@@ -90,10 +90,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
         android:text="Password"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="#000000"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -102,7 +102,7 @@
         android:background="@drawable/rectangular_round_white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         >
         <EditText
             android:id="@+id/register_password_text"
@@ -119,10 +119,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
         android:text="Confirm Password"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="#000000"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -131,7 +131,7 @@
         android:background="@drawable/rectangular_round_white"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         >
         <EditText
             android:id="@+id/register_confirm_text"
@@ -147,7 +147,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="18dp"
+        android:layout_height="20dp"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="9dp"
         >
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             />
-        <EditText
+        <TextView
             android:paddingHorizontal="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -165,23 +165,25 @@
             android:text="Agree with Terms &amp; Conditions"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="#000000"
             />
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
         >
+
         <Button
-            style="@style/normal_button"
             android:id="@+id/register_button"
-            android:layout_gravity="center"
-            android:layout_height="43dp"
+            style="@style/normal_button"
             android:layout_width="200dp"
-            android:text="JOIN"/>
+            android:layout_height="43dp"
+            android:layout_gravity="center"
+            android:text="JOIN" />
     </LinearLayout>
 
 </LinearLayout>

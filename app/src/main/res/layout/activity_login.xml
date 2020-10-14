@@ -11,7 +11,6 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="30dp"
     android:layout_marginRight="30dp"
-    android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
     android:src="@drawable/logo"/>
 
@@ -57,12 +56,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="17dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
         >
-        <EditText
+        <TextView
             android:id="@+id/forget_password_text"
             android:layout_marginLeft="20dp"
             android:paddingHorizontal="5dp"
@@ -70,7 +69,8 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:text="Forget Password?"
-            android:textSize="15dp"
+            android:textSize="13sp"
+            android:textColor="#000000"
             />
     </LinearLayout>
 
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 />
-            <EditText
+            <TextView
                 android:id="@+id/Remember_me_text"
                 android:paddingHorizontal="5dp"
                 android:layout_width="match_parent"
@@ -105,12 +105,13 @@
                 android:text="Remember Me"
                 android:textSize="15dp"
                 android:textStyle="bold"
+                android:textColor="#000000"
                 />
 
         </LinearLayout>
         <Button
             style="@style/small_button"
-            android:id="@+id/edit_profile"
+            android:id="@+id/login_button"
             android:layout_height="43dp"
             android:layout_width="100dp"
             android:layout_alignParentBottom="true"
@@ -120,21 +121,22 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="19dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         >
-        <EditText
+        <TextView
             android:paddingHorizontal="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@null"
             android:text="Don't have an account?"
             android:textSize="15dp"
+            android:textColor="#000000"
             />
-        <EditText
+        <TextView
             android:id="@+id/without_account_text"
             android:paddingHorizontal="5dp"
             android:layout_width="wrap_content"
@@ -143,43 +145,46 @@
             android:text="Sign Up"
             android:textSize="15dp"
             android:textStyle="bold"
+            android:textColor="#000000"
             />
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="19dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         >
-        <EditText
+        <TextView
             android:paddingHorizontal="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@null"
             android:text="—————————— OR ——————————"
             android:textSize="15dp"
+            android:textColor="#000000"
             />
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         >
-        <EditText
+        <TextView
             android:paddingHorizontal="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@null"
-            android:text="Sign up with social netWork"
+            android:text="Sign up with social network"
             android:textStyle="bold"
             android:textSize="15dp"
+            android:textColor="#000000"
             />
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -195,7 +200,7 @@
         <ImageView
             android:id="@+id/login_facbook"
             android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="13dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/facebook"/>
