@@ -28,7 +28,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class HomePageFragment extends Fragment {
     private ImageView icon;
@@ -82,7 +84,7 @@ public class HomePageFragment extends Fragment {
                     User user = new User((String) data.get("firstName"),
                             (String) data.get("lastName"),
                             (String) data.get("profileImage"),
-                            (String) data.get("username"), null);
+                            (String) data.get("username"),(String)data.get("about"), new ArrayList<String>());
                     Message msg = new Message();
                     msg.what = UPDATE_MSG;
                     Bundle bd = new Bundle();

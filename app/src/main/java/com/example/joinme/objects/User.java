@@ -24,6 +24,7 @@ public class User implements Serializable {
         this.album = album;
     }
 
+
     public String getFirstName() {
         return firstName;
     }
