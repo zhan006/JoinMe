@@ -62,4 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStackImmediate();
+            getFragmentManager().beginTransaction().commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

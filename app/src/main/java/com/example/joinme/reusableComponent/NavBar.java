@@ -68,4 +68,5 @@ public class NavBar extends LinearLayout {
     public int getPrevSelected(){
         return prev_selected;
     }
+
 }
