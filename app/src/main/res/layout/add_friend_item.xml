@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_friend_item"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="15dp"
+    android:background="@drawable/path490"
+    android:orientation="horizontal">
+    <androidx.cardview.widget.CardView
+        style="@style/icon"
+        app:cardCornerRadius="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="15dp">
+        <ImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_icon"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/user_name"
+                style="@style/bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Abby"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/user_about"
+                style="@style/normal_text"
+                android:layout_width="170dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="This is my life! " />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+            <ImageButton
+                android:id="@+id/profile_btn"
+                style="@style/add_friend_btn"
+                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:src="@drawable/profile_icon"/>
+            <ImageButton
+                android:id="@+id/follow_btn"
+                style="@style/add_friend_btn"
+                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:src="@drawable/tick_icon"/>
+            <ImageButton
+                android:id="@+id/message_icon"
+                style="@style/add_friend_btn"
+                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:src="@drawable/message_icon"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

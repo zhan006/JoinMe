@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,18 +26,39 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
-    public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3;
+    public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
+
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case UPDATE_MSG:
+                    Bundle bd = msg.getData();
+                    setName(bd.getString("firstName")+bd.getString("lastName"));
+                    setAboutMe(bd.getString("about"));
+
+
+            }
+        }
+    };
     LinearLayout friendGallery,albums;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -71,7 +95,35 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        String uid = ((MainActivity)getActivity()).getUser();
         addAlbum(R.drawable.default_icon);
+        new Thread(() -> {
+            ValueEventListener userListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Get Post object and use the values to update the UI
+                    //String username = dataSnapshot.getValue(String.class);
+                    HashMap data = (HashMap) dataSnapshot.getValue();
+                    Message msg = new Message();
+                    msg.what = UPDATE_MSG;
+                    Bundle bd = new Bundle();
+                    bd.putString("firstName",(String)data.get("firstName"));
+                    bd.putString("lastName",(String) data.get("lastName"));
+                    bd.putString("about",(String) data.get("about"));
+                    msg.setData(bd);
+                    handler.sendMessage(msg);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w("home", "loadPost:onCancelled", databaseError.toException());
+                }
+            };
+
+            //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
+            FirebaseAPI.getFirebaseData("User/"+uid, userListener);
+        }).start();
 
     }
 

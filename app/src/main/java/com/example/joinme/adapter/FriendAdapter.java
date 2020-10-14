@@ -21,7 +21,7 @@ public class FriendAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriendList;
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView name,latestMsg,lastTime;
-        ImageView icom;
+        ImageView icon;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.friend_name);

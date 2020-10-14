@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.fragments.HomePageFragment;
+import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
+    private User user;
+    private String uid;
 
     private static final String TAG = "MainActivity";
     @Override
@@ -31,26 +37,21 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         FragmentManager fm = getSupportFragmentManager();
         if(actionbar != null) actionbar.hide();
-        NavBar nav = (NavBar) findViewById(R.id.navbar);
+        NavBar nav = findViewById(R.id.navbar);
         nav.setSelectedItem(R.id.tab_home);
-
+        uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
         /*
          * Firebase testing demo
          */
-        FirebaseAPI.setFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", "Giovanna")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-
-            }
-        });
 
         ValueEventListener userListener = new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                String username = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "onDataChange: username = "+username);
+                //String username = dataSnapshot.getValue(String.class);
+                HashMap data = (HashMap)dataSnapshot.getValue();
+                Log.d(TAG, "onDataChange: username = "+data.toString());
             }
 
             @Override
@@ -60,6 +61,27 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
+        //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
+        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43",userListener);
+        FirebaseAPI.setFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", "Giovana")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+    }
+    public String getUser(){
+        return uid;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStackImmediate();
+            getFragmentManager().beginTransaction().commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
