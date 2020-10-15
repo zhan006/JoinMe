@@ -2,6 +2,7 @@ package com.example.joinme.reusableComponent;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
@@ -40,7 +41,9 @@ public class NavBar extends LinearLayout {
                     break;
                 case R.id.tab_home:
                     HomePageFragment home_frag = (HomePageFragment) manager.findFragmentByTag("home");
-                    if(home_frag == null) home_frag = new HomePageFragment();
+                    if(home_frag == null) {
+                        Log.d("Fragment","new fragment created");
+                        home_frag = new HomePageFragment();}
                     manager.beginTransaction().replace(R.id.main_fragment_container,home_frag,"home").addToBackStack(null).commit();
                     selected = R.id.tab_home;
                     break;
