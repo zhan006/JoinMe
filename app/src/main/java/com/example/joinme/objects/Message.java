@@ -6,24 +6,27 @@ public class Message {
     // message position type
     public static final int LEFT_MSG_TYPE = 0;
     public static final int RIGHT_MSG_TYPE = 1;
-    private String content, type, from;
-    private Time time;
-    private boolean seen;
+    private String messageContent, type, from;
+    private Time timestamp;
+    private Boolean seen;
+
+    public Message() {
+    }
 
     public Message(String content, String type, String from, Time time, boolean seen) {
-        this.content = content;
+        this.messageContent = content;
         this.type = type;
         this.from = from;
-        this.time = time;
+        this.timestamp = time;
         this.seen = seen;
     }
 
-    public String getContent() {
-        return content;
+    public String getMessageContent() {
+        return messageContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setMessageContent(String content) {
+        this.messageContent = content;
     }
 
     public String getType() {
@@ -34,12 +37,12 @@ public class Message {
         this.type = type;
     }
 
-    public Time getTime() {
-        return time;
+    public Time getTimestamp() {
+        return timestamp;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setTimestamp(Time time) {
+        this.timestamp = time;
     }
 
     public String getFrom() {
@@ -56,5 +59,16 @@ public class Message {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageContent='" + messageContent + '\'' +
+                ", type='" + type + '\'' +
+                ", from='" + from + '\'' +
+                ", timestamp=" + timestamp +
+                ", seen=" + seen +
+                '}';
     }
 }

@@ -60,6 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             return;
         }
 
+
         // set right hand side view holder
         if (chatWith.equals(this.currentUid)) {
             // set current user's profile image
@@ -67,14 +68,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             // render message content
             if (message.getType().equals("text")) {
-                ((RightMessageViewHolder) holder).setMessage(message.getContent());
+                ((RightMessageViewHolder) holder).setMessage(message.getMessageContent());
                 // hide image component
                 ((RightMessageViewHolder) holder).getMessageImage().setVisibility(View.GONE);
             } else if (message.getType().equals("image")) {
                 // display image and hide message text box
                 ((RightMessageViewHolder) holder).getMessageImage().setVisibility(View.VISIBLE);
                 ((RightMessageViewHolder) holder).getMessage().setVisibility(View.GONE);
-                ((RightMessageViewHolder) holder).setMessageImage(message.getContent());
+                ((RightMessageViewHolder) holder).setMessageImage(message.getMessageContent());
             }
 
         }
@@ -85,14 +86,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             // render message content
             if (message.getType().equals("text")) {
-                ((LeftMessageViewHolder) holder).setMessage(message.getContent());
+                ((LeftMessageViewHolder) holder).setMessage(message.getMessageContent());
                 // hide image component
                 ((LeftMessageViewHolder) holder).getMessageImage().setVisibility(View.GONE);
             } else if (message.getType().equals("image")) {
                 // display image and hide message text box
                 ((LeftMessageViewHolder) holder).getMessageImage().setVisibility(View.VISIBLE);
                 ((LeftMessageViewHolder) holder).getMessage().setVisibility(View.GONE);
-                ((LeftMessageViewHolder) holder).setMessageImage(message.getContent());
+                ((LeftMessageViewHolder) holder).setMessageImage(message.getMessageContent());
             }
         }
 
