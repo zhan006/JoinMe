@@ -54,6 +54,7 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="John"
+            android:maxLines="1"
             />
     </LinearLayout>
 
@@ -83,6 +84,7 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="John123@google.com"
+            android:maxLines="1"
             />
     </LinearLayout>
 
@@ -108,11 +110,18 @@
             android:id="@+id/register_password_text"
             android:layout_marginLeft="15dp"
             android:paddingHorizontal="5dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="**************"
             />
+        <ImageView
+            android:id="@+id/visible_button_2"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/invisible"/>
     </LinearLayout>
 
     <TextView
@@ -137,11 +146,18 @@
             android:id="@+id/register_confirm_text"
             android:layout_marginLeft="15dp"
             android:paddingHorizontal="5dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="**************"
             />
+        <ImageView
+            android:id="@+id/visible_button_3"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/invisible"/>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
