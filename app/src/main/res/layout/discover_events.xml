@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                style="@style/relativeFragment">
+    <com.example.joinme.reusableComponent.TitleBar
+            android:id="@+id/event_manage_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:backable="false"
+            custom:title="Manage Your Event"/>
+    <include layout="@layout/search_bar"
+             android:id="@+id/search_bar"
+             android:layout_marginHorizontal="20dp"
+             android:layout_width="match_parent"
+             android:layout_height="30dp"
+             android:layout_below="@id/event_manage_title"
+             android:layout_marginTop="10dp"
+             android:layout_centerHorizontal="true"/>
+    <include layout="@layout/discover_labels"
+             android:id="@+id/search_bar"
+             android:layout_marginHorizontal="20dp"
+             android:layout_width="wrap_content"
+             android:layout_height="160dp"
+             android:layout_below="@id/event_manage_title"
+             android:layout_marginTop="40dp"
+             android:layout_centerHorizontal="true"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id = "@+id/past_events"
+            android:layout_width="match_parent"
+            android:layout_marginTop="200dp"
+            android:layout_height="match_parent" android:layout_weight="1"/>
+
+
+</RelativeLayout>

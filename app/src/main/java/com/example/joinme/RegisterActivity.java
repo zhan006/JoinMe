@@ -1,5 +1,6 @@
 package com.example.joinme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.joinme.database.FirebaseAPI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -21,12 +28,39 @@ public class RegisterActivity extends AppCompatActivity {
         if (actionBar != null){
             actionBar.hide();
         }
+        EditText account = (EditText)findViewById(R.id.register_account_text);
+        EditText email = (EditText)findViewById(R.id.register_email_text);
+        EditText password = (EditText)findViewById(R.id.register_password_text);
+        EditText confirm = (EditText)findViewById(R.id.register_confirm_text);
+
         Button registerButton = (Button)findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
+                String accountString = account.getText().toString();
+                String emailString = email.getText().toString();
+                String passwordString = password.getText().toString();
+                String confirmString = confirm.getText().toString();
+                if (passwordString.equals(confirmString)){
+                    // password is conformed
+                    FirebaseAPI.signUp(emailString,passwordString).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(RegisterActivity.this, "sign up successful.",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(RegisterActivity.this, "sign up failed. Password should be more than 5 letters",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else {
+                    Toast.makeText(RegisterActivity.this, "Please confirm your password",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
         EditText passwordText1 = (EditText)findViewById(R.id.register_password_text);

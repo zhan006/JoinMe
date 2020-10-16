@@ -47,7 +47,7 @@ public class FriendFragment extends Fragment {
         search = v.findViewById(R.id.search_text);
         RecyclerView friends = v.findViewById(R.id.friends);
         friends.setLayoutManager(new LinearLayoutManager(getContext()));
-        friends.setAdapter(new FriendAdapter(initFriend()));
+        friends.setAdapter(new FriendAdapter(initFriend(), getContext()));
         ImageButton addFriendBtn = v.findViewById(R.id.icon_btn);
         addFriendBtn.setOnClickListener(v1 -> addFriendFragment());
         return v;
@@ -55,11 +55,11 @@ public class FriendFragment extends Fragment {
 
     List<Friend> initFriend(){
         ArrayList<Friend> friendArrayList = new ArrayList<>();
-        friendArrayList.add(new Friend("Abby",new Message("Yuema",new Time(23,33))));
-        friendArrayList.add(new Friend("Jinping",new Message("Laqingdan",new Time(22,33))));
-        friendArrayList.add(new Friend("Ming",new Message("gou",new Time(12,33))));
-        friendArrayList.add(new Friend("Shit",new Message("niubiniubi",new Time(23,33))));
-        friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi",new Time(13,32))));
+        friendArrayList.add(new Friend("Abby",new Message("Yuema","text","userA",new Time(), false)));
+        friendArrayList.add(new Friend("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
+        friendArrayList.add(new Friend("Ming",new Message("gou","text","userA",new Time(),false)));
+        friendArrayList.add(new Friend("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
+        friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
         return friendArrayList;
     }
 
