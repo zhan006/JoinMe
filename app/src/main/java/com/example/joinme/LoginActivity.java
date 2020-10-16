@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.renderscript.Script;
 import android.text.InputType;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private static String TAG = "EmailPassword";
     private FirebaseAuth mAuth;
+    CheckBox rememberMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // remember me issues
-        CheckBox rememberMe = (CheckBox)findViewById(R.id.checkbox_1);
-
         // turn to register page
         TextView goToRegister = (TextView)findViewById(R.id.without_account_text);
         goToRegister.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +75,46 @@ public class LoginActivity extends AppCompatActivity {
         EditText account = (EditText)findViewById(R.id.login_account_text);
         EditText password = (EditText)findViewById(R.id.login_password_text);
 
-        // input text already filled in, ONLY for text use!!
-        account.setText("blackpink@gmail.com");
-        password.setText("blackpink");
+        /*
+        Account and password already filled in, ONLY for test use, MUST DELETE when APP released
+         */
+//        account.setText("blackpink@gmail.com");
+//        password.setText("blackpink");
+
+        // remember the account and password
+        rememberMe = (CheckBox)findViewById(R.id.checkbox_1);
+        SharedPreferences settings = getSharedPreferences("SETTING_Infos", 0);
+        String strJudge = settings.getString("judgeText", "no");
+        String strUserName = settings.getString("userNameText", "");
+        String strPassword = settings.getString("passwordText", "");
+        if(strJudge.equals("yes")){
+            rememberMe.setChecked(true);
+            account.setText(strUserName);
+            password.setText(strPassword);
+        }else{
+            rememberMe.setChecked(false);
+            account.setText("");
+            password.setText("");
+        }
+
+        // add checkbox listener
+        rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences settings = getSharedPreferences("SETTING_Infos", 0);
+                if(isChecked){
+                    settings.edit().putString("judgeText", "yes")
+                            .putString("userNameText", account.getText().toString())
+                            .putString("passwordText", password.getText().toString())
+                            .apply();
+                }else{
+                    settings.edit().putString("judgeText", "no")
+                            .putString("UserNameText", "")
+                            .putString("passwordText", "")
+                            .apply();
+                }
+            }
+        });
 
         // turn to main activity
         mAuth = FirebaseAuth.getInstance();
@@ -97,6 +134,19 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "sign in successful.",
                                     Toast.LENGTH_SHORT).show();
 
+                            // check the remember me setting
+                            if (rememberMe.isChecked()){
+                                settings.edit().putString("judgeText", "yes")
+                                        .putString("userNameText", account.getText().toString())
+                                        .putString("passwordText", password.getText().toString())
+                                        .apply();
+                            }else {
+                                settings.edit().putString("judgeText", "no")
+                                        .putString("UserNameText", "")
+                                        .putString("passwordText", "")
+                                        .apply();
+                            }
+
                             // get UID from current user
                             currentUser = mAuth.getCurrentUser();
                             String UID = currentUser.getUid();
@@ -110,6 +160,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Sign in failed. Check the account and password",
                                     Toast.LENGTH_SHORT).show();
+                            settings.edit().putString("judgeText", "no")
+                                    .putString("UserNameText", "")
+                                    .putString("passwordText", "")
+                                    .apply();
                         }
                     }
                 });
