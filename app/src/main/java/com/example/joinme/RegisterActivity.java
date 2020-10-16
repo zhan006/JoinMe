@@ -17,8 +17,13 @@ import com.example.joinme.database.FirebaseAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
         if (actionBar != null){
             actionBar.hide();
         }
+
+        mAuth = FirebaseAuth.getInstance();
         EditText account = (EditText)findViewById(R.id.register_account_text);
         EditText email = (EditText)findViewById(R.id.register_email_text);
         EditText password = (EditText)findViewById(R.id.register_password_text);
@@ -49,7 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 Toast.makeText(RegisterActivity.this, "sign up successful.",
                                         Toast.LENGTH_SHORT).show();
+
+                                user = mAuth.getCurrentUser();
+                                String UID = user.getUid();
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.putExtra("UID", UID);
                                 startActivity(intent);
                             }else {
                                 Toast.makeText(RegisterActivity.this, "sign up failed. Password should be more than 5 letters",

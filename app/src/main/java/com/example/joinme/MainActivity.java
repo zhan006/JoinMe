@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.HomePageFragment;
@@ -98,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
         uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
         new Thread(getUserProfile).start();
         new Thread(getAttendingList).start();
+
+        // test the UID transformation from loginActivity
+        Intent intent = getIntent();
+        String currentUID = intent.getStringExtra("UID");
+        Toast.makeText(MainActivity.this, "current UID: " + currentUID,
+                Toast.LENGTH_SHORT).show();
+
         /*
          * Firebase testing demo
          */

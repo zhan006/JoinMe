@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // remember me issues
-        CheckBox remberMe = (CheckBox)findViewById(R.id.checkbox_1);
+        CheckBox rememberMe = (CheckBox)findViewById(R.id.checkbox_1);
 
         // turn to register page
         TextView goToRegister = (TextView)findViewById(R.id.without_account_text);
@@ -80,13 +80,14 @@ public class LoginActivity extends AppCompatActivity {
         password.setText("blackpink");
 
         // turn to main activity
+        mAuth = FirebaseAuth.getInstance();
         Button loginButton = (Button)findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String accountString = account.getText().toString();
                 String passwordString = password.getText().toString();
-
+                // using Firebase API to check a user's Existing status
                 FirebaseAPI.login(accountString,passwordString).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -95,7 +96,14 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "sign in successful.",
                                     Toast.LENGTH_SHORT).show();
+
+                            // get UID from current user
+                            currentUser = mAuth.getCurrentUser();
+                            String UID = currentUser.getUid();
+
+                            // send uid to the main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("UID", UID);
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
