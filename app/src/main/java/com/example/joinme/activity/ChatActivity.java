@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -142,6 +143,10 @@ public class ChatActivity extends AppCompatActivity {
 
                 // make sure user can see latest message even when typing
                 messageRecyclerView.scrollToPosition(messageList.size() - 1);
+
+                // update last message time
+                TextView dateTime = findViewById(R.id.chat_time);
+                dateTime.setText(msg.getTime().toString());
             }
 
             @Override
