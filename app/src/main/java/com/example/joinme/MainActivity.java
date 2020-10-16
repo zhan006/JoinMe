@@ -3,14 +3,21 @@ package com.example.joinme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.HomePageFragment;
+import com.example.joinme.interfaces.EventRenderable;
+import com.example.joinme.interfaces.UserRenderable;
+import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
@@ -23,11 +30,59 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private User user;
     private String uid;
+    private ArrayList<Event> eventList;
+    private final int GET_USER=0,GET_EVENT=1;
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            Bundle bd = msg.getData();
+            switch (msg.what){
+                case GET_USER:
+                    user = (User)bd.getSerializable("user");
+                    Fragment cFragment = getCurrentFragment();
+                    if(cFragment instanceof UserRenderable){
+                        ((UserRenderable) cFragment).renderUser();
+                    }
+                    break;
+                case GET_EVENT:
+                    ArrayList<String> ids = bd.getStringArrayList("ids");
+                    new Thread(()->{
+                        ValueEventListener listener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                HashMap map = (HashMap)snapshot.getValue();
+                                eventList = new ArrayList<Event>();
+                                for(String id:ids){
+                                    Event event = new Event((HashMap) map.get(id));
+                                    eventList.add(event);
+                                    Fragment cFragment = getCurrentFragment();
+                                    if(cFragment instanceof EventRenderable){
+                                        ((EventRenderable) cFragment).renderEvent();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        };
+                        FirebaseAPI.getFirebaseDataOnce("Event",listener);
+                    }).start();
+
+
+
+
+            }
+        }
+    };
+
 
     private static final String TAG = "MainActivity";
     @Override
@@ -38,8 +93,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         if(actionbar != null) actionbar.hide();
         NavBar nav = findViewById(R.id.navbar);
+        fm.beginTransaction().replace(R.id.main_fragment_container,new HomePageFragment(),"home").commit();
         nav.setSelectedItem(R.id.tab_home);
         uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
+        new Thread(getUserProfile).start();
+        new Thread(getAttendingList).start();
         /*
          * Firebase testing demo
          */
@@ -71,8 +129,68 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    public String getUser(){
-        return uid;
+    private Runnable getUserProfile = ()-> {
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                //String username = dataSnapshot.getValue(String.class);
+                User user =  dataSnapshot.getValue(User.class);
+                Message msg = new Message();
+                msg.what = GET_USER;
+                Bundle bd = new Bundle();
+                bd.putSerializable("user",user);
+                Log.d("user",user.toString());
+                msg.setData(bd);
+                handler.sendMessage(msg);
+                //Log.d(TAG, "onDataChange: username = "+username);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("home", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+
+        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
+    };
+    private Runnable getAttendingList = ()->{
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap map = (HashMap) snapshot.getValue();
+                Bundle bd = new Bundle();
+                bd.putStringArrayList("ids",new ArrayList(map.keySet()));
+                Message msg = new Message();
+                msg.what = GET_EVENT;
+                msg.setData(bd);
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseAPI.getFirebaseData("AttendingList/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", eventListener);
+    };
+    public User getUser(){
+        return user;
+    }
+    public String getUid(){return uid;}
+    public ArrayList<Event> getEventList(){return eventList;}
+    public Fragment getCurrentFragment(){
+        List<Fragment> ls = getSupportFragmentManager().getFragments();
+        if(ls !=null){
+            for(Fragment fragment:ls){
+                if(fragment.isVisible()){
+                    return fragment;
+                }
+            }
+        }
+        return null;
+
     }
 
     @Override

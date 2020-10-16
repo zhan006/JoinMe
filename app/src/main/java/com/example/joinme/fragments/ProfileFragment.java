@@ -1,17 +1,14 @@
 package com.example.joinme.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,45 +17,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
-import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.interfaces.EventRenderable;
+import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
-    public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0;
+public class ProfileFragment extends Fragment implements UserRenderable, EventRenderable {
+    public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
-
-    private Handler handler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
-                case UPDATE_MSG:
-                    Bundle bd = msg.getData();
-                    setName(bd.getString("firstName")+bd.getString("lastName"));
-                    setAboutMe(bd.getString("about"));
-
-
-            }
-        }
-    };
+    private Button editProfile;
+    private ArrayList<Event> eventList;
+    private RecyclerView upcomming_event;
+    private User user;
     LinearLayout friendGallery,albums;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -77,54 +60,32 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
+
         aboutMe = view.findViewById(R.id.aboutMe);
         friendGallery = view.findViewById(R.id.friend_gallery);
         albums = view.findViewById(R.id.albums);
         addAlbum=view.findViewById(R.id.addAlbum);
         name = view.findViewById(R.id.name);
         location = view.findViewById(R.id.location);
+        editProfile = view.findViewById(R.id.edit_profile);
         addAlbum.setOnClickListener((v)->{
             addAlbum(R.drawable.default_icon);
         });
-        RecyclerView recyclerView = view.findViewById(R.id.profile_upcomming_event);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new EventAdapter(initDummyEvents()));
+        upcomming_event = view.findViewById(R.id.profile_upcomming_event);
+        upcomming_event.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        renderEvent();
+        renderUser();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String uid = ((MainActivity)getActivity()).getUser();
+        String uid = ((MainActivity)getActivity()).getUid();
         addAlbum(R.drawable.default_icon);
-        new Thread(() -> {
-            ValueEventListener userListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Get Post object and use the values to update the UI
-                    //String username = dataSnapshot.getValue(String.class);
-                    HashMap data = (HashMap) dataSnapshot.getValue();
-                    Message msg = new Message();
-                    msg.what = UPDATE_MSG;
-                    Bundle bd = new Bundle();
-                    bd.putString("firstName",(String)data.get("firstName"));
-                    bd.putString("lastName",(String) data.get("lastName"));
-                    bd.putString("about",(String) data.get("about"));
-                    msg.setData(bd);
-                    handler.sendMessage(msg);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Getting Post failed, log a message
-                    Log.w("home", "loadPost:onCancelled", databaseError.toException());
-                }
-            };
-
-            //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
-            FirebaseAPI.getFirebaseData("User/"+uid, userListener);
-        }).start();
-
+        editProfile.setOnClickListener((v)->{
+            Log.d("fragment",((MainActivity)getActivity()).getCurrentFragment().getTag());
+        });
     }
 
     @Override
@@ -163,5 +124,27 @@ public class ProfileFragment extends Fragment {
         events.add(new Event("Eat dinner","1 Bouverie","Afternoon"));
         events.add(new Event("League of Legends","netfish cafe","evening"));
         return events;
+    }
+    public ArrayList<Event> getParentEventList(){
+        return ((MainActivity)getActivity()).getEventList();
+    }
+    public User getParentUser(){
+        return ((MainActivity)getActivity()).getUser();
+    }
+    @Override
+    public void renderEvent() {
+        eventList = getParentEventList();
+        if(eventList!=null){
+            upcomming_event.setAdapter(new EventAdapter(eventList));
+        }
+    }
+
+    @Override
+    public void renderUser() {
+        user = getParentUser();
+        if(user !=null){
+            setName(user.firstName+user.lastName);
+            setAboutMe(user.about);
+        }
     }
 }

@@ -45,25 +45,19 @@
             android:text="Welcome Ziping"
             style="@style/bold_text"/>
     </LinearLayout>
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_billboard"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="20dp"
         android:layout_below="@id/welcomebar"
         android:background="@drawable/rectangle_round"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp"
         >
-        <LinearLayout
-            android:orientation="vertical"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="10dp"
-            android:id="@+id/board"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-        </LinearLayout>
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
     <Button
         android:id="@+id/organize_event"
         style="@style/long_button"

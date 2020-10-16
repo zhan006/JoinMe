@@ -72,4 +72,7 @@ public class User implements Serializable {
     public void setAlbum(List<String> album) {
         this.album = album;
     }
+    public String toString(){
+        return firstName+" "+lastName;
+    }
 }

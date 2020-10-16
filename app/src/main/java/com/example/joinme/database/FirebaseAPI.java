@@ -31,7 +31,11 @@ public class FirebaseAPI {
         // Read from the database
         dbRef.addValueEventListener(valueEventListener);
     }
-
+    public static void getFirebaseDataOnce(String nodePath, ValueEventListener valueEventListener) {
+        DatabaseReference dbRef = rootRef.child(nodePath);
+        // Read from the database
+        dbRef.addListenerForSingleValueEvent(valueEventListener);
+    }
     public static Task<Void> setFirebaseData(String nodePath, String newData) {
         return rootRef.child(nodePath).setValue(newData);
     }
