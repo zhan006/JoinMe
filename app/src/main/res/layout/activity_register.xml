@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+    <com.example.joinme.reusableComponent.TitleBar
+        android:id="@+id/add_friend_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:title="Register"
+        custom:backable="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/welcomepic"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:text="Create Account"
+        android:textSize="25sp"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="11dp"
+        android:textStyle="bold"
+        android:text="Account"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangular_round_white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="3dp"
+        >
+        <EditText
+            android:id="@+id/register_account_text"
+            android:layout_marginLeft="15dp"
+            android:paddingHorizontal="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="John"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:text="Email"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangular_round_white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="3dp"
+        >
+        <EditText
+            android:id="@+id/register_email_text"
+            android:layout_marginLeft="15dp"
+            android:paddingHorizontal="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="John123@google.com"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:text="Password"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangular_round_white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="3dp"
+        >
+        <EditText
+            android:id="@+id/register_password_text"
+            android:layout_marginLeft="15dp"
+            android:paddingHorizontal="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="**************"
+            />
+        <ImageView
+            android:id="@+id/visible_button_2"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/invisible"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:text="Confirm Password"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangular_round_white"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="3dp"
+        >
+        <EditText
+            android:id="@+id/register_confirm_text"
+            android:layout_marginLeft="15dp"
+            android:paddingHorizontal="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="**************"
+            />
+        <ImageView
+            android:id="@+id/visible_button_3"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/invisible"/>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="9dp"
+        >
+        <CheckBox
+            android:id="@+id/register_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            />
+        <TextView
+            android:paddingHorizontal="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="Agree with Terms &amp; Conditions"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        >
+
+        <Button
+            android:id="@+id/register_button"
+            style="@style/normal_button"
+            android:layout_width="200dp"
+            android:layout_height="43dp"
+            android:layout_gravity="center"
+            android:text="JOIN" />
+    </LinearLayout>
+
+</LinearLayout>

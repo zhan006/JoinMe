@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     style="@style/relativeFragment"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <com.example.joinme.reusableComponent.TitleBar
         android:id="@+id/home_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:title="Home"
-        custom:backable="false"/>
+        custom:backable="false"
+        custom:icon="@drawable/setting_icon"/>
     <LinearLayout
         android:id="@+id/welcomebar"
         android:layout_below="@id/home_title"
@@ -19,11 +21,23 @@
         android:layout_width="match_parent"
         android:layout_marginHorizontal="10dp"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/default_icon"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="00dp"
+            android:background="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:elevation="5dp"
+            app:cardBackgroundColor="#FFFCFC"
+            app:cardCornerRadius="75dp">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/default_icon"/>
+        </androidx.cardview.widget.CardView>
         <TextView
+            android:id="@+id/welcome_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -31,21 +45,19 @@
             android:text="Welcome Ziping"
             style="@style/bold_text"/>
     </LinearLayout>
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_billboard"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="20dp"
         android:layout_below="@id/welcomebar"
         android:background="@drawable/rectangle_round"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp"
         >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-        </LinearLayout>
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
     <Button
         android:id="@+id/organize_event"
         style="@style/long_button"

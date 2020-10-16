@@ -10,4 +10,7 @@
     <color name="white">#FFF</color>
     <color name="colorBright">#E3C41C</color>
     <color name="colorBrightDark">#D1B315</color>
+    <color name="blue">#3715EF</color>
+    <color name="orange">#EF7A15</color>
+    <color name="green">#2A796D</color>
 </resources>

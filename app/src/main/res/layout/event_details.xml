@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/relativeFragment"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.joinme.reusableComponent.TitleBar
+        android:id="@+id/event_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:title="Event Details"
+        custom:backable="false" />
+
+
+
+
+    <ImageView
+        android:id="@+id/event_picture"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/event_picture" />
+
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_below="@id/event_details"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        >
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/event_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/normal_text"
+                android:text="30 September, 2020"
+                android:textColor="#F80A0A"
+                android:padding="10dp"
+
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/event_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/bold_text"
+                    android:text="Japanese Lunch Catch Up"
+                    android:textColor="#030303"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+
+                    />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                    <CheckBox
+                        android:id="@+id/event_checkbox_going"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="60dp"
+                        android:scaleX="1.1"
+                        android:scaleY="1.1"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/event_checkbox_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:layout_below="@id/event_checkbox_going"
+                        android:text="Going"
+                        android:textSize="15sp"
+
+                        />
+
+
+
+                    <ImageButton
+                        android:id="@+id/event_button_share"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@id/event_checkbox_going"
+                        android:layout_marginStart="30dp"
+                        android:src="@drawable/share_icon" />
+
+
+                    <TextView
+                        android:id="@+id/event_share_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share"
+                        android:textSize="15sp"
+                        android:layout_toEndOf="@id/event_checkbox_text"
+                        android:layout_below="@id/event_button_share"
+                        android:layout_marginStart="20dp"
+                        android:layout_alignBottom="@id/event_checkbox_text"
+                        android:layout_alignTop="@id/event_checkbox_text"
+
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/event_location_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/location_icon"
+                        android:layout_marginStart="20dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_location_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/normal_text"
+                        android:text="South Lawn, Unimelb"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/event_datetime_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/event_datetime_icon"
+                        android:layout_marginStart="20dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_datetime_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/normal_text"
+                        android:text="13:00-14:00 30 September 2020"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/event_groupsize_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/event_groupsize_icon"
+                        android:layout_marginStart="20dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_groupsize_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/normal_text"
+                        android:text="Group size 2-4 ppl"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/event_current_participants_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/event_participants_icon"
+                        android:layout_marginStart="20dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_participants_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/normal_text"
+                        android:text="Current participants: 2 ppl"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/event_host_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/event_host_icon"
+                        android:layout_marginStart="20dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_host_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/normal_text"
+                        android:text="Hosted by Ziping Gao"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/path490"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <androidx.cardview.widget.CardView
+                    style="@style/icon"
+                    app:cardCornerRadius="30dp"
+                    android:layout_gravity="center_vertical"
+
+                    android:layout_marginStart="15dp">
+                    <ImageView
+                        android:id="@+id/host_profile_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/host_profile_pic"
+                        />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/user_name"
+                            style="@style/bold_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginStart="15dp"
+                            android:text="Abby"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/user_about"
+                            style="@style/normal_text"
+                            android:layout_width="170dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="15dp"
+                            android:text="This is my life!" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp">
+                        <ImageButton
+                            android:id="@+id/profile_btn"
+                            style="@style/add_friend_btn"
+                            android:layout_height="40dp"
+                            android:layout_width="35dp"
+                            android:src="@drawable/profile_icon"/>
+                        <ImageButton
+                            android:id="@+id/follow_btn"
+                            style="@style/add_friend_btn"
+                            android:layout_height="40dp"
+                            android:layout_width="35dp"
+                            android:src="@drawable/tick_icon"/>
+                        <ImageButton
+                            android:id="@+id/message_icon"
+                            style="@style/add_friend_btn"
+                            android:layout_height="40dp"
+                            android:layout_width="35dp"
+                            android:src="@drawable/message_icon"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:id="@+id/event_about"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    style="@style/bold_text"
+                    android:text="About"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="45dp"
+                    />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/brignt_bg"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    >
+                    <EditText
+                        android:id="@+id/event_details"
+                        android:layout_marginStart="15dp"
+                        android:paddingHorizontal="5dp"
+                        android:paddingTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="What are we going to do?"
+                        android:gravity="top"
+                        />
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/event_comments"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    style="@style/bold_text"
+                    android:text="Comments"
+                    android:layout_marginStart="10dp"
+                    />
+
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
