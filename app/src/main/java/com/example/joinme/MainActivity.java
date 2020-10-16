@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 //String username = dataSnapshot.getValue(String.class);
-                HashMap data = (HashMap)dataSnapshot.getValue();
-                user = new User((String)data.get("firstName"),
-                        (String) data.get("lastName"),
-                        (String)data.get("profileImage"),
-                        (String)data.get("username"),null);
+//                HashMap data = (HashMap)dataSnapshot.getValue();
+//                user = new User((String)data.get("firstName"),
+//                        (String) data.get("lastName"),
+//                        (String)data.get("profileImage"),
+//                        (String)data.get("username"),null);
+                User user = dataSnapshot.getValue(User.class);
                 Log.d(TAG,dataSnapshot.getValue().toString());
                 //Log.d(TAG, "onDataChange: username = "+username);
             }

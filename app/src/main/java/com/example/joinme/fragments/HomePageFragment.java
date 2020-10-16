@@ -78,11 +78,12 @@ public class HomePageFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Get Post object and use the values to update the UI
                     //String username = dataSnapshot.getValue(String.class);
-                    HashMap data = (HashMap) dataSnapshot.getValue();
-                    User user = new User((String) data.get("firstName"),
-                            (String) data.get("lastName"),
-                            (String) data.get("profileImage"),
-                            (String) data.get("username"), null);
+//                    HashMap data = (HashMap) dataSnapshot.getValue();
+//                    User user = new User((String) data.get("firstName"),
+//                            (String) data.get("lastName"),
+//                            (String) data.get("profileImage"),
+//                            (String) data.get("username"), null);
+                    User user = dataSnapshot.getValue(User.class);
                     Message msg = new Message();
                     msg.what = UPDATE_MSG;
                     Bundle bd = new Bundle();

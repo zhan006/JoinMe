@@ -1,6 +1,7 @@
 package com.example.joinme.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.engine.Resource;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Message;
@@ -249,7 +258,33 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void setMessageImage(String messageImageUrl) {
             if (messageImageUrl != null && !messageImageUrl.equals("null")) {
                 // display image from the url in real time database
-                Glide.with(context).load(messageImageUrl).into(messageImage);
+                // resize the image to fit the imageview
+                Glide.with(context)
+                        .load(messageImageUrl)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                if (messageImage == null) {
+                                    return false;
+                                }
+                                if (messageImage.getScaleType() != ImageView.ScaleType.FIT_XY) {
+                                    messageImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                }
+                                ViewGroup.LayoutParams params = messageImage.getLayoutParams();
+                                int vw = messageImage.getWidth() - messageImage.getPaddingLeft() - messageImage.getPaddingRight();
+                                float scale = (float) vw / (float) resource.getIntrinsicWidth();
+                                int vh = Math.round(resource.getIntrinsicHeight() * scale);
+                                params.height = vh + messageImage.getPaddingTop() + messageImage.getPaddingBottom();
+                                messageImage.setLayoutParams(params);
+                                return false;
+                            }
+                        })
+                        .into(messageImage);
             }
         }
 
