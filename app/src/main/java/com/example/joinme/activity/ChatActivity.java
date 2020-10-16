@@ -1,6 +1,10 @@
 package com.example.joinme.activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,12 +26,22 @@ import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.TitleBar;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +50,7 @@ import java.util.Map;
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
+    private static final int GALLERY_PICK = 1;
     private List<Message> messageList = new ArrayList<>();
     private String friendUid;
     private String friendUsername;
@@ -55,7 +70,8 @@ public class ChatActivity extends AppCompatActivity {
 
         friendUid = getIntent().getStringExtra("friendUid");
         friendUsername = getIntent().getStringExtra("friendUsername");
-        currentUid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
+        currentUid = "dVPWSkIeVHT3SPDfSMYPbAf52Pz2";
+
 
         initView();
         initData();
@@ -70,6 +86,13 @@ public class ChatActivity extends AppCompatActivity {
                 sendMessage();
                 // clear input text after sending message
                 inputText.setText("");
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendImage();
             }
         });
 
@@ -201,7 +224,107 @@ public class ChatActivity extends AppCompatActivity {
             };
             FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
         }
+    }
+
+    void sendImage() {
+
+        // start an intent to select image
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "select image"), GALLERY_PICK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //open image gallery in the phone and get crop image
+        Uri imageUri = data.getData();
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
+            CropImage.activity(imageUri)
+                    .setAspectRatio(1, 1)
+                    .start(this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+                Uri resultUri = result.getUri();
 
 
+                final StorageReference filepath = FirebaseAPI.getStorageRef(
+                        "chat_images/" + currentUid);
+
+                Bitmap bitmap = null;
+
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+                byte[] bytes = baos.toByteArray();
+                UploadTask uploadTask = filepath.putBytes(bytes);
+
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.d(TAG, "onSuccess: image upload Task");
+//                        Toast.makeText(ChatActivity.this, "worked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // save storage url to realtime database
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+
+                        // Continue with the task to get the download URL
+                        return filepath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            String downloadUri = task.getResult().toString();
+
+                            // under Chat node create current user node with chat uid and vise versa
+                            String currentUserChatPath = "Chat/" + currentUid + "/" + friendUid;
+                            String friendChatPath = "Chat/" + friendUid + "/" + currentUid;
+
+                            // get unique message ID for current message
+                            String messageID = FirebaseAPI.pushFirebaseNode(currentUserChatPath);
+                            Time time = new Time();
+
+                            // create current message
+                            Message imgMessage = new Message(downloadUri, "image", currentUid, time, false);
+                            Log.d(TAG, "sendMessage: new time => "+ time.toString());
+
+                            // Push current message to both current user's chat and friend's chat path
+                            Map<String, Object> messagePush = new HashMap<>();
+                            messagePush.put(currentUserChatPath + "/" + messageID, imgMessage);
+                            messagePush.put(friendChatPath + "/" + messageID, imgMessage);
+
+                            DatabaseReference.CompletionListener batchCompletionListener = (error, ref) -> {
+                                if (error != null){
+                                    Log.d("SEND_IMAGE_MSG_ERROR", error.getMessage().toString());
+                                }
+                            };
+                            FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
+                        } else {
+                            Toast.makeText(ChatActivity.this, "Please write messages First... ", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+            }
+        }
     }
 }

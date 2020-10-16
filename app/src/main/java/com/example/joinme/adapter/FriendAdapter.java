@@ -60,7 +60,7 @@ public class FriendAdapter extends RecyclerView.Adapter {
                 Intent chatActivity = new Intent(v.getContext(), ChatActivity.class);
 
                 // Testing purpose
-                chatActivity.putExtra("friendUid", "dVPWSkIeVHT3SPDfSMYPbAf52Pz2");
+                chatActivity.putExtra("friendUid", "qa6KACdJ0RYZfVDXLtpKL2HcxJ43");
                 chatActivity.putExtra("friendUsername", "IU");
                 mContext.startActivity(chatActivity);
             }

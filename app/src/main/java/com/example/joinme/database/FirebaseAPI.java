@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,8 @@ public class FirebaseAPI {
 
     // Firebase auth
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    public static StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     public static void getFirebaseData(String nodePath, ValueEventListener valueEventListener) {
         DatabaseReference dbRef = rootRef.child(nodePath);
@@ -75,6 +79,10 @@ public class FirebaseAPI {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         Log.d(TAG, "getUser UID : " + currentUser.getUid());
         return currentUser;
+    }
+
+    public static StorageReference getStorageRef(String nodePath) {
+        return storageRef.child(nodePath);
     }
 
 
