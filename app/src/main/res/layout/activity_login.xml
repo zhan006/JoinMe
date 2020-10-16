@@ -26,10 +26,12 @@
             android:id="@+id/login_account_text"
             android:layout_marginLeft="20dp"
             android:paddingHorizontal="5dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="Email Address"
+            android:maxLines="1"
             />
     </LinearLayout>
 
@@ -46,11 +48,19 @@
             android:id="@+id/login_password_text"
             android:layout_marginLeft="20dp"
             android:paddingHorizontal="5dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="Password"
+            android:maxLines="1"
             />
+        <ImageView
+            android:id="@+id/visible_button"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/invisible"/>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

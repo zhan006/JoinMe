@@ -55,6 +55,10 @@
         android:background="@drawable/rectangle_round"
         >
         <LinearLayout
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="10dp"
+            android:id="@+id/board"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

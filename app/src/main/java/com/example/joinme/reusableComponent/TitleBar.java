@@ -21,6 +21,7 @@ import java.lang.ref.Reference;
 public class TitleBar extends LinearLayout {
     private static final String TAG = "TitleBar";
     private AttributeSet attrs;
+    private ImageButton back;
     public TitleBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.attrs = attrs;
@@ -32,26 +33,22 @@ public class TitleBar extends LinearLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
         icon = ta.getDrawable(R.styleable.TitleBar_icon);
 
-        ImageButton back = (ImageButton) this.findViewById(R.id.backBtn);
+        back = this.findViewById(R.id.backBtn);
         ImageButton iconBtn = findViewById(R.id.icon_btn);
         setTitle(newTitle);
         setIcon(iconBtn, icon);
 
         if (backable.equals("false")){
             back.setVisibility(INVISIBLE);
-        } else{
-            back.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)getContext()).finish();
-                }
-            });
         }
 
     }
     public void setTitle(String title){
         TextView text = (TextView)findViewById(R.id.title);
         text.setText(title);
+    }
+    public void setOnClickBackListener(OnClickListener listener){
+        back.setOnClickListener(listener);
     }
 
     public void setIcon(ImageButton iconBtn, Drawable icon) {
