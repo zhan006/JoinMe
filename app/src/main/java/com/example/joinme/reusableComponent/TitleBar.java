@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,6 @@ import androidx.annotation.Nullable;
 
 import com.example.joinme.R;
 
-import java.lang.ref.Reference;
 
 public class TitleBar extends LinearLayout {
     private static final String TAG = "TitleBar";
@@ -56,5 +56,8 @@ public class TitleBar extends LinearLayout {
 
     public void setIcon(ImageButton iconBtn, Drawable icon) {
         iconBtn.setImageDrawable(icon);
+        // set title bar icon size
+        iconBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        iconBtn.setPadding(30,15,30,15);
     }
 }

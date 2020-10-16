@@ -51,7 +51,7 @@ public class FriendAdapter extends RecyclerView.Adapter {
         Friend friend = mFriendList.get(position);
         ((ViewHolder)holder).name.setText(friend.getName());
         ((ViewHolder)holder).latestMsg.setText(friend.getLatestMessage().getMessageContent());
-        ((ViewHolder)holder).lastTime.setText(friend.getLatestMessage().getTimestamp().toString());
+        ((ViewHolder)holder).lastTime.setText(friend.getLatestMessage().getTime().getTime());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

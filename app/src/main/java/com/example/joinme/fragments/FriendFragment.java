@@ -55,11 +55,11 @@ public class FriendFragment extends Fragment {
 
     List<Friend> initFriend(){
         ArrayList<Friend> friendArrayList = new ArrayList<>();
-        friendArrayList.add(new Friend("Abby",new Message("Yuema","text","userA",new Time(23,33), false)));
-        friendArrayList.add(new Friend("Jinping",new Message("Laqingdan","text","userA",new Time(22,33), false)));
-        friendArrayList.add(new Friend("Ming",new Message("gou","text","userA",new Time(12,33),false)));
-        friendArrayList.add(new Friend("Shit",new Message("niubiniubi","text","userA",new Time(23,33),false)));
-        friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(13,32),false)));
+        friendArrayList.add(new Friend("Abby",new Message("Yuema","text","userA",new Time(), false)));
+        friendArrayList.add(new Friend("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
+        friendArrayList.add(new Friend("Ming",new Message("gou","text","userA",new Time(),false)));
+        friendArrayList.add(new Friend("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
+        friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
         return friendArrayList;
     }
 

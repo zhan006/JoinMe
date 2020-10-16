@@ -7,7 +7,7 @@ public class Message {
     public static final int LEFT_MSG_TYPE = 0;
     public static final int RIGHT_MSG_TYPE = 1;
     private String messageContent, type, from;
-    private Time timestamp;
+    private Time time;
     private Boolean seen;
 
     public Message() {
@@ -17,7 +17,7 @@ public class Message {
         this.messageContent = content;
         this.type = type;
         this.from = from;
-        this.timestamp = time;
+        this.time = time;
         this.seen = seen;
     }
 
@@ -37,12 +37,12 @@ public class Message {
         this.type = type;
     }
 
-    public Time getTimestamp() {
-        return timestamp;
+    public Time getTime() {
+        return time;
     }
 
-    public void setTimestamp(Time time) {
-        this.timestamp = time;
+    public void setTime(Time time) {
+        this.time = time;
     }
 
     public String getFrom() {
@@ -67,7 +67,7 @@ public class Message {
                 "messageContent='" + messageContent + '\'' +
                 ", type='" + type + '\'' +
                 ", from='" + from + '\'' +
-                ", timestamp=" + timestamp +
+                ", timestamp=" + time +
                 ", seen=" + seen +
                 '}';
     }

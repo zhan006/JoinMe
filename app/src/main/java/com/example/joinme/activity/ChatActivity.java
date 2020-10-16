@@ -1,9 +1,12 @@
 package com.example.joinme.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +24,13 @@ import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -54,6 +59,19 @@ public class ChatActivity extends AppCompatActivity {
         initView();
         initData();
 
+        // monitor firebase messages
+        loadMessages();
+
+        // send message
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+                // clear input text after sending message
+                inputText.setText("");
+            }
+        });
+
     }
 
     private void initView() {
@@ -77,33 +95,33 @@ public class ChatActivity extends AppCompatActivity {
         // set up adapter for message recycler view
         messageAdapter = new MessageAdapter(messageList, this, currentUid, friendUid);
         messageRecyclerView.setAdapter(messageAdapter);
-        loadMessages();
     }
 
+    // hardcode testing data
     void initMessages() {
         messageList.add(new Message("hello message 1", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
         messageList.add(new Message("hello message 1-1", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(10, 30), false));
+                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
         messageList.add(new Message("hello message 2", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
         messageList.add(new Message("hello message 3", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
 
         messageList.add(new Message("hello message 3-3", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(10, 30), false));
+                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
 
         messageList.add(new Message("hello message 4", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
 
         messageList.add(new Message("hello message 5", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
         messageList.add(new Message("hello message 6", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
         messageList.add(new Message("hello message 7", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false));
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
         Message message = new Message("hello message 8", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(10, 30), false);
+                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false);
         messageList.add(message);
 
         Log.d(TAG, "onDataChange: datasnapshot message => "+message.toString());
@@ -115,15 +133,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String messageID = snapshot.getKey();
                 Log.d(TAG, "onDataChange: message key => " + messageID);
+                Message msg = snapshot.getValue(Message.class);
 
-                HashMap firebaseMsg = (HashMap) snapshot.getValue();
-                Message message = new Message((String) firebaseMsg.get("messageContent"),
-                        (String) firebaseMsg.get("type"),
-                        (String) firebaseMsg.get("from"),
-                        new Time(((Long)firebaseMsg.get("hour")).intValue(), ((Long)firebaseMsg.get("minute")).intValue()),
-                        (boolean) firebaseMsg.get("seen"));
-                Log.d(TAG, "onDataChange: datasnapshot message => " + message.toString());
-                messageList.add(message);
+                Log.d(TAG, "onDataChange: datasnapshot message => " + msg.toString());
+                messageList.add(msg);
                 // notify adapter to update
                 messageAdapter.notifyDataSetChanged();
 
@@ -151,5 +164,39 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    void sendMessage() {
+        String sendText = inputText.getText().toString();
+
+        // empty input cannot be send
+        if (TextUtils.isEmpty(sendText)) {
+            Toast.makeText(this, "Please enter text first...", Toast.LENGTH_SHORT).show();
+        } else {
+            String currentUserChatPath = "Chat/" + currentUid + "/" + friendUid;
+            String friendChatPath = "Chat/" + friendUid + "/" + currentUid;
+
+            // get unique message ID for current message
+            String messageID = FirebaseAPI.pushFirebaseNode(currentUserChatPath);
+            Time time = new Time();
+
+            // create current message
+            Message message = new Message(sendText, "text", currentUid, time, false);
+            Log.d(TAG, "sendMessage: new time => "+ time.toString());
+
+            // Push current message to both current user's chat and friend's chat path
+            Map<String, Object> messagePush = new HashMap<>();
+            messagePush.put(currentUserChatPath + "/" + messageID, message);
+            messagePush.put(friendChatPath + "/" + messageID, message);
+
+            DatabaseReference.CompletionListener batchCompletionListener = (error, ref) -> {
+                if (error != null){
+                    Log.d("SEND_CHAT_MESSAGE_ERROR", error.getMessage().toString());
+                }
+            };
+            FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
+        }
+
+
     }
 }

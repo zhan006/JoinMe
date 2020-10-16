@@ -11,6 +11,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Encapsulates methods for accessing Firebase
  */
@@ -37,13 +40,22 @@ public class FirebaseAPI {
     }
 
     /**
-     * Push to a given Firebase node
-     * @return unique key
+     * Push to a given firebase node and get unique push id
+     * @param nodePath = node path
+     * @return unique push id
      */
-    public static String addFirebaseData(String nodePath, Object data, OnCompleteListener completionListener) {
-        String key = rootRef.child(nodePath).push().getKey();
-        rootRef.child(nodePath+"/"+key).setValue(data).addOnCompleteListener(completionListener);
-        return key;
+    public static String pushFirebaseNode(String nodePath) {
+        return rootRef.child(nodePath).push().getKey();
+    }
+
+    /**
+     * Given node paths and data, update batch data at once
+     * @param batchData = Map object with nodePath being key
+     * @param completionListener = completion logic after updating data
+     */
+    public static void updateBatchData(Map<String, Object> batchData,
+                                       DatabaseReference.CompletionListener completionListener) {
+        rootRef.updateChildren(batchData, completionListener);
     }
 
 
