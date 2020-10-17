@@ -404,6 +404,17 @@
                     android:layout_marginStart="10dp"
                     />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/event_comments_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="15dp"
+                    android:background="#F9F4E3"
+
+                    >
+                </androidx.recyclerview.widget.RecyclerView>
+
 
 
 

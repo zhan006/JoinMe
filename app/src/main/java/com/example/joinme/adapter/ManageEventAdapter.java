@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
-import com.example.joinme.fragments.HomePageFragment;
+import com.example.joinme.fragments.EventDetailFragment;
 import com.example.joinme.objects.Event;
 
 import java.util.List;
@@ -30,10 +30,17 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
             update=(Button)itemView.findViewById(R.id.update_button);
 
             cancel.setOnClickListener((v)->{});
+//            update.setOnClickListener((v)->{
+//                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
+//                        new HomePageFragment(),null).commit();
+//            });
+
+//            Deng: this is where I should show my event_details page!
             update.setOnClickListener((v)->{
                 ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-                        new HomePageFragment(),null).commit();
+                        new EventDetailFragment(),null).commit();
             });
+
         }
     }
 
