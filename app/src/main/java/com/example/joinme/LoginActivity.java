@@ -124,49 +124,56 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String accountString = account.getText().toString();
                 String passwordString = password.getText().toString();
-                // using Firebase API to check a user's Existing status
-                FirebaseAPI.login(accountString,passwordString).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(LoginActivity.this, "sign in successful.",
-                                    Toast.LENGTH_SHORT).show();
+                if(accountString.equals("") || passwordString.equals("")){
+                    Toast.makeText(LoginActivity.this,"Please input your account and password",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    FirebaseAPI.login(accountString,passwordString).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                Toast.makeText(LoginActivity.this, "sign in successful.",
+                                        Toast.LENGTH_SHORT).show();
 
-                            // check the remember me setting
-                            if (rememberMe.isChecked()){
-                                settings.edit().putString("judgeText", "yes")
-                                        .putString("userNameText", account.getText().toString())
-                                        .putString("passwordText", password.getText().toString())
-                                        .apply();
-                            }else {
+                                // check the remember me setting
+                                if (rememberMe.isChecked()){
+                                    settings.edit().putString("judgeText", "yes")
+                                            .putString("userNameText", account.getText().toString())
+                                            .putString("passwordText", password.getText().toString())
+                                            .apply();
+                                }else {
+                                    settings.edit().putString("judgeText", "no")
+                                            .putString("UserNameText", "")
+                                            .putString("passwordText", "")
+                                            .apply();
+                                }
+
+                                // get UID from current user
+                                currentUser = mAuth.getCurrentUser();
+                                String UID = currentUser.getUid();
+
+                                // send uid to the main activity
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("UID", UID);
+                                startActivity(intent);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, "Sign in failed. Check the account and password",
+                                        Toast.LENGTH_SHORT).show();
                                 settings.edit().putString("judgeText", "no")
                                         .putString("UserNameText", "")
                                         .putString("passwordText", "")
                                         .apply();
                             }
-
-                            // get UID from current user
-                            currentUser = mAuth.getCurrentUser();
-                            String UID = currentUser.getUid();
-
-                            // send uid to the main activity
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("UID", UID);
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Sign in failed. Check the account and password",
-                                    Toast.LENGTH_SHORT).show();
-                            settings.edit().putString("judgeText", "no")
-                                    .putString("UserNameText", "")
-                                    .putString("passwordText", "")
-                                    .apply();
                         }
-                    }
-                });
+                    });
+                }
+                // using Firebase API to check a user's Existing status
+
             }
         });
     }

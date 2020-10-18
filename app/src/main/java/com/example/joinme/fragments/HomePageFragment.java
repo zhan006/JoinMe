@@ -1,5 +1,10 @@
 package com.example.joinme.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +24,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +42,11 @@ import com.example.joinme.utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class HomePageFragment extends Fragment implements UserRenderable, EventRenderable {
@@ -49,8 +58,10 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     private RecyclerView board;
     private User user;
     private Event event;
+    private Geocoder geocoder;
     private final String WELCOME = "Welcome ";
-    private final int UPDATE_MSG = 1,UPDATE_EVENTS=2,GET_EVENT_DETAIL=3;
+    private final int UPDATE_MSG = 1, UPDATE_EVENTS = 2, GET_EVENT_DETAIL = 3;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @Override
@@ -63,7 +74,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_home,container,false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_home, container, false);
         icon = view.findViewById(R.id.icon);
         welcome = view.findViewById(R.id.welcome_name);
         organise = view.findViewById(R.id.organize_event);
@@ -80,12 +91,24 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("fragment", String.valueOf(getActivity().getSupportFragmentManager().getFragments().get(0).isVisible()));
-        organise.setOnClickListener((v)->{
+        organise.setOnClickListener((v) -> {
             FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm,new PublishEvent(),"publish_event");
+            utils.replaceFragment(fm, new PublishEvent(), "publish_event");
         });
-        search.setOnClickListener((v)->{
-            Log.d("fragment", ((MainActivity)getActivity()).getCurrentFragment().getTag());
+        // for testing location service;
+        search.setOnClickListener((v) -> {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            Location location = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            geocoder = new Geocoder(getContext());
+            try {
+                List address = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),4);
+                Log.d("fragment",address.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         });
 
     }
