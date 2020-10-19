@@ -48,6 +48,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/event_name"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
@@ -71,11 +72,13 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/event_time"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content">
 
                 </EditText>
                 <ImageButton
+                    android:id="@+id/calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_date_range_black_18dp"/>
@@ -95,13 +98,14 @@
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
-
                 <EditText
+                    android:id="@+id/event_location"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
                 </EditText>
                 <ImageButton
+                    android:id="@+id/location_button"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_add_location_alt_black_18dp"/>
@@ -112,6 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Category:*"
@@ -122,12 +127,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <Spinner
-                    android:layout_width="250dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"/>
 
+
+                <Spinner
+                    android:id="@+id/event_category"
+                    android:layout_width="251dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bio_bg" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Min group size:*"
@@ -146,12 +154,12 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <NumberPicker
+                    android:id="@+id/min_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                   />
+                    android:layout_marginLeft="10dp"/>
 
             </LinearLayout>
 
@@ -170,13 +178,13 @@
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
-
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <NumberPicker
+                    android:id="@+id/max_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:layout_marginLeft="10dp"/>
+
 
             </LinearLayout>
 
@@ -197,6 +205,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/about"
                     android:background="@drawable/bio_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -224,6 +233,7 @@
                     android:layout_marginLeft="15dp"
                     />
                 <ImageButton
+                    android:id="@+id/invite_friend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_send_black_18dp"/>
@@ -237,6 +247,7 @@
                 android:layout_height="60dp">
 
                 <Button
+                    android:id="@+id/publish_event"
                     android:layout_marginTop="20dp"
                     style="@style/small_button"
                     android:layout_width="170dp"
