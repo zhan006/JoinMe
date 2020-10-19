@@ -3,10 +3,16 @@ package com.example.joinme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,45 +47,45 @@ public class MainActivity extends AppCompatActivity {
     private User user;
     private String uid;
     private ArrayList<Event> eventList;
-    private final int GET_USER=0,GET_EVENT=1;
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private final int GET_USER = 0, GET_EVENT = 1;
+    public LocationManager locationManager;
+    private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             Bundle bd = msg.getData();
-            switch (msg.what){
+            switch (msg.what) {
                 case GET_USER:
-                    user = (User)bd.getSerializable("user");
+                    user = (User) bd.getSerializable("user");
                     Fragment cFragment = getCurrentFragment();
-                    if(cFragment instanceof UserRenderable){
+                    if (cFragment instanceof UserRenderable) {
                         ((UserRenderable) cFragment).renderUser();
                     }
                     break;
                 case GET_EVENT:
                     ArrayList<String> ids = bd.getStringArrayList("ids");
-                    new Thread(()->{
+                    new Thread(() -> {
                         ValueEventListener listener = new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                HashMap map = (HashMap)snapshot.getValue();
+                                HashMap map = (HashMap) snapshot.getValue();
                                 eventList = new ArrayList<Event>();
-                                for(String id:ids){
+                                for (String id : ids) {
                                     Event event = new Event((HashMap) map.get(id));
                                     eventList.add(event);
                                     Fragment cFragment = getCurrentFragment();
-                                    if(cFragment instanceof EventRenderable){
+                                    if (cFragment instanceof EventRenderable) {
                                         ((EventRenderable) cFragment).renderEvent();
                                     }
                                 }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
 
                             }
                         };
-                        FirebaseAPI.getFirebaseDataOnce("Event",listener);
+                        FirebaseAPI.getFirebaseDataOnce("Event", listener);
                     }).start();
-
-
 
 
             }
@@ -87,17 +94,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionbar = getSupportActionBar();
         FragmentManager fm = getSupportFragmentManager();
-        if(actionbar != null) actionbar.hide();
+        if (actionbar != null) actionbar.hide();
         NavBar nav = findViewById(R.id.navbar);
-        fm.beginTransaction().replace(R.id.main_fragment_container,new HomePageFragment(),"home").commit();
+        fm.beginTransaction().replace(R.id.main_fragment_container, new HomePageFragment(), "home").commit();
         nav.setSelectedItem(R.id.tab_home);
         uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
+        getCurrentLocation();
         new Thread(getUserProfile).start();
         new Thread(getAttendingList).start();
 
@@ -117,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 //String username = dataSnapshot.getValue(String.class);
-                HashMap data = (HashMap)dataSnapshot.getValue();
-                Log.d(TAG, "onDataChange: username = "+data.toString());
+                HashMap data = (HashMap) dataSnapshot.getValue();
+                Log.d(TAG, "onDataChange: username = " + data.toString());
             }
 
             @Override
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43",userListener);
+        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
         FirebaseAPI.setFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", "Giovana")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -138,18 +147,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    private Runnable getUserProfile = ()-> {
+
+    private Runnable getUserProfile = () -> {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 //String username = dataSnapshot.getValue(String.class);
-                User user =  dataSnapshot.getValue(User.class);
+                User user = dataSnapshot.getValue(User.class);
                 Message msg = new Message();
                 msg.what = GET_USER;
                 Bundle bd = new Bundle();
-                bd.putSerializable("user",user);
-                Log.d("user",user.toString());
+                bd.putSerializable("user", user);
+                Log.d("user", user.toString());
                 msg.setData(bd);
                 handler.sendMessage(msg);
                 //Log.d(TAG, "onDataChange: username = "+username);
@@ -164,13 +174,13 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
     };
-    private Runnable getAttendingList = ()->{
+    private Runnable getAttendingList = () -> {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap map = (HashMap) snapshot.getValue();
                 Bundle bd = new Bundle();
-                bd.putStringArrayList("ids",new ArrayList(map.keySet()));
+                bd.putStringArrayList("ids", new ArrayList(map.keySet()));
                 Message msg = new Message();
                 msg.what = GET_EVENT;
                 msg.setData(bd);
@@ -184,16 +194,24 @@ public class MainActivity extends AppCompatActivity {
         };
         FirebaseAPI.getFirebaseData("AttendingList/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", eventListener);
     };
-    public User getUser(){
+
+    public User getUser() {
         return user;
     }
-    public String getUid(){return uid;}
-    public ArrayList<Event> getEventList(){return eventList;}
-    public Fragment getCurrentFragment(){
+
+    public String getUid() {
+        return uid;
+    }
+
+    public ArrayList<Event> getEventList() {
+        return eventList;
+    }
+
+    public Fragment getCurrentFragment() {
         List<Fragment> ls = getSupportFragmentManager().getFragments();
-        if(ls !=null){
-            for(Fragment fragment:ls){
-                if(fragment.isVisible()){
+        if (ls != null) {
+            for (Fragment fragment : ls) {
+                if (fragment.isVisible()) {
                     return fragment;
                 }
             }
@@ -202,13 +220,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStackImmediate();
             getFragmentManager().beginTransaction().commit();
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void getCurrentLocation() {
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+                    1);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10,
+                location -> Log.d("location", location.getLatitude()+""));
     }
 }
