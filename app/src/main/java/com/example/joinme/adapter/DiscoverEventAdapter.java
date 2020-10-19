@@ -63,6 +63,12 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter implements View.O
         ((ViewHolder) holder).title.setText(event.getEventName());
         ((ViewHolder) holder).time.setText(event.getDatetime());
         ((ViewHolder) holder).location.setText(event.getLocation());
+        ((ViewHolder) holder).detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override

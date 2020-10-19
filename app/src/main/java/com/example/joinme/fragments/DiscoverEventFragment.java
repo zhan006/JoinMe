@@ -69,6 +69,7 @@ public class DiscoverEventFragment extends Fragment {
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         hobbyRecyclerView.setLayoutManager(layoutManager);
         hobbyRecyclerView.setAdapter(new SearchConditionAdapter(initDistances()));
+
     }
 
     private void initDateList(View v) {
