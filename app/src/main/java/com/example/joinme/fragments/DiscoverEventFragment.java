@@ -2,7 +2,6 @@ package com.example.joinme.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
-import com.example.joinme.adapter.AddFriendAdapter;
 import com.example.joinme.adapter.SearchConditionAdapter;
-import com.example.joinme.objects.Friend;
-import com.example.joinme.objects.Message;
-import com.example.joinme.objects.Time;
-import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 
 import java.util.ArrayList;
@@ -52,7 +45,6 @@ public class DiscoverEventFragment extends Fragment {
         initTopicList(v);
         initDistanceList(v);
         initDateList(v);
-
 
         return v;
     }
