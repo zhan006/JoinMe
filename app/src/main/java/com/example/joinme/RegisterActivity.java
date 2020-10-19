@@ -104,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                     visibleButton2.setImageResource(R.drawable.visible);
                 }
             }
+
         });
     }
 }
