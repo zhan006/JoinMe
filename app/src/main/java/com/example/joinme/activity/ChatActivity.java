@@ -240,7 +240,8 @@ public class ChatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //open image gallery in the phone and get crop image
-        Uri imageUri = data.getData();
+        Uri imageUri=null;
+        if(data!=null) imageUri = data.getData();
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
             CropImage.activity(imageUri)
                     .setAspectRatio(1, 1)
