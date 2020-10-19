@@ -84,7 +84,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="30dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,19 +95,26 @@
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
+                <fragment
+                    android:id="@+id/autoCompleteLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content">
+<!--                <EditText-->
+<!--                    android:layout_width="220dp"-->
+<!--                    android:layout_height="wrap_content">-->
 
-                </EditText>
-                <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_add_location_alt_black_18dp"/>
+<!--                </EditText>-->
+<!--                <ImageButton-->
+<!--                    android:layout_width="60dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/baseline_add_location_alt_black_18dp"/>-->
             </LinearLayout>
 
+
             <LinearLayout
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
