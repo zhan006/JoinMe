@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,6 +43,23 @@ public class RegisterActivity extends AppCompatActivity {
         EditText confirm = (EditText)findViewById(R.id.register_confirm_text);
 
         Button registerButton = (Button)findViewById(R.id.register_button);
+        CheckBox checkBox = (CheckBox)findViewById(R.id.register_checkbox);
+        if (!checkBox.isChecked()){
+            registerButton.setEnabled(false);
+        }else {
+            registerButton.setEnabled(true);
+        }
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    registerButton.setEnabled(true);
+                }else {
+                    registerButton.setEnabled(false);
+                }
+            }
+        });
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
