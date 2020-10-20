@@ -73,4 +73,11 @@
         android:layout_marginTop="30dp"
         android:layout_below="@id/organize_event"
         android:text="search an event"/>
+    <Button
+        android:id="@+id/signout_button"
+        style="@style/long_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/search_event"
+        android:text="sign out"/>
 </RelativeLayout>

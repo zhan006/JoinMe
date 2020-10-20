@@ -1,6 +1,7 @@
 package com.example.joinme.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
@@ -30,6 +31,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.joinme.LoginActivity;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.NotificationAdapter;
@@ -39,6 +41,12 @@ import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
 import com.example.joinme.utils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -52,7 +60,7 @@ import java.util.List;
 public class HomePageFragment extends Fragment implements UserRenderable, EventRenderable {
     private ImageView icon;
     private TextView welcome;
-    private Button organise, search;
+    private Button organise, search, signout;
     private NotificationAdapter adapter;
     private ArrayList<Event> eventList;
     private RecyclerView board;
@@ -82,6 +90,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         board = view.findViewById(R.id.home_billboard);
         board.setLayoutManager(new LinearLayoutManager(getContext()));
         eventList = getParentEventList();
+        signout = view.findViewById(R.id.signout_button);
         renderEvent();
         renderUser();
         return view;
@@ -109,6 +118,28 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
                 e.printStackTrace();
             }
 
+        });
+        // test signout service
+        signout.setOnClickListener(v -> {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.signOut();
+            // [START config_signin]
+            // Configure Google Sign In
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            // [END config_signin]
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+            if (mGoogleSignInClient != null){
+                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+            }
+            Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intentSignin);
         });
 
     }
