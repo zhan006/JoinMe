@@ -244,6 +244,7 @@
                 android:layout_height="60dp">
 
                 <Button
+                    android:id="@+id/publish_event"
                     android:layout_marginTop="20dp"
                     style="@style/small_button"
                     android:layout_width="170dp"

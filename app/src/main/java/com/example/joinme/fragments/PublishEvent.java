@@ -2,11 +2,14 @@ package com.example.joinme.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +18,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
+import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.objects.Event;
+import com.example.joinme.objects.Time;
+import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -28,6 +36,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.annotations.NotNull;
 
 import java.util.Arrays;
@@ -40,10 +49,21 @@ public class PublishEvent extends Fragment {
     @Nullable
     private TitleBar titleBar;
     private PlacesClient placesClient;
+    private Button publish;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.from(getContext()).inflate(R.layout.activity_publish_event,container,false);
         titleBar = view.findViewById(R.id.title_bar);
+        publish = view.findViewById(R.id.publish_event);
+        publish.setOnClickListener((v)->{
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            Location loc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new Time(),
+                    "Test",((MainActivity) getActivity()).getUid(),"xixixi");
+            addEvent(dummyEvent);
+        });
         initPlaces();
         getCurrentPlace();
         return view;
@@ -82,6 +102,12 @@ public class PublishEvent extends Fragment {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.remove(fragment);
         ft.commit();
+    }
+
+    public void addEvent(Event event){
+        DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
+        event.setId(ref.getKey());
+        ref.setValue(event);
     }
 
     public void initPlaces(){
