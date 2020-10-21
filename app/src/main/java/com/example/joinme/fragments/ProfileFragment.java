@@ -26,6 +26,7 @@ import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
+import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
@@ -121,9 +122,9 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     }
     public List<Event> initDummyEvents(){
         ArrayList<Event> events = new ArrayList<Event>();
-        events.add(new Event("Hang out together","38 Little Lonsdale",new Time()));
-        events.add(new Event("Eat dinner","1 Bouverie",new Time()));
-        events.add(new Event("League of Legends","netfish cafe",new Time()));
+        events.add(new Event("Hang out together","38 Little Lonsdale",new DateTime()));
+        events.add(new Event("Eat dinner","1 Bouverie",new DateTime()));
+        events.add(new Event("League of Legends","netfish cafe",new DateTime()));
         return events;
     }
     public ArrayList<Event> getParentEventList(){

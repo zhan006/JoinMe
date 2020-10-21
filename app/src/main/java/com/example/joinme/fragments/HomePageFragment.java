@@ -38,6 +38,7 @@ import com.example.joinme.adapter.NotificationAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
+import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
@@ -115,7 +116,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             Location loc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
 
-            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new Time(),
+            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new DateTime(),
                     "sport",((MainActivity) getActivity()).getUid(),"nOTHING",ref.getKey());
             ref.setValue(dummyEvent);
             geocoder = new Geocoder(getContext());

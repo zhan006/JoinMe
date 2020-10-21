@@ -26,12 +26,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.location;
@@ -86,6 +88,11 @@ public class PublishEvent extends Fragment implements DateTimeClick {
         publish_event = view.findViewById(R.id.publish_event);
         event_duration = view.findViewById(R.id.event_duration);
         date_time = view.findViewById(R.id.date_time);
+        date_time.setFocusable(false);
+        date_time.setOnClickListener((v -> {
+            DialogFragment date_time = new date_time_pickers();
+            date_time.show(getActivity().getSupportFragmentManager(),"date_time");
+        }));
 
         Spinner category_spinner = (Spinner) view.findViewById(R.id.event_category);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -183,6 +190,7 @@ public class PublishEvent extends Fragment implements DateTimeClick {
 
     @Override
     public void OnDateTimeSelected(int Year, int Month, int Day, int Hour, int Minute) {
-        event.setDatetime();
+        event.setDatetime(new DateTime(Year,Month,Day,Hour,Minute));
+        date_time.setText(event.getDatetime().toString());
     }
 }
