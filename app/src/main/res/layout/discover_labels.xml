@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:layout_marginTop="10dp"
+              android:layout_marginLeft="20dp">
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -15,40 +17,17 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 style="@style/bold_text"/>
-
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/Basketball_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="Basketball"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/Movie_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="Moive"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/Guitar_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="Guitar"
-                android:textAllCaps="false"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topic_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp" />
     </LinearLayout>
     <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+    >
 
         <TextView
                 android:layout_width="wrap_content"
@@ -59,33 +38,13 @@
                 android:layout_marginLeft="20dp"
                 style="@style/bold_text"/>
 
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/zero_five_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="0-5km"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/five_eight_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="5-8km"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/eight_more_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text=">8km"
-                android:textAllCaps="false"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/distance_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="5dp"/>
+
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -101,33 +60,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 style="@style/bold_text"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/date_list"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"/>
 
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/d1"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="date1"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/d2"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="date2"
-                android:textAllCaps="false"
-        />
-        <Button
-                style="@style/detail_button"
-                android:id="@+id/d3"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="date3"
-                android:textAllCaps="false"/>
     </LinearLayout>
 
 </LinearLayout>

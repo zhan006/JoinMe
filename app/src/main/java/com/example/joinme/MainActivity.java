@@ -178,9 +178,15 @@ public class MainActivity extends AppCompatActivity {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashMap map = (HashMap) snapshot.getValue();
+                HashMap<String,Boolean> map = (HashMap) snapshot.getValue();
+
                 Bundle bd = new Bundle();
-                bd.putStringArrayList("ids", new ArrayList(map.keySet()));
+                ArrayList attendingList = new ArrayList();
+                for(String k : map.keySet()){
+                    if(map.get(k)){attendingList.add(k);}
+                }
+                Log.d("event",attendingList.toString());
+                bd.putStringArrayList("ids", new ArrayList(attendingList));
                 Message msg = new Message();
                 msg.what = GET_EVENT;
                 msg.setData(bd);

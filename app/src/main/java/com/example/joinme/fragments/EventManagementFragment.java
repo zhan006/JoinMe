@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.R;
 import com.example.joinme.adapter.ManageEventAdapter;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.Time;
 import com.example.joinme.reusableComponent.NavBar;
 
 import java.util.ArrayList;
@@ -56,9 +57,9 @@ public class EventManagementFragment extends Fragment {
     }
     public List<Event> initDummyEvents(){
         ArrayList<Event> events = new ArrayList<Event>();
-        events.add(new Event("Hang out together","38 Little Lonsdale","Today"));
-        events.add(new Event("Eat dinner","1 Bouverie","Afternoon"));
-        events.add(new Event("League of Legends","netfish cafe","evening"));
+        events.add(new Event("Hang out together","38 Little Lonsdale", new Time()));
+        events.add(new Event("Eat dinner","1 Bouverie",new Time()));
+        events.add(new Event("League of Legends","netfish cafe",new Time()));
         return events;
     }
 }

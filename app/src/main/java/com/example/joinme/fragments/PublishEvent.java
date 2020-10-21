@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +29,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
+import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.objects.Event;
+import com.example.joinme.objects.Time;
+import com.example.joinme.objects.location;
 import com.example.joinme.interfaces.DateTimeClick;
 import com.example.joinme.objects.Event;
 import com.example.joinme.reusableComponent.TitleBar;
@@ -41,6 +49,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.annotations.NotNull;
 
 import java.text.DateFormat;
@@ -124,6 +133,12 @@ public class PublishEvent extends Fragment implements DateTimeClick {
         ft.commit();
     }
 
+    public void addEvent(Event event){
+        DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
+        event.setId(ref.getKey());
+        ref.setValue(event);
+    }
+
     public void initPlaces(){
         Places.initialize(getContext(),"AIzaSyDLzlvA6LLbYiY35Ch3tEziWe-dGzdJhLo");
         placesClient = Places.createClient(getContext());
@@ -156,6 +171,9 @@ public class PublishEvent extends Fragment implements DateTimeClick {
                 }
             });
         } else {
+            // A local method to request required permissions;
+            // See https://developer.android.com/training/permissions/requesting
+//            getLocationPermission();
             ActivityCompat.requestPermissions( getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                     1);
             getCurrentPlace();

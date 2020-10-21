@@ -25,7 +25,7 @@
              android:layout_height="160dp"
              android:layout_below="@id/event_manage_title"
              android:layout_marginTop="40dp"
-             android:layout_centerHorizontal="true"/>
+             android:layout_marginLeft="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id = "@+id/past_events"
