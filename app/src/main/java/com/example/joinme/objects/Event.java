@@ -22,6 +22,10 @@ public class Event implements Serializable {
 
     }
 
+    public Event() {
+
+    }
+
     public String getDatetime() {
         return datetime;
     }

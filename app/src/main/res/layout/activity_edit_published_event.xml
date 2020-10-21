@@ -47,10 +47,11 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
+
                 <EditText
+                    android:id="@+id/event_name"
                     android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:hint="Let's BBQ">
+                    android:layout_height="wrap_content">
 
                 </EditText>
 
@@ -72,9 +73,9 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/time"
                     android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:hint="15 August 2020">
+                    android:layout_height="wrap_content">
 
                 </EditText>
                 <ImageButton
@@ -100,8 +101,7 @@
 
                 <EditText
                     android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:hint="University of Melbourne">
+                    android:layout_height="wrap_content">
 
                 </EditText>
                 <ImageButton
@@ -149,12 +149,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <EditText
+                    android:id="@+id/min_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:inputType="number"
+                    android:layout_marginLeft="10dp"/>
 
             </LinearLayout>
 
@@ -174,12 +176,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <EditText
+                    android:id="@+id/max_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:inputType="number"
+                    android:layout_marginLeft="10dp"/>
 
             </LinearLayout>
 
@@ -206,7 +210,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp"
-                    android:hint="I am looking forward to meeting you all!">
+                    android:padding="10dp"
+                    android:gravity="start">
 
                 </EditText>
 

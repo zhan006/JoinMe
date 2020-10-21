@@ -1,6 +1,9 @@
 package com.example.joinme.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.joinme.R;
+import com.example.joinme.interfaces.DateTimeClick;
+import com.example.joinme.objects.Event;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -36,40 +43,40 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class PublishEvent extends Fragment {
+public class PublishEvent extends Fragment implements DateTimeClick {
     @Nullable
     private TitleBar titleBar;
-    private EditText event_name, event_time, event_location, about;
+    private EditText event_name, event_location, about, event_duration, date_time;
     private Spinner event_category;
-    private ImageButton calendar, location_button, invite_friend;
+    private ImageButton location_button, invite_friend;
     private Button publish_event;
-    private NumberPicker min_group_size, max_group_size;
+    private EditText min_group_size, max_group_size;
     private PlacesClient placesClient;
+    private Event event= new Event();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.from(getContext()).inflate(R.layout.activity_publish_event,container,false);
         titleBar = view.findViewById(R.id.title_bar);
         event_name = view.findViewById(R.id.event_name);
-        event_time = view.findViewById(R.id.event_time);
         event_location = view.findViewById(R.id.event_location);
         event_category = view.findViewById(R.id.event_category);
         min_group_size = view.findViewById(R.id.min_group_size);
-        min_group_size.setMaxValue(100);
-        min_group_size.setMinValue(1);
         max_group_size = view.findViewById(R.id.max_group_size);
-        max_group_size.setMaxValue(100);
-        max_group_size.setMinValue(1);
-        calendar = view.findViewById(R.id.calendar);
-        location_button = view.findViewById(R.id.location_button);
         about = view.findViewById(R.id.about);
         invite_friend = view.findViewById(R.id.invite_friend);
         publish_event = view.findViewById(R.id.publish_event);
+        event_duration = view.findViewById(R.id.event_duration);
+        date_time = view.findViewById(R.id.date_time);
 
         Spinner category_spinner = (Spinner) view.findViewById(R.id.event_category);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -149,13 +156,15 @@ public class PublishEvent extends Fragment {
                 }
             });
         } else {
-            // A local method to request required permissions;
-            // See https://developer.android.com/training/permissions/requesting
-//            getLocationPermission();
             ActivityCompat.requestPermissions( getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                     1);
             getCurrentPlace();
             Log.d("location", String.valueOf(ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION)));
         }
+    }
+
+    @Override
+    public void OnDateTimeSelected(int Year, int Month, int Day, int Hour, int Minute) {
+        event.setDatetime();
     }
 }
