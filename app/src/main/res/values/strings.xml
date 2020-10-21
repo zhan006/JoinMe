@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Joinme</string>
+    <string-array name="category_array">
+        <item>Sport</item>
+        <item>Game</item>
+        <item>Food</item>
+        <item>Exercise</item>
+        <item>Music</item>
+        <item>Study</item>
+    </string-array>
+
+
+
 </resources>

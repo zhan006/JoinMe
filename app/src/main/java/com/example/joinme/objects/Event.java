@@ -9,8 +9,8 @@ import java.util.HashMap;
 public class Event implements Serializable {
     private String eventName,description,eventCategory,organizerid,address,id;
     private location location;
-    private Time datetime;
-    public Event(String name,location location,Time datetime,String category,String userid,String description,String id){
+    private DateTime datetime;
+    public Event(String name,location location,DateTime datetime,String category,String userid,String description,String id){
         this.eventName = name;
         this.location = location;
         this.datetime = datetime;
@@ -19,7 +19,7 @@ public class Event implements Serializable {
         this.description = description;
         this.id = id;
     }
-    public Event(String name,location location,Time datetime,String category,String userid,String description){
+    public Event(String name,location location,DateTime datetime,String category,String userid,String description){
         this.eventName = name;
         this.location = location;
         this.datetime = datetime;
@@ -31,7 +31,7 @@ public class Event implements Serializable {
     public Event(HashMap data){
         this.eventName = (String)data.get("name");
         try{
-            this.datetime = (Time)data.get("time");
+            this.datetime = (DateTime)data.get("time");
         }catch (Exception e){
         }
 
@@ -41,16 +41,21 @@ public class Event implements Serializable {
 
     }
 
-    public Event(String name, String location, Time today) {
-        this.eventName = name;
-        this.address = location;
-        this.datetime = today;
+    public Event() {
+
     }
+
+    public Event(String name, String address, DateTime time) {
+        eventName = name;
+        this.address = address;
+        this.datetime = time;
+    }
+
     public String getId(){
         return id;
     }
     public void setId(String id){this.id = id;}
-    public Time getDatetime() {
+    public DateTime getDatetime() {
         return datetime;
     }
 
@@ -78,7 +83,7 @@ public class Event implements Serializable {
     }
 
     public void setDescription(String description){this.description = description;}
-    public void setDatetime(Time datetime) {
+    public void setDatetime(DateTime datetime) {
         this.datetime = datetime;
     }
 

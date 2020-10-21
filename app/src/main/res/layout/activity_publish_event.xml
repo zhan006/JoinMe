@@ -48,6 +48,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/event_name"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
@@ -62,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Time:*"
+                    android:text="Date and Time:*"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -71,16 +72,36 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:layout_width="250dp"
+                    android:id="@+id/date_time"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
                 </EditText>
-                <ImageButton
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_date_range_black_18dp"/>
-            </LinearLayout>
+                    android:text="Event Duration:*"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
 
+                <EditText
+                    android:id="@+id/event_duration"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content">
+
+                </EditText>
+
+            </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -95,6 +116,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
+
                 <fragment
                     android:id="@+id/autoCompleteLocation"
                     android:layout_width="match_parent"
@@ -112,13 +134,13 @@
 <!--                    android:src="@drawable/baseline_add_location_alt_black_18dp"/>-->
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Category:*"
@@ -130,11 +152,11 @@
                     android:layout_centerVertical="true"/>
 
                 <Spinner
-                    android:layout_width="250dp"
+                    android:id="@+id/event_category"
+                    android:layout_width="251dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"/>
-
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bio_bg" />
             </LinearLayout>
 
             <LinearLayout
@@ -153,12 +175,15 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <EditText
+                    android:id="@+id/min_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                   />
+                    android:inputType="number"
+                    android:layout_marginLeft="10dp"/>
+
 
             </LinearLayout>
 
@@ -177,13 +202,15 @@
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
-
-                <Spinner
-                    android:layout_width="200dp"
-                    android:layout_height="40dp"
+                <EditText
+                    android:id="@+id/max_group_size"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:inputType="number"
                     android:background="@drawable/bio_bg"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:layout_marginLeft="10dp"/>
+
 
             </LinearLayout>
 
@@ -204,13 +231,16 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/about"
                     android:background="@drawable/bio_bg"
+                    android:gravity="start"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginLeft="20dp">
-
+                    android:layout_marginLeft="20dp"
+                    android:padding="10dp"
+                    android:hint="Tell us more about the event!">
                 </EditText>
 
             </LinearLayout>
@@ -231,6 +261,7 @@
                     android:layout_marginLeft="15dp"
                     />
                 <ImageButton
+                    android:id="@+id/invite_friend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_send_black_18dp"/>
@@ -244,6 +275,7 @@
                 android:layout_height="60dp">
 
                 <Button
+                    android:id="@+id/publish_event"
                     android:layout_marginTop="20dp"
                     style="@style/small_button"
                     android:layout_width="170dp"
