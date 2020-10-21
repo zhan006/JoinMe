@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.joinme.database.FirebaseAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -125,18 +126,18 @@ public class LoginActivity extends AppCompatActivity {
                 String accountString = account.getText().toString();
                 String passwordString = password.getText().toString();
                 if(accountString.equals("") || passwordString.equals("")){
-                    Toast.makeText(LoginActivity.this,"Please input your account and password",
-                            Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.login_layout),"Please input your account and password",
+                            Snackbar.LENGTH_SHORT).show();
                 }
                 else{
+                    Snackbar.make(findViewById(R.id.login_layout),"Pending Login Process",Snackbar.LENGTH_SHORT).show();
                     FirebaseAPI.login(accountString,passwordString).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
-                                Toast.makeText(LoginActivity.this, "sign in successful.",
-                                        Toast.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(R.id.login_layout),"Success!",Snackbar.LENGTH_SHORT).show();
 
                                 // check the remember me setting
                                 if (rememberMe.isChecked()){
@@ -162,8 +163,8 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Sign in failed. Check the account and password",
-                                        Toast.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(R.id.login_layout), "Sign in failed. Check the account and password",
+                                        Snackbar.LENGTH_SHORT).show();
                                 settings.edit().putString("judgeText", "no")
                                         .putString("UserNameText", "")
                                         .putString("passwordText", "")

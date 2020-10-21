@@ -46,8 +46,14 @@ public class NotificationAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Event event = eventList.get(position);
         ((NotificationAdapter.ViewHolder) holder).name.setText(event.getEventName());
-        ((NotificationAdapter.ViewHolder) holder).date.setText(event.getDatetime());
-        ((NotificationAdapter.ViewHolder) holder).location.setText(event.getLocation());
+        if(event.getDatetime()!=null){
+            ((NotificationAdapter.ViewHolder) holder).date.setText(event.getDatetime().toString());
+        }
+
+        if(event.getLocation()!=null){
+            ((NotificationAdapter.ViewHolder) holder).location.setText(event.getLocation().getAddress());
+        }
+
     }
 
     @Override

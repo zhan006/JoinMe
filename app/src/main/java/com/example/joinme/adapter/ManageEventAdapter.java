@@ -29,7 +29,9 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
             cancel=(Button)itemView.findViewById(R.id.cancel_button);
             update=(Button)itemView.findViewById(R.id.update_button);
 
-            cancel.setOnClickListener((v)->{});
+            cancel.setOnClickListener((v)->{
+
+            });
 //            update.setOnClickListener((v)->{
 //                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
 //                        new HomePageFragment(),null).commit();
@@ -59,8 +61,12 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Event event = mEventList.get(position);
         ((ViewHolder)holder).eventName.setText(event.getEventName());
-        ((ViewHolder)holder).eventDatetime.setText(event.getDatetime());
-        ((ViewHolder)holder).eventLocation.setText(event.getLocation());
+        ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
+        ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
+        ((ViewHolder)holder).cancel.setOnClickListener((v)->{
+            mEventList.remove(position);
+            this.notifyDataSetChanged();
+        });
     }
 
     @Override

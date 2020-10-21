@@ -37,10 +37,13 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
+import com.example.joinme.objects.location;
 import com.example.joinme.utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -100,10 +103,15 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            Location location = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location loc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
+
+            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new Time(),
+                    "sport",((MainActivity) getActivity()).getUid(),"nOTHING",ref.getKey());
+            ref.setValue(dummyEvent);
             geocoder = new Geocoder(getContext());
             try {
-                List address = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),4);
+                List address = geocoder.getFromLocation(loc.getLatitude(),loc.getLongitude(),4);
                 Log.d("fragment",address.toString());
             } catch (IOException e) {
                 e.printStackTrace();
