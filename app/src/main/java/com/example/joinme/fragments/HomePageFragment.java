@@ -57,6 +57,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,6 +86,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_home, container, false);
@@ -158,10 +161,13 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     public User getParentUser(){
         return ((MainActivity)getActivity()).getUser();
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void renderEvent() {
         eventList = getParentEventList();
         if(eventList!=null){
+            eventList.sort((event, t1) -> event.getDatetime().compareTo(t1.getDatetime()));
+            eventList.removeIf((e)-> Calendar.getInstance().getTimeInMillis()>e.getDatetime().getTimeStamp());
             board.setAdapter(new NotificationAdapter(eventList));
         }
     }

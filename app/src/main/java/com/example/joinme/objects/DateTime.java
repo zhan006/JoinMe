@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class DateTime {
+public class DateTime implements Comparable<DateTime>{
     String date,time;
     Long timeStamp;
     private Calendar cal_date;
@@ -35,7 +35,7 @@ public class DateTime {
 
     public DateTime(HashMap datetime) {
         cal_date = Calendar.getInstance();
-        Long timeStamp = (Long) datetime.get("timeStamp");
+        timeStamp = (Long) datetime.get("timeStamp");
         cal_date.setTimeInMillis(timeStamp);
     }
 
@@ -47,5 +47,16 @@ public class DateTime {
     public void setTimeStamp(Long timeStamp){this.timeStamp = timeStamp;}
     public String toString(){
         return getDate()+", "+getTime();
+    }
+
+    @Override
+    public int compareTo(DateTime o) {
+        if(this.getTimeStamp().intValue()<o.getTimeStamp().intValue()){
+            return -1;
+        }else if(this.getTimeStamp().intValue()==o.getTimeStamp().intValue()){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }
