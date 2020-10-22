@@ -67,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
                         ValueEventListener listener = new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                snapshot.getChildren();
                                 HashMap map = (HashMap) snapshot.getValue();
                                 eventList = new ArrayList<Event>();
                                 for (String id : ids) {
-                                    Event event = new Event((HashMap) map.get(id));
+                                    Log.d("event", map.get(id).toString());
+                                    Event event = new Event((HashMap)map.get(id));
                                     eventList.add(event);
                                     Fragment cFragment = getCurrentFragment();
                                     if (cFragment instanceof EventRenderable) {
@@ -182,11 +184,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Bundle bd = new Bundle();
                 ArrayList attendingList = new ArrayList();
-                for(String k : map.keySet()){
-                    if(map.get(k)){attendingList.add(k);}
+                if(map!=null){
+                    for(String k : map.keySet()){
+                        if(map.get(k)){attendingList.add(k);}
+                    }
+                    Log.d("event",attendingList.toString());
                 }
-                Log.d("event",attendingList.toString());
-                bd.putStringArrayList("ids", new ArrayList(attendingList));
+
+                bd.putStringArrayList("ids", attendingList);
                 Message msg = new Message();
                 msg.what = GET_EVENT;
                 msg.setData(bd);

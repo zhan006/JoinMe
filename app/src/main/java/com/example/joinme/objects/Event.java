@@ -1,5 +1,7 @@
 package com.example.joinme.objects;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -7,7 +9,8 @@ import java.security.spec.ECField;
 import java.util.HashMap;
 
 public class Event implements Serializable {
-    private String eventName,description,eventCategory,organizerid,address,id;
+    private String eventName,description,eventCategory,organizerid,address,id,duration;
+    private int min, max;
     private location location;
     private DateTime datetime;
     public Event(String name,location location,DateTime datetime,String category,String userid,String description,String id){
@@ -29,15 +32,17 @@ public class Event implements Serializable {
         this.id = id;
     }
     public Event(HashMap data){
-        this.eventName = (String)data.get("name");
-        try{
-            this.datetime = (DateTime)data.get("time");
-        }catch (Exception e){
-        }
+        this.eventName = (String)data.get("eventName");
+        this.datetime = new DateTime((HashMap)data.get("datetime"));
 
         this.description = (String)data.get("description");
         this.eventCategory = (String)data.get("eventCategory");
-        this.organizerid = (String)data.get("organizerID");
+        this.organizerid = (String)data.get("organizerid");
+        this.location = new location((HashMap)data.get("location"));
+        this.duration = (String)data.get(duration);
+        this.id = (String)data.get("id");
+        this.min = ((Long)data.get("min")).intValue();
+        this.max = ((Long)data.get("max")).intValue();
 
     }
 
@@ -53,6 +58,12 @@ public class Event implements Serializable {
 
     public String getId(){
         return id;
+    }
+    public void setDuration(String duration){
+        this.duration = duration;
+    }
+    public String getDuration(){
+        return this.duration;
     }
     public void setId(String id){this.id = id;}
     public DateTime getDatetime() {
@@ -98,10 +109,14 @@ public class Event implements Serializable {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+    public void setMin(int min){this.min = min;}
+    public void setMax(int max){this.max = max;}
+    public int getMin(){return min;}
+    public int getMax(){return max;}
 
     @NonNull
     @Override
     public String toString() {
-        return eventName+" "+location+" "+organizerid+" "+datetime;
+        return eventName+" "+location.toString()+" "+organizerid+" "+datetime;
     }
 }
