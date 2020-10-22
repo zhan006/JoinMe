@@ -37,7 +37,11 @@ public class CommentAdapter extends RecyclerView.Adapter {
             upvoteCount = itemView.findViewById(R.id.event_comments_upvote_count);
             upvoteButton = itemView.findViewById(R.id.event_comments_upvote_icon);
 
+
+
         }
+
+
 
     }
 
@@ -55,7 +59,14 @@ public class CommentAdapter extends RecyclerView.Adapter {
         ((ViewHolder) holder).firstName.setText(comment.getFirstName());
         ((ViewHolder) holder).lastName.setText(comment.getLastName());
         ((ViewHolder) holder).textContent.setText(comment.getCommentContent());
-        ((ViewHolder) holder).profilePhoto.setImageResource(comment.getProfileImageId());
+        ((ViewHolder) holder).upvoteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                comment.setUpvoteCount(comment.getUpvoteCount()+1);
+                ((ViewHolder) holder).upvoteCount.setText(String.valueOf(comment.getUpvoteCount()));
+            }
+        });
+        ((ViewHolder) holder).upvoteCount.setText(String.valueOf(comment.getUpvoteCount()));
 
     }
 

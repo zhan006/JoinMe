@@ -1,12 +1,14 @@
 package com.example.joinme.objects;
 
+import com.example.joinme.R;
+
 public class Comment {
     private String firstName;
     private String lastName;
     private int profileImageId;
     private String commentContent;
     private int upvoteCount;
-    private String upvoteIcon;
+    private int upvoteIcon;
     private String commentAge;
 //    private String replyToUsername;
 
@@ -16,6 +18,8 @@ public class Comment {
         this.lastName = lastName;
         this.commentContent = commentContent;
         this.profileImageId = profileImageId;
+        this.upvoteIcon = R.drawable.event_upvote_icon;
+        this.upvoteCount = 0;
     }
 
     public String getFirstName(){
@@ -37,5 +41,9 @@ public class Comment {
 
     public int getUpvoteCount() {
         return upvoteCount;
+    }
+
+    public void setUpvoteCount(int upvoteCount) {
+        this.upvoteCount = upvoteCount;
     }
 }

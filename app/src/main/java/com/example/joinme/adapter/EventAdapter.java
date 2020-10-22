@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
-import com.example.joinme.fragments.HomePageFragment;
+import com.example.joinme.fragments.EventDetailFragment;
 import com.example.joinme.objects.Event;
 
 import java.util.List;
@@ -22,18 +21,18 @@ public class EventAdapter extends RecyclerView.Adapter {
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView eventName,eventLocation,eventDatetime;
         Button detail;
-        ImageButton upvote;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = (TextView) itemView.findViewById(R.id.event_name);
             eventLocation = (TextView) itemView.findViewById(R.id.event_location);
             eventDatetime = (TextView) itemView.findViewById(R.id.event_datetime);
             detail=(Button)itemView.findViewById(R.id.detail_button);
-            upvote = (ImageButton) itemView.findViewById(R.id.event_comments_upvote_icon);
             //for testing use, it should redirect to event details page
+//            Deng: Linked to event details page now.
             detail.setOnClickListener((v)->{
                 ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-                        new HomePageFragment(),null).commit();
+                        new EventDetailFragment(),null).commit();
             });
         }
     }
@@ -53,8 +52,8 @@ public class EventAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Event event = mEventList.get(position);
         ((ViewHolder)holder).eventName.setText(event.getEventName());
-        ((ViewHolder)holder).eventDatetime.setText(event.getDatetime());
-        ((ViewHolder)holder).eventLocation.setText(event.getLocation());
+        if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
+        if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
 
     }
 
