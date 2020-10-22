@@ -6,6 +6,7 @@ import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDetailFragment extends Fragment {
+    private ImageButton upvoteButton;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -40,8 +42,16 @@ public class EventDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
+        upvoteButton = v.findViewById(R.id.event_comments_upvote_icon);
+
+
         initCommentList(v);
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     public void initCommentList(View v){
@@ -62,4 +72,6 @@ public class EventDetailFragment extends Fragment {
         return comments;
 
     }
+
+
 }

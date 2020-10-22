@@ -3,6 +3,7 @@ package com.example.joinme.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,14 +25,18 @@ public class CommentAdapter extends RecyclerView.Adapter {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView firstName, lastName, textContent;
+        TextView firstName, lastName, textContent, upvoteCount;
         ImageView profilePhoto;
+        ImageButton upvoteButton;
         public ViewHolder(View itemView){
             super(itemView);
             firstName = itemView.findViewById(R.id.comment_user_firstName);
             lastName = itemView.findViewById(R.id.comment_user_lastName);
             profilePhoto = itemView.findViewById(R.id.comment_user_photo);
             textContent = itemView.findViewById(R.id.event_comments_content);
+            upvoteCount = itemView.findViewById(R.id.event_comments_upvote_count);
+            upvoteButton = itemView.findViewById(R.id.event_comments_upvote_icon);
+
         }
 
     }

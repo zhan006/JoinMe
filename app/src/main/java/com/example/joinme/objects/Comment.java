@@ -35,4 +35,7 @@ public class Comment {
         return commentContent;
     }
 
+    public int getUpvoteCount() {
+        return upvoteCount;
+    }
 }
