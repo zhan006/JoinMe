@@ -330,19 +330,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp">
                         <ImageButton
-                            android:id="@+id/profile_btn"
+                            android:id="@+id/event_organizer_profile_btn"
                             style="@style/add_friend_btn"
                             android:layout_height="40dp"
                             android:layout_width="35dp"
                             android:src="@drawable/profile_icon"/>
+
                         <ImageButton
-                            android:id="@+id/follow_btn"
-                            style="@style/add_friend_btn"
+                            android:id="@+id/event_follow_btn"
+                            android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_width="35dp"
-                            android:src="@drawable/tick_icon"/>
+                            android:scaleType="fitXY"
+                            android:src="@drawable/add_icon"
+                            android:background="@null"/>
+
                         <ImageButton
-                            android:id="@+id/message_icon"
+                            android:id="@+id/event_message_icon"
                             style="@style/add_friend_btn"
                             android:layout_height="40dp"
                             android:layout_width="35dp"
