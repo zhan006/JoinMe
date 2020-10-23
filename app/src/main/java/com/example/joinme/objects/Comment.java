@@ -9,7 +9,9 @@ public class Comment {
     private String commentContent;
     private int upvoteCount;
     private int upvoteIcon;
-    private String commentAge;
+    private String timeAgo;
+    private String timeCreated;
+
 //    private String replyToUsername;
 
 
@@ -20,6 +22,8 @@ public class Comment {
         this.profileImageId = profileImageId;
         this.upvoteIcon = R.drawable.event_upvote_icon;
         this.upvoteCount = 0;
+        this.timeCreated = "" + System.currentTimeMillis();
+
     }
 
     public String getFirstName(){
@@ -46,4 +50,14 @@ public class Comment {
     public void setUpvoteCount(int upvoteCount) {
         this.upvoteCount = upvoteCount;
     }
+
+
+    public String getTimeAgo() {
+        return timeAgo;
+    }
+
+    public String getTimeCreated() {
+        return timeCreated;
+    }
+
 }
