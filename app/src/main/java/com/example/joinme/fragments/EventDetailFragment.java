@@ -116,6 +116,7 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             case R.id.event_organizer_profile_btn:
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 utils.replaceFragment(fm, new ProfileFragment(), "organiser_profile");
+                break;
 
             case R.id.event_message_icon:
                 Toast.makeText(getActivity(), "Let's contact the organizer", Toast.LENGTH_SHORT).show();
@@ -126,6 +127,7 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                 chatActivity.putExtra("friendUid", "qa6KACdJ0RYZfVDXLtpKL2HcxJ43");
                 chatActivity.putExtra("friendUsername", "IU");
                 startActivity(chatActivity);
+                break;
 
 
             default:
