@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/comment_dialog_textArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="100dp"
+        android:hint="Please write down your comment"
+        style="@style/normal_text"
+        android:gravity="left|top"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:paddingLeft = "20dp"
+        android:paddingVertical="15dp"
+        android:background="@drawable/event_background"
+        />
+    <Button
+        android:id="@+id/comment_dialog_reply_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        style="@style/normal_button"
+        android:text="Comment"
+        android:layout_marginLeft="280dp"
+        android:layout_marginBottom="10dp"
+        android:textAllCaps="false"
+
+        />
+
+
+
+
+
+
+</LinearLayout>
