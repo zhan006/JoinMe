@@ -6,7 +6,9 @@ import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,14 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
 import com.example.joinme.adapter.CommentAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Comment;
 import com.example.joinme.reusableComponent.NavBar;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDetailFragment extends Fragment {
-    private ImageButton upvoteButton;
+public class EventDetailFragment extends Fragment{
+    private static final String TAG = "EventDetailFragment";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -42,12 +46,38 @@ public class EventDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
-        upvoteButton = v.findViewById(R.id.event_comments_upvote_icon);
+        CheckBox going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+
+        going.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean going) {
+                if(going){
+                    FirebaseAPI.rootRef.child("AttendingList").child("dVPWSkIeVHT3SPDfSMYPbAf52Pz2").child("-MKENdIe97l5y0t00Poa").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(),"Congrats! You are going!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }else{
+                    FirebaseAPI.rootRef.child("AttendingList").child("dVPWSkIeVHT3SPDfSMYPbAf52Pz2").child("-MKENdIe97l5y0t00Poa").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(), "You have successully withdrawn from the attending list", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
 
 
         initCommentList(v);
         return v;
     }
+
+
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -1,5 +1,7 @@
 package com.example.joinme.objects;
 
+import android.location.Location;
+
 import java.util.HashMap;
 
 public class location {
@@ -43,5 +45,17 @@ public class location {
 
     public String getAddress() {
         return address;
+    }
+
+    public double distanceTo(location l){
+        return Math.abs(l.latitude-latitude)+Math.abs(l.longtitude-longtitude);
+    }
+
+    public double distanceTo(Location l){
+        return Math.abs(l.getLatitude()-latitude)+Math.abs(l.getLongitude()-longtitude);
+    }
+
+    public double distanceTo(double la, double lo){
+        return Math.abs(la-this.latitude)+Math.abs(lo-longtitude);
     }
 }
