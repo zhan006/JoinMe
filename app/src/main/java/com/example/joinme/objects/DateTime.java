@@ -44,7 +44,9 @@ public class DateTime implements Comparable<DateTime>{
     public Long getTimeStamp(){return timeStamp;}
     public void setDate(String date){this.date = date;}
     public void setTime(String time){this.time = time;}
-    public void setTimeStamp(Long timeStamp){this.timeStamp = timeStamp;}
+    public void setTimeStamp(Long timeStamp){
+        this.cal_date.setTimeInMillis(timeStamp);
+        this.timeStamp = timeStamp;}
     public String toString(){
         return getDate()+", "+getTime();
     }

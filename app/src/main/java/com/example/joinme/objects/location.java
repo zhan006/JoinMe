@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class location {
     double latitude,longtitude;
     String address;
+    public location(){};
     public location(HashMap data){
         latitude = (double)data.get("latitude");
         longtitude = (double)data.get("longtitude");

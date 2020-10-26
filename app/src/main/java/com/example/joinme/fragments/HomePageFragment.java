@@ -113,25 +113,8 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         });
         // for testing location service;
         search.setOnClickListener((v) -> {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            Location loc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
-
-            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new DateTime(),
-                    "sport",((MainActivity) getActivity()).getUid(),"nOTHING",ref.getKey());
-            ref.setValue(dummyEvent);
-            geocoder = new Geocoder(getContext());
             FragmentManager fm = getActivity().getSupportFragmentManager();
             utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
-            try {
-                List address = geocoder.getFromLocation(loc.getLatitude(),loc.getLongitude(),4);
-                Log.d("fragment",address.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         });
         // test signout service
         signout.setOnClickListener(v -> {
