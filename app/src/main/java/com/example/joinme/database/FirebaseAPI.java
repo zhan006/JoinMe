@@ -58,6 +58,10 @@ public class FirebaseAPI {
         return rootRef.child(nodePath).push().getKey();
     }
 
+//    public static void push(String nodePath, Object pushedObject) {
+//        rootRef.child(nodePath).push(pushedObject);
+//    }
+
     /**
      * Given node paths and data, update batch data at once
      * @param batchData = Map object with nodePath being key
