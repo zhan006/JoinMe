@@ -31,6 +31,7 @@ import com.example.joinme.objects.Event;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +87,11 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         String uid = ((MainActivity)getActivity()).getUid();
         addAlbum(R.drawable.default_icon);
         editProfile.setOnClickListener((v)->{
-            Log.d("fragment",((MainActivity)getActivity()).getCurrentFragment().getTag());
+            EditProfileFragment f = new EditProfileFragment();
+            Bundle bd = new Bundle();
+            bd.putSerializable("user",getParentUser());
+            f.setArguments(bd);
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
         });
     }
 
@@ -147,6 +152,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         if(user !=null){
             setName(user.firstName+user.lastName);
             setAboutMe(user.about);
+            location.setText(user.getLocation().getAddress());
         }
     }
 }
