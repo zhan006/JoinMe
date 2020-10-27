@@ -1,6 +1,7 @@
 package com.example.joinme.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.joinme.R;
+import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -141,12 +143,7 @@ public class AddFriendAdapter{
                         ((ViewHolder) holder).followBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Map<String, Object> pushFollow = new HashMap<>();
-                                pushFollow.put(userID, true);
-                                FirebaseAPI.rootRef.child("UserFollowing/"+
-                                        currentUid).updateChildren(pushFollow);
-                                Log.d(TAG, "FollowOnClick: "+ currentUid + " follow user: " + userID);
-
+                                followUser(userID);
                             }
                         });
 
@@ -154,7 +151,11 @@ public class AddFriendAdapter{
                         ((ViewHolder) holder).messageBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                Intent chatActivity = new Intent(v.getContext(), ChatActivity.class);
+                                chatActivity.putExtra("friendUid", userID);
+                                chatActivity.putExtra("friendUsername",
+                                        snapshot.child("username").getValue().toString());
+                                context.startActivity(chatActivity);
                             }
                         });
                     }
@@ -169,15 +170,15 @@ public class AddFriendAdapter{
                 FirebaseAPI.getFirebaseData("UserFollowing/" +  currentUid, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
-                        Log.d(TAG, "onDataChange: has user?  "+snapshot.getKey());
 
                         // already follow this user, hide follow btn
-                        if (snapshot.hasChild(userID) || userID.equals(currentUid)) {
-//                            Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
+                        if (snapshot.hasChild(userID)) {
+                            holder.followBtn.setImageResource(R.drawable.tick_icon);
+                        } else if (userID.equals(currentUid)) {
                             holder.followBtn.setVisibility(View.GONE);
-                        } else {
-                            holder.followBtn.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            holder.followBtn.setImageResource(R.drawable.add_icon);
                         }
                     }
 
@@ -197,6 +198,14 @@ public class AddFriendAdapter{
                 return viewHolder;
             }
         };
+    }
+
+    private void followUser(String userID) {
+        Map<String, Object> pushFollow = new HashMap<>();
+        pushFollow.put(userID, true);
+        FirebaseAPI.rootRef.child("UserFollowing/"+
+                currentUid).updateChildren(pushFollow);
+        Log.d(TAG, "FollowOnClick: "+ currentUid + " follow user: " + userID);
     }
 }
 
