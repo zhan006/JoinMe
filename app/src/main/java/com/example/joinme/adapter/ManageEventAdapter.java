@@ -1,6 +1,7 @@
 package com.example.joinme.adapter;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.EventDetailFragment;
+import com.example.joinme.fragments.UpdateEvent;
+import com.example.joinme.fragments.UpdateEventFragment;
 import com.example.joinme.objects.Event;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,10 +44,7 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
             cancel=(Button)itemView.findViewById(R.id.cancel_button);
             update=(Button)itemView.findViewById(R.id.update_button);
 //            Deng: this is where I should show my event_details page!
-            update.setOnClickListener((v)->{
-                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-                        new EventDetailFragment(),null).commit();
-            });
+
 
         }
     }
@@ -74,6 +74,10 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
             ((ViewHolder)holder).eventName.setText(event.getEventName());
             if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
             if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
+            ((ViewHolder)holder).update.setOnClickListener((v)->{
+                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
+                        new EventDetailFragment(),null).commit();
+            });
 
             ((ViewHolder)holder).cancel.setOnClickListener((v)->{
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -97,9 +101,17 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Event event = snapshot.getValue(Event.class);
+                    Bundle bd = new Bundle();
+                    bd.putSerializable("event",event);
                     ((ViewHolder)holder).eventName.setText(event.getEventName());
                     if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
                     if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
+                    ((ViewHolder)holder).update.setOnClickListener((v)->{
+                        UpdateEventFragment f = new UpdateEventFragment();
+                        f.setArguments(bd);
+                        ((AppCompatActivity)v.getContext()).getSupportFragmentManager().
+                                beginTransaction().replace(R.id.main_fragment_container, f,null).commit();
+                    });
                     ((ViewHolder)holder).cancel.setOnClickListener((v)->{
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                         builder.setMessage("Are you sure to cancel the event?");

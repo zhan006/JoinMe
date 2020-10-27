@@ -115,39 +115,10 @@ public class MainActivity extends AppCompatActivity {
         // test the UID transformation from loginActivity
         Intent intent = getIntent();
         String currentUID = intent.getStringExtra("UID");
+//        this should be used after implementing insert new user into the database
+//        uid = currentUID;
         Toast.makeText(MainActivity.this, "current UID: " + currentUID,
                 Toast.LENGTH_SHORT).show();
-
-        /*
-         * Firebase testing demo
-         */
-
-        ValueEventListener userListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                //String username = dataSnapshot.getValue(String.class);
-                HashMap data = (HashMap) dataSnapshot.getValue();
-                Log.d(TAG, "onDataChange: username = " + data.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-
-        //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
-        FirebaseAPI.setFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", "Giovana")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
     }
 
     private Runnable getUserProfile = () -> {
@@ -174,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
+        FirebaseAPI.getFirebaseData("User/"+uid, userListener);
     };
     private Runnable getAttendingList = () -> {
         ValueEventListener eventListener = new ValueEventListener() {
@@ -203,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        FirebaseAPI.getFirebaseData("AttendingList/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", eventListener);
+        FirebaseAPI.getFirebaseData("AttendingList/"+uid, eventListener);
     };
 
     public User getUser() {
