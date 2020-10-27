@@ -20,7 +20,10 @@ public class User implements Serializable {
     public String profileImage;
     public String username;
     public String about;
+    public String gender;
+    public String email,phone;
     public List<String> album;
+    public location location;
 
     public User() {
     }
@@ -34,8 +37,14 @@ public class User implements Serializable {
         this.about = about;
         this.album = album;
     }
-
-
+    public void setLocation(location l){location = l;}
+    public location getLocation(){return location;}
+    public String getGender(){return gender;};
+    public void setGender(String g){this.gender= g;}
+    public String getEmail(){return email;}
+    public void setEmail(String email){this.email = email;}
+    public String getPhone(){return phone;}
+    public void setPhone(String phone){this.phone = phone;}
     public String getFirstName() {
         return firstName;
     }

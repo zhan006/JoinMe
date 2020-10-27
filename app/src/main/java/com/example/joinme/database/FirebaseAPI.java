@@ -3,6 +3,7 @@ package com.example.joinme.database;
 import android.util.Log;
 
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
