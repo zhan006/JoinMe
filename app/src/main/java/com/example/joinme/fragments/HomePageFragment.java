@@ -57,6 +57,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,6 +86,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_home, container, false);
@@ -110,25 +113,8 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         });
         // for testing location service;
         search.setOnClickListener((v) -> {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            Location loc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
-
-            Event dummyEvent = new Event("TEST",new location(loc.getLatitude(),loc.getLongitude()),new DateTime(),
-                    "sport",((MainActivity) getActivity()).getUid(),"nOTHING",ref.getKey());
-            ref.setValue(dummyEvent);
-            geocoder = new Geocoder(getContext());
             FragmentManager fm = getActivity().getSupportFragmentManager();
             utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
-            try {
-                List address = geocoder.getFromLocation(loc.getLatitude(),loc.getLongitude(),4);
-                Log.d("fragment",address.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         });
         // test signout service
         signout.setOnClickListener(v -> {
@@ -160,10 +146,13 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     public User getParentUser(){
         return ((MainActivity)getActivity()).getUser();
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void renderEvent() {
         eventList = getParentEventList();
         if(eventList!=null){
+            eventList.sort((event, t1) -> event.getDatetime().compareTo(t1.getDatetime()));
+            eventList.removeIf((e)-> Calendar.getInstance().getTimeInMillis()>e.getDatetime().getTimeStamp());
             board.setAdapter(new NotificationAdapter(eventList));
         }
     }

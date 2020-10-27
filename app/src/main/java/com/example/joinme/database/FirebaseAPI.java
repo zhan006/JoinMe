@@ -2,6 +2,8 @@ package com.example.joinme.database;
 
 import android.util.Log;
 
+import com.example.joinme.objects.Event;
+import com.example.joinme.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -64,6 +66,18 @@ public class FirebaseAPI {
     public static void updateBatchData(Map<String, Object> batchData,
                                        DatabaseReference.CompletionListener completionListener) {
         rootRef.updateChildren(batchData, completionListener);
+    }
+    public static void addEvent(Event event, String uid, DatabaseReference.CompletionListener completionListener){
+        String id = pushFirebaseNode("Event");
+        event.setId(id);
+        String eventPath = "Event/"+id;
+        String organisedPath = "OrganizedEvents/"+uid+"/"+id;
+        String attendPath = "AttendingList/"+uid+"/"+id;
+        HashMap<String,Object> map = new HashMap();
+        map.put(eventPath,event);
+        map.put(organisedPath,true);
+        map.put(attendPath,true);
+        updateBatchData(map,completionListener);
     }
 
 

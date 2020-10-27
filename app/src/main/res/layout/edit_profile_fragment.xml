@@ -90,6 +90,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -111,6 +112,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -132,6 +134,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/last_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -152,11 +155,13 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/gender"
+                    android:layout_width="251dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bio_bg" />
 
-                </EditText>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -174,6 +179,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -195,6 +201,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -215,13 +222,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 
-                <EditText
+                <fragment
+                    android:id="@+id/autoCompleteLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </EditText>
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="150dp">
@@ -237,6 +245,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
+                    android:id="@+id/bio"
                     android:background="@drawable/bio_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -259,29 +268,16 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="60dp">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/small_button"
-                    android:text="Edit"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+
 
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/small_button"
+                    android:id="@+id/save"
+                    style="@style/long_button"
                     android:text="Save"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_gravity=""
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
 
