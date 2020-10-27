@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         style="@style/icon"
         app:cardCornerRadius="30dp"
-        android:layout_gravity="center_vertical"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="15dp">
         <ImageView
             android:id="@+id/profile_photo"
@@ -34,9 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="15dp"
-                android:text="Abby"
                 android:textSize="20sp" />
 
             <TextView
@@ -45,13 +44,15 @@
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginStart="15dp"
-                android:text="This is my life! " />
+                android:layout_marginStart="15dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:layout_marginEnd="0dp">
+
             <ImageButton
                 android:id="@+id/profile_btn"
                 style="@style/add_friend_btn"
@@ -59,17 +60,19 @@
                 android:layout_width="35dp"
                 android:src="@drawable/profile_icon"/>
             <ImageButton
-                android:id="@+id/follow_btn"
-                style="@style/add_friend_btn"
-                android:layout_height="40dp"
-                android:layout_width="35dp"
-                android:src="@drawable/tick_icon"/>
-            <ImageButton
                 android:id="@+id/message_icon"
                 style="@style/add_friend_btn"
                 android:layout_height="40dp"
                 android:layout_width="35dp"
                 android:src="@drawable/message_icon"/>
+            <ImageButton
+            android:id="@+id/follow_btn"
+            style="@style/add_friend_btn"
+            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:src="@drawable/tick_icon"
+            android:visibility="visible"/>
+
         </LinearLayout>
 
     </LinearLayout>
