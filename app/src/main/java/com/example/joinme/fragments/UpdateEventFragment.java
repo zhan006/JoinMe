@@ -23,13 +23,17 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.DateTimeClick;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.TitleBar;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,8 +55,9 @@ public class UpdateEventFragment extends Fragment implements DateTimeClick {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.from(getContext()).inflate(R.layout.activity_edit_published_event,container,false);
-        initView(view);
         initPlaces();
+        initView(view);
+
         return view;
     }
 
@@ -86,6 +91,19 @@ public class UpdateEventFragment extends Fragment implements DateTimeClick {
         if(event!=null){
             completeLocation.setText(event.getLocation().getAddress());
         }
+        completeLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                LatLng latlang = place.getLatLng();
+                event.setLocation(new location(latlang.latitude,latlang.longitude,place.getName()));
+                completeLocation.setText(place.getAddress());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
         titleBar.setTitle(event.getEventName());
         event_name.setText(event.getEventName());
         min_group_size.setText(String.valueOf(event.getMin()));

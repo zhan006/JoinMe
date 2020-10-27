@@ -1,6 +1,5 @@
 package com.example.joinme.adapter;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.EventDetailFragment;
-import com.example.joinme.fragments.UpdateEvent;
 import com.example.joinme.fragments.UpdateEventFragment;
 import com.example.joinme.objects.Event;
 import com.google.firebase.database.DataSnapshot;
