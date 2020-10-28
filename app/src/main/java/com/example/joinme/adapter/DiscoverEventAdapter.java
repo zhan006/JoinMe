@@ -1,40 +1,71 @@
 package com.example.joinme.adapter;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.joinme.MainActivity;
 import com.example.joinme.R;
-import com.example.joinme.fragments.DiscoverEventFragment;
-import com.example.joinme.fragments.EventDetailFragment;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.User;
-import com.example.joinme.objects.location;
 
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class DiscoverEventAdapter extends RecyclerView.Adapter {
+public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdapter.ViewHolder> implements Filterable {
     private List<Event> eventList;
+    private List<Event> filteredList;
     private static Location loc;
     public DiscoverEventAdapter(List<Event> eventList, Location l) {
         this.eventList = eventList;
+        this.filteredList = eventList;
         this.loc = l;
+    }
+
+    public Location getLoc(){
+        return loc;
+    }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredList = eventList;
+                } else {
+                    List<Event> f = new ArrayList<>();
+                    for (Event e : eventList) {
+                        //这里根据需求，添加匹配规则
+                        if (e.getId().equals(charSequence)) {
+                            f.add(e);
+                        }
+                    }
+
+                    filteredList = f;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredList = (ArrayList<Event>) filterResults.values;
+                //刷新数据
+                notifyDataSetChanged();
+            }
+        };
     }
 
 
@@ -44,7 +75,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter {
         Button detail;
         Button join;
         @RequiresApi(api = Build.VERSION_CODES.N)
-        public ViewHolder(@NonNull View itemView, List<Event> e) {
+        public ViewHolder(@NonNull View itemView, DiscoverEventAdapter adapter) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.event_name);
             time = (TextView) itemView.findViewById(R.id.event_datetime);
@@ -52,6 +83,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter {
             detail = (Button)itemView.findViewById(R.id.detail_button);
             join = (Button)itemView.findViewById(R.id.detail_button);
             detail.setOnClickListener((v)->{
+                /*
                 e.sort(new Comparator<Event>() {
                     @Override
                     public int compare(Event o1, Event o2) {
@@ -63,39 +95,47 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter {
                         }
                         return 0;
                     }
-                });
+
+                });*/
+                adapter.sortEvents();
             });
             join.setOnClickListener((v)->{
+                Collections.reverse(adapter.eventList);
             });
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.discover_event_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view,eventList);
+        ViewHolder viewHolder = new ViewHolder(view,this);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Event event = eventList.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Event event = filteredList.get(position);
         ((ViewHolder) holder).title.setText(event.getEventName());
         if(event.getDatetime()!=null) ((ViewHolder) holder).time.setText(event.getDatetime().toString());
         if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+event.getLocation().distanceTo(loc));
 
-        /*((ViewHolder) holder).detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
     }
+    /*
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+    }*/
 
     @Override
     public int getItemCount() {
         return eventList.size();
+    }
+
+
+    public void sortEvents(){
+        Collections.shuffle(eventList);
+        this.notifyDataSetChanged();
     }
 }
 

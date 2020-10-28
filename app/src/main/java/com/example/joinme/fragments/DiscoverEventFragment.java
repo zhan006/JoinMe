@@ -6,11 +6,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -23,18 +23,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
+import com.example.joinme.adapter.DiscoverConditionAdapter;
 import com.example.joinme.adapter.DiscoverEventAdapter;
-import com.example.joinme.adapter.SearchConditionAdapter;
+
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.NavBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DiscoverEventFragment extends Fragment {
 
+    public RecyclerView eventRecyclerView;
+    private Button study,entertainment, dailyLife;
+    private Button distance1,distance2,distance3;
+    private Button today, thisWeek, thisMonth;
+    private String topic;
+    private int distanceLimit = Integer.MAX_VALUE;
+    private String date;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -53,22 +62,77 @@ public class DiscoverEventFragment extends Fragment {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.discover_events, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
-        initTopicList(v);
-        initDistanceList(v);
-        initDateList(v);
+        initButtons(v);
         initEvent(v);
-
-
         return v;
+    }
+    private void initButtons(View v){
+        study = v.findViewById( R.id.study_button);
+        entertainment = v.findViewById(R.id.entertainment_button);
+        dailyLife = v.findViewById(R.id.daily_life_button);
+        distance1 = v.findViewById(R.id.within1_button);
+        distance2 = v.findViewById(R.id.within5_button);
+        distance3 = v.findViewById(R.id.distance_all_button);
+        today = v.findViewById(R.id.today_button);
+        thisWeek = v.findViewById(R.id.this_week_button);
+        thisMonth = v.findViewById(R.id.this_month_button);
+        setTopicListener(study);
+        setTopicListener(entertainment);
+        setTopicListener(dailyLife);
+
+        setDistanceLimitListener(distance1,1);
+        setDistanceLimitListener(distance1,5);
+        setDistanceLimitListener(distance1,Integer.MAX_VALUE);
+
+        setDateListener(today,"today");
+        setDateListener(thisWeek,"thisWeek");
+        setDateListener(thisMonth,"thisMonth");
+
+
+    }
+    private void setTopicListener(Button b){
+        b.setOnClickListener(v -> {
+            topic = (String) b.getText();
+            refreshRV();
+        });
+    }
+    private void setDistanceLimitListener(Button b, int i){
+        b.setOnClickListener(v->{
+            distanceLimit = i;
+            refreshRV();
+        });
+    }
+    private void setDateListener (Button b, String d){
+        b.setOnClickListener(v->{
+            date = d;
+            refreshRV();
+        });
     }
 
 
+    private void refreshRV(){
+        List<Event> selected = new ArrayList<>();
+        for(int i=0;i<initEvents().size();i++){
+            Event e = initEvents().get(i);
+            if(!e.getEventCategory().equals(topic)){
+                break;
+            }
+
+
+            selected.add(e);
+
+        }
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
+  }
+
+
+    /*
     private void initTopicList(View v) {
         RecyclerView topicRecyclerView = v.findViewById(R.id.topic_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         topicRecyclerView.setLayoutManager(layoutManager);
-        topicRecyclerView.setAdapter(new SearchConditionAdapter(initTopics()));
+        topicRecyclerView.setAdapter(new DiscoverConditionAdapter(initTopics(),this));
     }
 
     private void initDistanceList(View v) {
@@ -76,7 +140,7 @@ public class DiscoverEventFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         disRecyclerView.setLayoutManager(layoutManager);
-        disRecyclerView.setAdapter(new SearchConditionAdapter(initDistances()));
+        disRecyclerView.setAdapter(new DiscoverConditionAdapter(initDistances(),this));
 
     }
 
@@ -85,12 +149,12 @@ public class DiscoverEventFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         datetimeRecyclerView.setLayoutManager(layoutManager);
-        datetimeRecyclerView.setAdapter(new SearchConditionAdapter(initDates()));
-    }
+        datetimeRecyclerView.setAdapter(new DiscoverConditionAdapter(initDates(),this));
+    }*/
 
 
     private void initEvent(View v) {
-        RecyclerView eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         eventRecyclerView.setLayoutManager(layoutManager);
@@ -99,7 +163,7 @@ public class DiscoverEventFragment extends Fragment {
 
     }
 
-    private Location curLocation(){
+    public Location curLocation(){
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -116,7 +180,7 @@ public class DiscoverEventFragment extends Fragment {
 
 
 
-
+    /*
     List<String> initTopics() {
         ArrayList<String> topics = new ArrayList<>();
         topics.add("Basketball");
@@ -142,7 +206,7 @@ public class DiscoverEventFragment extends Fragment {
         dates.add("After");
         return dates;
     }
-
+    */
     List<Event> initEvents(){
         ArrayList<Event> events = new ArrayList<>();
         ArrayList<String> eventNames = new ArrayList<>();
