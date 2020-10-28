@@ -62,6 +62,11 @@ public class DiscoverEventFragment extends Fragment {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.discover_events, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
+        eventRecyclerView.setLayoutManager(layoutManager);
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
         initButtons(v);
         initEvent(v);
         return v;
@@ -155,10 +160,7 @@ public class DiscoverEventFragment extends Fragment {
 
     private void initEvent(View v) {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        eventRecyclerView.setLayoutManager(layoutManager);
-        eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
+
 
 
     }
@@ -220,7 +222,7 @@ public class DiscoverEventFragment extends Fragment {
             eventNames.add("EVENT"+Integer.toString(i));
             locations.add(new location(-37.797+0.001*i, 144.961+0.001*i,"Unimelb"));
             datetimes.add(new DateTime());
-            categorys.add("study");
+            categorys.add("Study");
             usr_ids.add("1");
             descriptions.add("");
             ids.add(Integer.toString(i));
