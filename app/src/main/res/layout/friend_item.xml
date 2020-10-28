@@ -19,6 +19,14 @@
             android:src="@drawable/default_icon" />
     </androidx.cardview.widget.CardView>
 
+    <ImageView
+        android:id="@+id/unread_icon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/unread_icon"
+        android:layout_marginTop="12dp"
+        />
+
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -60,9 +68,5 @@
 
 
     </LinearLayout>
-    <TextView
-        android:layout_height="match_parent"
-        android:layout_width="50dp"
-        android:text="10:00"/>
 
 </LinearLayout>

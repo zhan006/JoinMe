@@ -123,24 +123,24 @@ public class AddFriendAdapter{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.hasChild("username")) {
-                            ((ViewHolder) holder).setName(snapshot.child("username").getValue());
+                            holder.setName(snapshot.child("username").getValue());
                         }
                         if (snapshot.hasChild("about")) {
-                            ((ViewHolder) holder).setAbout(snapshot.child("about").getValue());
+                            holder.setAbout(snapshot.child("about").getValue());
                         }
 
                         // load profile image
                         holder.setProfile(userID);
 
                         // TODO: view user's profile
-                        ((ViewHolder) holder).profileBtn.setOnClickListener(new View.OnClickListener() {
+                        holder.profileBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                             }
                         });
 
                         // follow this user
-                        ((ViewHolder) holder).followBtn.setOnClickListener(new View.OnClickListener() {
+                        holder.followBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 followUser(userID);
@@ -148,14 +148,10 @@ public class AddFriendAdapter{
                         });
 
                         // send message to this user
-                        ((ViewHolder) holder).messageBtn.setOnClickListener(new View.OnClickListener() {
+                        holder.messageBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent chatActivity = new Intent(v.getContext(), ChatActivity.class);
-                                chatActivity.putExtra("friendUid", userID);
-                                chatActivity.putExtra("friendUsername",
-                                        snapshot.child("username").getValue().toString());
-                                context.startActivity(chatActivity);
+                                chat(userID, snapshot.child("username").getValue().toString(), v);
                             }
                         });
                     }
@@ -206,6 +202,14 @@ public class AddFriendAdapter{
         FirebaseAPI.rootRef.child("UserFollowing/"+
                 currentUid).updateChildren(pushFollow);
         Log.d(TAG, "FollowOnClick: "+ currentUid + " follow user: " + userID);
+    }
+
+    private void chat(String userID, String username, View v) {
+        Intent chatActivity = new Intent(v.getContext(), ChatActivity.class);
+        chatActivity.putExtra("friendUid", userID);
+        chatActivity.putExtra("friendUsername",
+                username);
+        context.startActivity(chatActivity);
     }
 }
 
