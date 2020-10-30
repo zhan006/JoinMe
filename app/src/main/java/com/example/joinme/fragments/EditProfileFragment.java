@@ -100,7 +100,8 @@ public class EditProfileFragment extends Fragment {
             email.setText(user.getEmail());
             phone.setText(user.getPhone());
             bio.setText(user.getAbout());
-            location.setText(user.getLocation().getAddress());
+            if(user.getLocation()!=null) location.setText(user.getLocation().getAddress());
+
         }
 
     }
