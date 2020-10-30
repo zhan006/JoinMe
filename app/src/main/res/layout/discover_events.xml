@@ -18,14 +18,16 @@
              android:layout_below="@id/event_manage_title"
              android:layout_marginTop="10dp"
              android:layout_centerHorizontal="true"/>
-    <include layout="@layout/discover_labels"
-             android:id="@+id/search_bar"
-             android:layout_marginHorizontal="20dp"
-             android:layout_width="wrap_content"
-             android:layout_height="160dp"
-             android:layout_below="@id/event_manage_title"
-             android:layout_marginTop="40dp"
-             android:layout_marginLeft="20dp"/>
+
+    <include
+        android:id="@+id/search_bar"
+        layout="@layout/discover_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:layout_below="@id/event_manage_title"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="32dp" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id = "@+id/discover_events_recycle"

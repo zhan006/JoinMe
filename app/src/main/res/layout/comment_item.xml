@@ -97,7 +97,7 @@
         android:layout_width="match_parent">
 
         <TextView
-            android:id="@+id/comment_postPeriod"
+            android:id="@+id/comment_createdDateTime"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:text="1 hour ago"
@@ -106,7 +106,7 @@
             />
 
         <TextView
-            android:id="@+id/comment_reply"
+            android:id="@+id/comment_reply_btn"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:text="Reply"

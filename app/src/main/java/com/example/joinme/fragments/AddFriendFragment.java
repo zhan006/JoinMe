@@ -3,6 +3,7 @@ package com.example.joinme.fragments;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +13,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
 import com.example.joinme.adapter.AddFriendAdapter;
 import com.example.joinme.adapter.SearchConditionAdapter;
-import com.example.joinme.objects.Friend;
-import com.example.joinme.objects.Message;
-import com.example.joinme.objects.Time;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddFriendFragment extends Fragment {
+    private static final String TAG = "AddFriendFragment";
+    private List<User> userList = new ArrayList<>();
+
+    private FirebaseRecyclerAdapter<User, AddFriendAdapter.ViewHolder> addFriendAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -48,6 +54,7 @@ public class AddFriendFragment extends Fragment {
         searchBar.setHint("search by name or ID");
 
         initUserList(v);
+//        loadUsers();
         initHobbyList(v);
         initGenderList(v);
         initAgeList(v);
@@ -58,7 +65,9 @@ public class AddFriendFragment extends Fragment {
     private void initUserList(View v) {
         RecyclerView userRecyclerView = v.findViewById(R.id.add_friends_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userRecyclerView.setAdapter(new AddFriendAdapter(initUsers()));
+        addFriendAdapter = new AddFriendAdapter(getContext()).addFriendAdaptor();
+        userRecyclerView.setAdapter(addFriendAdapter);
+        addFriendAdapter.startListening();
     }
 
     private void initHobbyList(View v) {
@@ -85,17 +94,32 @@ public class AddFriendFragment extends Fragment {
         ageRecyclerView.setAdapter(new SearchConditionAdapter(initAge()));
     }
 
-    List<User> initUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User("Tong", "Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Jinping","Su", "image url", "Tong", "My cat name is Bugu xixi!", null));
-        users.add(new User("Ming","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Shino","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Shino","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Shino","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Shino","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        users.add(new User("Shino","Su", "image url", "Giovanna", "My cat name is Bugu xixi!", null));
-        return users;
+    void loadUsers() {
+        FirebaseAPI.rootRef.child("User").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                Log.d(TAG, "onDataChange: User => "+user.toString());
+                userList.add(user);
+                addFriendAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     List<String> initHobbies() {

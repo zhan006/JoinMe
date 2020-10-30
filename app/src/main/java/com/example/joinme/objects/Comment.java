@@ -1,6 +1,13 @@
 package com.example.joinme.objects;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.joinme.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Comment {
     private String firstName;
@@ -12,17 +19,21 @@ public class Comment {
     private String timeAgo;
     private String timeCreated;
 
+
 //    private String replyToUsername;
 
 
-    public Comment(String firstName, String lastName, int profileImageId,String commentContent){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Comment(String firstName, String lastName, int profileImageId, String commentContent){
         this.firstName = firstName;
         this.lastName = lastName;
         this.commentContent = commentContent;
         this.profileImageId = profileImageId;
         this.upvoteIcon = R.drawable.event_upvote_icon;
         this.upvoteCount = 0;
-        this.timeCreated = "" + System.currentTimeMillis();
+//        this.timeCreated = java.text.DateFormat.getDateTimeInstance().format(new Date());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        this.timeCreated = dateFormat.format(new Date());
 
     }
 

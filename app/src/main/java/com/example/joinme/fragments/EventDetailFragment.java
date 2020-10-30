@@ -1,5 +1,7 @@
 package com.example.joinme.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -8,27 +10,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
+import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.adapter.CommentAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Comment;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDetailFragment extends Fragment{
+public class EventDetailFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "EventDetailFragment";
+    private String uid = "dVPWSkIeVHT3SPDfSMYPbAf52Pz2";
+    private String eventOrganizerUID = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
+    private CheckBox going;
+    private ImageButton organiserProfile, followOrganiser, messageOrganiser;
+    private Context mContext;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -46,7 +57,18 @@ public class EventDetailFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
-        CheckBox going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+        going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+
+
+        organiserProfile = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
+        organiserProfile.setOnClickListener(this);
+
+        followOrganiser = (ImageButton) v.findViewById(R.id.event_follow_btn);
+        followOrganiser.setOnClickListener(this);
+
+        messageOrganiser = (ImageButton) v.findViewById(R.id.event_message_icon);
+        messageOrganiser.setOnClickListener(this);
+
 
         going.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
@@ -75,9 +97,43 @@ public class EventDetailFragment extends Fragment{
         return v;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.event_follow_btn:
+                Toast.makeText(getActivity(), "Want to follow the organizer?", Toast.LENGTH_SHORT).show();
+                followOrganiser.setImageResource(R.drawable.tick_icon);
+                FirebaseAPI.rootRef.child("UserFollowing").child(uid).child(eventOrganizerUID).setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(),"Congrats! You have followed user "+eventOrganizerUID,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                FirebaseAPI.rootRef.child("FollowingUser").child(eventOrganizerUID).child(uid).setValue(true);
+
+                break;
+
+            case R.id.event_organizer_profile_btn:
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                utils.replaceFragment(fm, new ProfileFragment(), "organiser_profile");
+                break;
+
+            case R.id.event_message_icon:
+                Toast.makeText(getActivity(), "Let's contact the organizer", Toast.LENGTH_SHORT).show();
+                // jump to chat activity
+                Intent chatActivity = new Intent(getActivity(), ChatActivity.class);
+
+                // Testing purpose
+                chatActivity.putExtra("friendUid", "qa6KACdJ0RYZfVDXLtpKL2HcxJ43");
+                chatActivity.putExtra("friendUsername", "IU");
+                startActivity(chatActivity);
+                break;
 
 
-
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
