@@ -18,12 +18,9 @@
 
 
 
-    <ImageView
-        android:id="@+id/event_picture"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/event_picture" />
+
+
+
 
     <ScrollView
         android:layout_height="match_parent"
@@ -35,11 +32,21 @@
         >
 
 
+
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             >
+
+
+            <ImageView
+                android:id="@+id/event_picture"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/event_picture" />
 
             <TextView
                 android:id="@+id/event_date"
@@ -323,19 +330,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp">
                         <ImageButton
-                            android:id="@+id/profile_btn"
+                            android:id="@+id/event_organizer_profile_btn"
                             style="@style/add_friend_btn"
                             android:layout_height="40dp"
                             android:layout_width="35dp"
                             android:src="@drawable/profile_icon"/>
+
                         <ImageButton
-                            android:id="@+id/follow_btn"
-                            style="@style/add_friend_btn"
+                            android:id="@+id/event_follow_btn"
+                            android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_width="35dp"
-                            android:src="@drawable/tick_icon"/>
+                            android:scaleType="fitXY"
+                            android:src="@drawable/add_icon"
+                            android:background="@null"/>
+
                         <ImageButton
-                            android:id="@+id/message_icon"
+                            android:id="@+id/event_message_icon"
                             style="@style/add_friend_btn"
                             android:layout_height="40dp"
                             android:layout_width="35dp"
@@ -372,7 +382,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     >
-                    <EditText
+                    <TextView
                         android:id="@+id/event_details"
                         android:layout_marginStart="15dp"
                         android:paddingHorizontal="5dp"

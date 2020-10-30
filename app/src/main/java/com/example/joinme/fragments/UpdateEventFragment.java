@@ -1,12 +1,5 @@
 package com.example.joinme.fragments;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,18 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,57 +20,59 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.interfaces.DateTimeClick;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Time;
 import com.example.joinme.objects.location;
-import com.example.joinme.interfaces.DateTimeClick;
-import com.example.joinme.objects.Event;
 import com.example.joinme.reusableComponent.TitleBar;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.annotations.NotNull;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
-public class PublishEvent extends Fragment implements DateTimeClick {
-    @Nullable
+public class UpdateEventFragment extends Fragment implements DateTimeClick {
     private TitleBar titleBar;
-    private EditText event_name, event_location, about, event_duration, date_time;
+    private EditText event_name, about, event_duration, date_time;
     private Spinner event_category;
     private ImageButton location_button, invite_friend;
     private Button publish_event;
     private EditText min_group_size, max_group_size;
     private PlacesClient placesClient;
-    private Event event= new Event();
-
+    private Event event;
+    private AutocompleteSupportFragment completeLocation;
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.from(getContext()).inflate(R.layout.activity_publish_event,container,false);
+        View view = inflater.from(getContext()).inflate(R.layout.activity_edit_published_event,container,false);
+        initPlaces();
+        initView(view);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Snackbar.make(getView(),event.getId(),Snackbar.LENGTH_LONG).show();
+
+
+    }
+
+    private void initView(View view){
+        event = (Event) getArguments().getSerializable("event");
         titleBar = view.findViewById(R.id.title_bar);
         event_name = view.findViewById(R.id.event_name);
-        event_location = view.findViewById(R.id.event_location);
         event_category = view.findViewById(R.id.event_category);
         min_group_size = view.findViewById(R.id.min_group_size);
         max_group_size = view.findViewById(R.id.max_group_size);
@@ -92,22 +81,41 @@ public class PublishEvent extends Fragment implements DateTimeClick {
         publish_event = view.findViewById(R.id.publish_event);
         event_duration = view.findViewById(R.id.event_duration);
         date_time = view.findViewById(R.id.date_time);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.category_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        event_category.setAdapter(adapter);
+        completeLocation = (AutocompleteSupportFragment)getActivity().getSupportFragmentManager().
+                findFragmentById(R.id.autoCompleteLocation);
+        completeLocation.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG,Place.Field.ID, Place.Field.NAME));
+        if(event!=null){
+            completeLocation.setText(event.getLocation().getAddress());
+        }
+        completeLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                LatLng latlang = place.getLatLng();
+                event.setLocation(new location(latlang.latitude,latlang.longitude,place.getName()));
+                completeLocation.setText(place.getAddress());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
+        titleBar.setTitle(event.getEventName());
+        event_name.setText(event.getEventName());
+        min_group_size.setText(String.valueOf(event.getMin()));
+        max_group_size.setText(String.valueOf(event.getMax()));
+        about.setText(event.getDescription());
+        event_duration.setText(event.getDuration());
+        date_time.setText(event.getDatetime().toString());
         date_time.setFocusable(false);
         date_time.setOnClickListener((v -> {
             DialogFragment date_time = new date_time_pickers();
             date_time.show(getActivity().getSupportFragmentManager(),"date_time");
         }));
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.category_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        event_category.setAdapter(adapter);
-        initPlaces();
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         publish_event.setOnClickListener((v)->{
             try {
                 addEvent(event);
@@ -116,31 +124,7 @@ public class PublishEvent extends Fragment implements DateTimeClick {
                         Snackbar.LENGTH_SHORT).show();
             }
         });
-        AutocompleteSupportFragment completeLocation = (AutocompleteSupportFragment)getActivity().getSupportFragmentManager().
-                findFragmentById(R.id.autoCompleteLocation);
-        completeLocation.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG,Place.Field.ID, Place.Field.NAME));
-        completeLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NotNull Place place) {
-
-                Log.i("location", "Place: " + place.getName() + ", " + place.getLatLng());
-                LatLng latlang = place.getLatLng();
-                event.setLocation(new location(latlang.latitude,latlang.longitude,place.getName()));
-
-            }
-
-
-            @Override
-            public void onError(@NotNull Status status) {
-                // TODO: Handle the error.
-                Log.i("location", "An error occurred: " + status);
-            }
-        });
-        titleBar.setOnClickBackListener((v) -> {
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -150,11 +134,13 @@ public class PublishEvent extends Fragment implements DateTimeClick {
         ft.remove(fragment);
         ft.commit();
     }
+    public void initPlaces(){
+        Places.initialize(getContext(),"AIzaSyDLzlvA6LLbYiY35Ch3tEziWe-dGzdJhLo");
+        placesClient = Places.createClient(getContext());
 
+    }
     public void addEvent(Event event) throws CompulsoryElementException {
 //        DatabaseReference ref = FirebaseAPI.rootRef.child("Event").push();
-        String key = FirebaseAPI.pushFirebaseNode("Event");
-        event.setId(key);
         String name = event_name.getText().toString().trim();
         if(!name.equals("")) event.setEventName(name);
         else{throw new CompulsoryElementException();}
@@ -183,41 +169,21 @@ public class PublishEvent extends Fragment implements DateTimeClick {
         String ab = about.getText().toString();
         event.setDescription(ab);
         String uid = ((MainActivity)getActivity()).getUid();
-        event.setOrganizerid(uid);
-        FirebaseAPI.addEvent(event, uid, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                if(error == null){
-                    Snackbar.make(getView(),"Success!",Snackbar.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-                else{
-                    Snackbar.make(getView(),error.getDetails(),Snackbar.LENGTH_SHORT).show();
-                }
-            }
+        String path = "Event/"+event.getId();
+        FirebaseAPI.rootRef.child(path).setValue(event).addOnCompleteListener(task -> {
+            Log.d("event","success");
+            Snackbar.make(getView(),"Success!",Snackbar.LENGTH_LONG).show();
+            getActivity().getSupportFragmentManager().popBackStack();
         });
 
 
-    }
-
-    public void initPlaces(){
-        Places.initialize(getContext(),"AIzaSyDLzlvA6LLbYiY35Ch3tEziWe-dGzdJhLo");
-        placesClient = Places.createClient(getContext());
 
     }
+
 
     @Override
-    public void OnDateTimeSelected(int Year, int Month, int Day, int Hour, int Minute) {
-        Log.d("time",String.valueOf(Year)+String.valueOf(Month)+String.valueOf(Day)+String.valueOf(Hour));
+    public void OnDateTimeSelected(int Year, int Month, int Day, int Hour, int Minute) throws ParseException {
         event.setDatetime(new DateTime(Year,Month,Day,Hour,Minute));
         date_time.setText(event.getDatetime().toString());
-    }
-}
-class CompulsoryElementException extends Exception{
-    public CompulsoryElementException(){
-        super();
-    }
-    public CompulsoryElementException(String msg){
-        super(msg);
     }
 }

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
-import com.example.joinme.fragments.HomePageFragment;
+import com.example.joinme.fragments.EventDetailFragment;
 import com.example.joinme.objects.Event;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public class EventAdapter extends RecyclerView.Adapter {
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView eventName,eventLocation,eventDatetime;
         Button detail;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = (TextView) itemView.findViewById(R.id.event_name);
@@ -28,9 +29,10 @@ public class EventAdapter extends RecyclerView.Adapter {
             eventDatetime = (TextView) itemView.findViewById(R.id.event_datetime);
             detail=(Button)itemView.findViewById(R.id.detail_button);
             //for testing use, it should redirect to event details page
+//            Deng: Linked to event details page now.
             detail.setOnClickListener((v)->{
                 ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-                        new HomePageFragment(),null).commit();
+                        new EventDetailFragment(),null).commit();
             });
         }
     }
@@ -52,6 +54,7 @@ public class EventAdapter extends RecyclerView.Adapter {
         ((ViewHolder)holder).eventName.setText(event.getEventName());
         if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
         if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
+
     }
 
     @Override

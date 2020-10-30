@@ -67,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
                         ValueEventListener listener = new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                snapshot.getChildren();
                                 HashMap map = (HashMap) snapshot.getValue();
                                 eventList = new ArrayList<Event>();
                                 for (String id : ids) {
-                                    Event event = new Event((HashMap) map.get(id));
+                                    Log.d("event", map.get(id).toString());
+                                    Event event = new Event((HashMap)map.get(id));
                                     eventList.add(event);
                                     Fragment cFragment = getCurrentFragment();
                                     if (cFragment instanceof EventRenderable) {
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         NavBar nav = findViewById(R.id.navbar);
         fm.beginTransaction().replace(R.id.main_fragment_container, new HomePageFragment(), "home").commit();
         nav.setSelectedItem(R.id.tab_home);
-        uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
         getCurrentLocation();
         new Thread(getUserProfile).start();
         new Thread(getAttendingList).start();
@@ -113,39 +114,10 @@ public class MainActivity extends AppCompatActivity {
         // test the UID transformation from loginActivity
         Intent intent = getIntent();
         String currentUID = intent.getStringExtra("UID");
+//        this should be used after implementing insert new user into the database
+        uid = currentUID;
         Toast.makeText(MainActivity.this, "current UID: " + currentUID,
                 Toast.LENGTH_SHORT).show();
-
-        /*
-         * Firebase testing demo
-         */
-
-        ValueEventListener userListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                //String username = dataSnapshot.getValue(String.class);
-                HashMap data = (HashMap) dataSnapshot.getValue();
-                Log.d(TAG, "onDataChange: username = " + data.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-
-        //FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", userListener);
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
-        FirebaseAPI.setFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43/username", "Giovana")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
     }
 
     private Runnable getUserProfile = () -> {
@@ -172,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseAPI.getFirebaseData("User/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", userListener);
+        FirebaseAPI.getFirebaseData("User/"+uid, userListener);
     };
     private Runnable getAttendingList = () -> {
         ValueEventListener eventListener = new ValueEventListener() {
@@ -182,11 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Bundle bd = new Bundle();
                 ArrayList attendingList = new ArrayList();
-                for(String k : map.keySet()){
-                    if(map.get(k)){attendingList.add(k);}
+                if(map!=null){
+                    for(String k : map.keySet()){
+                        if(map.get(k)){attendingList.add(k);}
+                    }
+                    Log.d("event",attendingList.toString());
                 }
-                Log.d("event",attendingList.toString());
-                bd.putStringArrayList("ids", new ArrayList(attendingList));
+
+                bd.putStringArrayList("ids", attendingList);
                 Message msg = new Message();
                 msg.what = GET_EVENT;
                 msg.setData(bd);
@@ -198,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        FirebaseAPI.getFirebaseData("AttendingList/qa6KACdJ0RYZfVDXLtpKL2HcxJ43", eventListener);
+        FirebaseAPI.getFirebaseData("AttendingList/"+uid, eventListener);
     };
 
     public User getUser() {

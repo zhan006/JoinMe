@@ -1,5 +1,6 @@
 package com.example.joinme.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class NotificationAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Event event = eventList.get(position);
+        Log.d("event",event.toString());
         ((NotificationAdapter.ViewHolder) holder).name.setText(event.getEventName());
         if(event.getDatetime()!=null){
             ((NotificationAdapter.ViewHolder) holder).date.setText(event.getDatetime().toString());

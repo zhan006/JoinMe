@@ -1,13 +1,16 @@
 package com.example.joinme.objects;
 
+import android.location.Location;
+
 import java.util.HashMap;
 
 public class location {
     double latitude,longtitude;
     String address;
+    public location(){};
     public location(HashMap data){
-        latitude = (double)data.get("Latitude");
-        longtitude = (double)data.get("Longtitude");
+        latitude = (double)data.get("latitude");
+        longtitude = (double)data.get("longtitude");
         address = (String)data.get("address");
     }
 
@@ -43,5 +46,17 @@ public class location {
 
     public String getAddress() {
         return address;
+    }
+
+    public double distanceTo(location l){
+        return Math.abs(l.latitude-latitude)+Math.abs(l.longtitude-longtitude);
+    }
+
+    public double distanceTo(Location l){
+        return Math.abs(l.getLatitude()-latitude)+Math.abs(l.getLongitude()-longtitude);
+    }
+
+    public double distanceTo(double la, double lo){
+        return Math.abs(la-this.latitude)+Math.abs(lo-longtitude);
     }
 }

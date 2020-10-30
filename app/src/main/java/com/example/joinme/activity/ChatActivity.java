@@ -70,7 +70,8 @@ public class ChatActivity extends AppCompatActivity {
 
         friendUid = getIntent().getStringExtra("friendUid");
         friendUsername = getIntent().getStringExtra("friendUsername");
-        currentUid = "dVPWSkIeVHT3SPDfSMYPbAf52Pz2";
+//        currentUid = "dVPWSkIeVHT3SPDfSMYPbAf52Pz2";
+        currentUid = FirebaseAPI.getUser().getUid();
 
 
         initView();
