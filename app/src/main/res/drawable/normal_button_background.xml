@@ -6,6 +6,12 @@
             <solid android:color="@color/colorAccentDark"/>
         </shape>
     </item>
+    <item android:state_selected="true">
+        <shape>
+            <corners android:radius="35dp"></corners>
+            <solid android:color="@color/colorAccentDark"/>
+        </shape>
+    </item>
     <item>
         <shape>
             <corners android:radius="35dp"></corners>
