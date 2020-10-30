@@ -51,14 +51,14 @@ public class followFollowingAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_friend_item,parent,false);
-        ManageEventAdapter.ViewHolder holder = new ManageEventAdapter.ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String uid = this.uids.get(position);
-        String path = "User"+uid;
+        String path = "User/"+uid;
         FirebaseAPI.getFirebaseData(path, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,7 +85,7 @@ public class followFollowingAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return uids.size();
     }
 }
 

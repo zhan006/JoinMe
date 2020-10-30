@@ -137,6 +137,7 @@
 
             </LinearLayout>
             <Button
+                android:id="@+id/see_Friend"
                 style="@style/label_button"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"

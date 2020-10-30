@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
-    private Button editProfile;
+    private Button editProfile,seeFriend;
     private ArrayList<Event> eventList;
     private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
     private RecyclerView upcomming_event,albums;
@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         name = view.findViewById(R.id.name);
         location = view.findViewById(R.id.location);
         editProfile = view.findViewById(R.id.edit_profile);
+        seeFriend = view.findViewById(R.id.see_Friend);
         addAlbum.setOnClickListener((v)->{
             addAlbum(R.drawable.default_icon);
         });
@@ -111,6 +112,9 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             bd.putSerializable("user",getParentUser());
             f.setArguments(bd);
             utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
+        });
+        seeFriend.setOnClickListener((v)->{
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(),"follower");
         });
     }
 
