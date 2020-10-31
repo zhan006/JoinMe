@@ -114,7 +114,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
         });
         seeFriend.setOnClickListener((v)->{
-            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(),"follower");
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(uid),"follower");
         });
     }
 
