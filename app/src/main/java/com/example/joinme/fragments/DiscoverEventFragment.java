@@ -254,7 +254,7 @@ public class DiscoverEventFragment extends Fragment {
     */
     List<Event> initEvents(){
 
-        ArrayList<Event> events = new ArrayList<>();/*
+        ArrayList<Event> events = new ArrayList<>();
         ArrayList<String> eventNames = new ArrayList<>();
         ArrayList<location> locations = new ArrayList<>();
         ArrayList<DateTime> datetimes = new ArrayList<>();
@@ -275,10 +275,9 @@ public class DiscoverEventFragment extends Fragment {
             Event e = new Event(eventNames.get(i),locations.get(i),datetimes.get(i),categorys.get(i),usr_ids.get(i),descriptions.get(i),ids.get(i));
             events.add(e);
 
-        }*/
+        }
 
 
-        String uid = ((MainActivity)getActivity()).getUid();
         String eventPath = "Event";
 
         FirebaseAPI.getFirebaseData(eventPath, new ValueEventListener() {
