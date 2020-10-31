@@ -32,7 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
+import com.example.joinme.adapter.followFollowingAdapter;
 import com.example.joinme.adapter.photoAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
@@ -41,6 +43,9 @@ import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,6 +68,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private Uri imageUri;
     private final int PHOTO = 1;
     LinearLayout friendGallery;
+    private boolean visitorMode = false;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -208,5 +214,23 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             }
 
         }
+    }
+
+    public void setUser(User newUser) {
+        if(newUser != null){
+            user = newUser;
+            setName(user.username);
+            setAboutMe(user.about);
+            if(user.getLocation()!=null){
+                location.setText(user.getLocation().getAddress());
+            }
+            if(!(user.getUsername().equals(getParentUser().username))){
+                visitorMode = true;
+            }
+        }
+        if(visitorMode){
+            editProfile.setText("Follow");
+        }
+
     }
 }

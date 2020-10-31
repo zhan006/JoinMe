@@ -284,7 +284,7 @@ public class DiscoverEventFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
-                    Event event = snapshot.getValue(Event.class);
+                    Event event = ds.getValue(Event.class);
                     events.add(event);
                 }
             }
