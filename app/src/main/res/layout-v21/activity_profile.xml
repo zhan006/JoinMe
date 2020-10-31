@@ -137,6 +137,7 @@
 
             </LinearLayout>
             <Button
+                android:id="@+id/see_Friend"
                 style="@style/label_button"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
@@ -206,24 +207,10 @@
                     android:layout_toRightOf="@id/album_text"
                     android:src="@drawable/baseline_add_circle_outline_black_18dp"/>
             </RelativeLayout>
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/albums"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingHorizontal="10dp"
-                android:orientation="horizontal"
-                >
-                <androidx.cardview.widget.CardView
-                    style="@style/icon"
-                    app:cardCornerRadius="30dp">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/default_icon"/>
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
+                android:layout_height="60dp"/>
             <RelativeLayout
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"

@@ -1,10 +1,16 @@
 package com.example.joinme.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
+import com.example.joinme.adapter.photoAdapter;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
@@ -33,19 +42,27 @@ import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements UserRenderable, EventRenderable {
     public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
-    private Button editProfile;
+    private Button editProfile,seeFriend;
     private ArrayList<Event> eventList;
-    private RecyclerView upcomming_event;
+    private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
+    private RecyclerView upcomming_event,albums;
     private User user;
-    LinearLayout friendGallery,albums;
+    private Uri imageUri;
+    private final int PHOTO = 1;
+    LinearLayout friendGallery;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -71,11 +88,15 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         name = view.findViewById(R.id.name);
         location = view.findViewById(R.id.location);
         editProfile = view.findViewById(R.id.edit_profile);
+        seeFriend = view.findViewById(R.id.see_Friend);
         addAlbum.setOnClickListener((v)->{
             addAlbum(R.drawable.default_icon);
         });
         upcomming_event = view.findViewById(R.id.profile_upcomming_event);
         upcomming_event.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        LinearLayoutManager lm = new LinearLayoutManager(getContext());
+        lm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        albums.setLayoutManager(lm);
         renderEvent();
         renderUser();
         return view;
@@ -85,7 +106,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         String uid = ((MainActivity)getActivity()).getUid();
-        addAlbum(R.drawable.default_icon);
         editProfile.setOnClickListener((v)->{
             EditProfileFragment f = new EditProfileFragment();
             Bundle bd = new Bundle();
@@ -93,11 +113,31 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             f.setArguments(bd);
             utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
         });
+        seeFriend.setOnClickListener((v)->{
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(uid),"follower");
+        });
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode){
+            case PHOTO:
+                if(resultCode == RESULT_OK){
+                    try{
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri));
+                        images.add(bitmap);
+                        albums.setAdapter(new photoAdapter(images));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            break;
+        }
     }
 
     public void setName(String name){
@@ -110,12 +150,23 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         aboutMe.setText(text);
     }
     public void addAlbum(int image){
-        if(albums.getChildCount()<ALBUM_DISPLAY){
-            ImageView v= new ImageView(getContext());
-            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            v.setImageResource(image);
-            albums.addView(v);
+        File output = new File(getContext().getExternalCacheDir(),"output.jpg");
+        try{
+            if(output.exists()){
+                output.delete();
+            }
+            output.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        if(Build.VERSION.SDK_INT>=24){
+            imageUri = FileProvider.getUriForFile(getActivity(),"com.example.joinme.fileprovider",output);
+        }
+        else{imageUri = Uri.fromFile(output);}
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+        startActivityForResult(intent,1);
     }
     public void addFriends(int image){
         if(albums.getChildCount()<FRIEND_DISPLAY){
@@ -150,9 +201,12 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public void renderUser() {
         user = getParentUser();
         if(user !=null){
-            setName(user.firstName+user.lastName);
+            setName(user.username);
             setAboutMe(user.about);
-            location.setText(user.getLocation().getAddress());
+            if(user.getLocation()!=null){
+                location.setText(user.getLocation().getAddress());
+            }
+
         }
     }
 }
