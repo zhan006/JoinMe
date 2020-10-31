@@ -32,6 +32,11 @@ import java.util.HashMap;
 public class Follower_Following_Fragment extends Fragment {
     private Button follower, following;
     private RecyclerView recyclerView;
+    private String uid;
+    public Follower_Following_Fragment(String uid){
+        super();
+        this.uid = uid;
+    }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @Override
@@ -41,14 +46,15 @@ public class Follower_Following_Fragment extends Fragment {
         following = v.findViewById(R.id.followings);
         recyclerView = v.findViewById(R.id.friend_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        setOnClickListener();
+        try{setOnClickListener();}
+        catch (Exception e){Log.d("Debug",e.getMessage());};
         follower.performClick();
 
         return v;
     }
 
-    public void setOnClickListener(){
-        String uid = ((MainActivity)getActivity()).getUid();
+    public void setOnClickListener() throws Exception {
+        if(uid.equals("")) throw new Exception("unknown uid");
         this.follower.setOnClickListener((v)->{
             String followerPath = "FollowingUser/"+uid;
             follower.setSelected(true);
