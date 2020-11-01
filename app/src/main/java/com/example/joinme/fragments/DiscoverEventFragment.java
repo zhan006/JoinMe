@@ -54,6 +54,8 @@ public class  DiscoverEventFragment extends Fragment {
     private int distanceLimit = Integer.MAX_VALUE;
     private String date="";
     private Editable target;
+    public Location curLoc;
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -65,7 +67,14 @@ public class  DiscoverEventFragment extends Fragment {
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
 
     }
-
+    public DiscoverEventFragment(){
+        super();
+    }
+    public DiscoverEventFragment(Editable t){
+        super();
+        target=t;
+//        search();
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,6 +94,8 @@ public class  DiscoverEventFragment extends Fragment {
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
         initButtons(v);
         initEvent(v);
+        if(!target.equals(""))
+            search();
         return v;
     }
     private void initButtons(View v){
@@ -129,6 +140,11 @@ public class  DiscoverEventFragment extends Fragment {
             refreshRV();
         });
     }
+    public void setTarget (Editable t){
+        target = t;
+        search();
+    }
+
     public void search() {
         List<Event> selected = new ArrayList<>();
         for(int i=0;i<initEvents().size();i++){
@@ -212,6 +228,9 @@ public class  DiscoverEventFragment extends Fragment {
     }
 
     public Location curLocation(){
+        if(curLoc!=null){
+            return curLoc;
+        }
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -222,8 +241,8 @@ public class  DiscoverEventFragment extends Fragment {
             // for ActivityCompat#requestPermissions for more details.
             return null;
         }
-        return((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        curLoc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return curLoc;
     }
 
 

@@ -24,12 +24,13 @@ import com.example.joinme.objects.Friend;
 import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FriendFragment extends Fragment {
-    private EditText search;
+    //private EditText search;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +44,13 @@ public class FriendFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.friend_activity,container,false);
-        search = v.findViewById(R.id.search_text);
+        //search = v.findViewById(R.id.search_text);
+        ImageButton search = v.findViewById(R.id.search_button);
+        EditText target = v.findViewById(R.id.search_text);
+        search.setOnClickListener((v1) -> {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            utils.replaceFragment(fm, new DiscoverEventFragment(target.getText()), "discover_event_2");
+        });
         RecyclerView friends = v.findViewById(R.id.friends);
         friends.setLayoutManager(new LinearLayoutManager(getContext()));
         friends.setAdapter(new FriendAdapter(initFriend(), getContext()));
