@@ -29,6 +29,7 @@ import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -51,6 +52,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     private User user;
     private String currentUID;
     private Event event;
+    private TitleBar bar;
     private Geocoder geocoder;
     private final String WELCOME = "Welcome ";
     private final int UPDATE_MSG = 1, UPDATE_EVENTS = 2, GET_EVENT_DETAIL = 3;
@@ -76,8 +78,9 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         board = view.findViewById(R.id.home_billboard);
         board.setLayoutManager(new LinearLayoutManager(getContext()));
         eventList = getParentEventList();
-        signout = view.findViewById(R.id.signout_button);
         currentUID = ((MainActivity) getActivity()).getUid();
+        bar = view.findViewById(R.id.home_title);
+
         renderEvent();
         renderUser();
         return view;
@@ -96,8 +99,9 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             FragmentManager fm = getActivity().getSupportFragmentManager();
             utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
         });
+
         // test signout service
-        signout.setOnClickListener(v -> {
+        bar.setIconListener(v -> {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
             // [START config_signin]

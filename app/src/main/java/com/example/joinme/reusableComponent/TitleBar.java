@@ -21,7 +21,7 @@ import com.example.joinme.R;
 public class TitleBar extends LinearLayout {
     private static final String TAG = "TitleBar";
     private AttributeSet attrs;
-    private ImageButton back;
+    private ImageButton back,iconBtn;
     public TitleBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.attrs = attrs;
@@ -34,7 +34,7 @@ public class TitleBar extends LinearLayout {
         icon = ta.getDrawable(R.styleable.TitleBar_icon);
 
         back = this.findViewById(R.id.backBtn);
-        ImageButton iconBtn = findViewById(R.id.icon_btn);
+        iconBtn = findViewById(R.id.icon_btn);
         setTitle(newTitle);
         setIcon(iconBtn, icon);
 
@@ -50,7 +50,9 @@ public class TitleBar extends LinearLayout {
     public void setOnClickBackListener(OnClickListener listener){
         back.setOnClickListener(listener);
     }
-
+    public void setIconListener(OnClickListener listener){
+        iconBtn.setOnClickListener(listener);
+    }
     public void setIcon(ImageButton iconBtn, Drawable icon) {
         iconBtn.setImageDrawable(icon);
         // set title bar icon size

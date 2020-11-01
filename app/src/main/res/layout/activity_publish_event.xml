@@ -40,15 +40,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Name:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_marginStart="15dp"
+                    />
 
                 <EditText
                     android:id="@+id/event_name"
+                    android:paddingLeft="5dp"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
@@ -64,15 +63,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date and Time:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_marginLeft="15dp" />
 
                 <EditText
                     android:id="@+id/date_time"
+                    android:paddingLeft="5dp"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
@@ -87,15 +84,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Duration:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_marginStart="15dp" />
 
                 <EditText
                     android:id="@+id/event_duration"
+                    android:paddingStart="5dp"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content">
 
@@ -110,17 +105,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Location:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    />
 
                 <fragment
                     android:id="@+id/autoCompleteLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
 
 <!--                <EditText-->
@@ -144,12 +137,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Category:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    />
 
                 <Spinner
                     android:id="@+id/event_category"
@@ -168,12 +159,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Min group size:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_marginLeft="15dp" />
 
                 <EditText
                     android:id="@+id/min_group_size"
@@ -196,12 +184,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Max group size:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    />
                 <EditText
                     android:id="@+id/max_group_size"
                     android:layout_width="40dp"
@@ -223,12 +209,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About:"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    />
 
                 <EditText
                     android:id="@+id/about"
@@ -245,34 +229,35 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Invite Friends:"
-                    android:layout_marginTop="10dp"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="15dp"
-                    />
-                <ImageButton
-                    android:id="@+id/invite_friend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_send_black_18dp"/>
+<!--            <LinearLayout-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="10dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Invite Friends:"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_marginLeft="15dp"-->
+<!--                    />-->
+<!--                <ImageButton-->
+<!--                    android:id="@+id/invite_friend"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/baseline_send_black_18dp"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
             <RelativeLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp">
 
                 <Button
                     android:id="@+id/publish_event"
@@ -281,10 +266,9 @@
                     android:layout_width="170dp"
                     android:layout_height="54dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="15dp"
                     android:text="Publish Event"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="12dp"
                     android:textStyle="bold"/>
 
             </RelativeLayout>
