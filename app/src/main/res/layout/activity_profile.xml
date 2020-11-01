@@ -45,9 +45,10 @@
                 app:cardBackgroundColor="#FFFCFC"
                 app:cardCornerRadius="75dp">
                 <ImageView
+                    android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/photo"/>
+                    />
             </androidx.cardview.widget.CardView>
 
             <TextView
