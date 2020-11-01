@@ -9,8 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.TransitionInflater;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,30 +21,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
 import com.example.joinme.adapter.photoAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -55,6 +55,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
+    private ImageView profileImage, placeIcon;
     private Button editProfile,seeFriend;
     private ArrayList<Event> eventList;
     private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
@@ -63,6 +64,10 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private Uri imageUri;
     private final int PHOTO = 1;
     LinearLayout friendGallery;
+    private static final String TAG = "ProfileFragment";
+    private String currentUID;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -80,7 +85,9 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
-
+        profileImage = view.findViewById(R.id.profile_image);
+        placeIcon = view.findViewById(R.id.place_icon);
+        currentUID = ((MainActivity) getActivity()).getUid();
         aboutMe = view.findViewById(R.id.aboutMe);
         friendGallery = view.findViewById(R.id.friend_gallery);
         albums = view.findViewById(R.id.albums);
@@ -143,6 +150,8 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public void setName(String name){
         this.name.setText(name);
     }
+
+
     public void setLocation(String location){
         this.location.setText(location);
     }
@@ -203,10 +212,34 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         if(user !=null){
             setName(user.username);
             setAboutMe(user.about);
+            loadProfileImage(getActivity(), currentUID, profileImage);
             if(user.getLocation()!=null){
                 location.setText(user.getLocation().getAddress());
             }
 
         }
     }
+
+
+
+    public void loadProfileImage(Context context, String uid, ImageView imageView) {
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("profileImage")) {
+                    String image = snapshot.child("profileImage").getValue().toString();
+                    if (!image.equals("null")) {
+                        //display image from the url in real time database for user profile image
+                        Glide.with(context).load(image).into(imageView);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseAPI.getFirebaseData("User/"+uid, valueEventListener);
+    }
+
 }

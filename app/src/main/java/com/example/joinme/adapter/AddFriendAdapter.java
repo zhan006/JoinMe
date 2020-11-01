@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,15 +18,12 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddFriendAdapter{
@@ -65,7 +61,7 @@ public class AddFriendAdapter{
             if (name == null) {
                 name = "";
             }
-           this.name.setText(name.toString());
+            this.name.setText(name.toString());
         }
 
         public TextView getAbout() {
@@ -199,4 +195,3 @@ public class AddFriendAdapter{
         };
     }
 }
-
