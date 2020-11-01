@@ -62,8 +62,10 @@ public class DiscoverEventFragment extends Fragment {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.discover_events, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
+
         initButtons(v);
         initEvent(v);
+
         return v;
     }
     private void initButtons(View v){
@@ -154,7 +156,7 @@ public class DiscoverEventFragment extends Fragment {
 
 
     private void initEvent(View v) {
-
+        eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         eventRecyclerView.setLayoutManager(layoutManager);

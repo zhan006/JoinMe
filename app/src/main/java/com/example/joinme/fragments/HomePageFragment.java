@@ -43,6 +43,7 @@ import com.example.joinme.objects.Event;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.objects.location;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -97,27 +98,9 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         board = view.findViewById(R.id.home_billboard);
         board.setLayoutManager(new LinearLayoutManager(getContext()));
         eventList = getParentEventList();
-        signout = view.findViewById(R.id.signout_button);
-        renderEvent();
-        renderUser();
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("fragment", String.valueOf(getActivity().getSupportFragmentManager().getFragments().get(0).isVisible()));
-        organise.setOnClickListener((v) -> {
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm, new PublishEvent(), "publish_event");
-        });
-        // for testing location service;
-        search.setOnClickListener((v) -> {
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
-        });
-        // test signout service
-        signout.setOnClickListener(v -> {
+//        signout = view.findViewById(R.id.signout_button);
+        TitleBar bar = view.findViewById(R.id.home_title);
+        bar.setIconListener(v -> {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
             // [START config_signin]
@@ -138,6 +121,49 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentSignin);
         });
+        icon.setOnClickListener((v)->{
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),new ProfileFragment(),"account");
+        });
+        renderEvent();
+        renderUser();
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("fragment", String.valueOf(getActivity().getSupportFragmentManager().getFragments().get(0).isVisible()));
+        organise.setOnClickListener((v) -> {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            utils.replaceFragment(fm, new PublishEvent(), "publish_event");
+        });
+        // for testing location service;
+        search.setOnClickListener((v) -> {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
+        });
+        // test signout service
+//        signout.setOnClickListener(v -> {
+//            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//            mAuth.signOut();
+//            // [START config_signin]
+//            // Configure Google Sign In
+//            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                    .requestIdToken(getString(R.string.default_web_client_id))
+//                    .requestEmail()
+//                    .build();
+//            // [END config_signin]
+//            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+//            if (mGoogleSignInClient != null){
+//                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                    }
+//                });
+//            }
+//            Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
+//            startActivity(intentSignin);
+//        });
 
     }
     public ArrayList<Event> getParentEventList(){

@@ -19,6 +19,7 @@ import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.example.joinme.objects.location;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,6 +66,10 @@ public class EditProfileFragment extends Fragment {
         phone = v.findViewById(R.id.phone);
         bio = v.findViewById(R.id.bio);
         gender = v.findViewById(R.id.gender);
+        TitleBar bar = v.findViewById(R.id.edit_profile_title);
+        bar.setOnClickBackListener(view->{
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
         save = v.findViewById(R.id.save);
         save.setOnClickListener((view)->{
             try {

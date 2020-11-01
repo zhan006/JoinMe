@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         custom:title="Home"
         custom:backable="false"
-        custom:icon="@drawable/setting_icon"/>
+        custom:icon="@drawable/baseline_exit_to_app_black_18dp"/>
     <LinearLayout
         android:id="@+id/welcomebar"
         android:layout_below="@id/home_title"
@@ -42,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:text="Welcome Ziping"
-            style="@style/bold_text"/>
+            android:text="Welcome"
+            style="@style/large_title"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_billboard"
@@ -73,11 +73,11 @@
         android:layout_marginTop="30dp"
         android:layout_below="@id/organize_event"
         android:text="search an event"/>
-    <Button
-        android:id="@+id/signout_button"
-        style="@style/long_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/search_event"
-        android:text="sign out"/>
+<!--    <Button-->
+<!--        android:id="@+id/signout_button"-->
+<!--        style="@style/long_button"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_below="@id/search_event"-->
+<!--        android:text="sign out"/>-->
 </RelativeLayout>
