@@ -1,17 +1,9 @@
 package com.example.joinme.fragments;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,15 +25,10 @@ import com.example.joinme.LoginActivity;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.NotificationAdapter;
-import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
-import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
-import com.example.joinme.objects.location;
-import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -51,17 +36,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class HomePageFragment extends Fragment implements UserRenderable, EventRenderable {
@@ -72,6 +49,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     private ArrayList<Event> eventList;
     private RecyclerView board;
     private User user;
+    private String currentUID;
     private Event event;
     private Geocoder geocoder;
     private final String WELCOME = "Welcome ";
@@ -98,9 +76,28 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         board = view.findViewById(R.id.home_billboard);
         board.setLayoutManager(new LinearLayoutManager(getContext()));
         eventList = getParentEventList();
-//        signout = view.findViewById(R.id.signout_button);
-        TitleBar bar = view.findViewById(R.id.home_title);
-        bar.setIconListener(v -> {
+        signout = view.findViewById(R.id.signout_button);
+        currentUID = ((MainActivity) getActivity()).getUid();
+        renderEvent();
+        renderUser();
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("fragment", String.valueOf(getActivity().getSupportFragmentManager().getFragments().get(0).isVisible()));
+        organise.setOnClickListener((v) -> {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            utils.replaceFragment(fm, new PublishEvent(), "publish_event");
+        });
+        // for testing location service;
+        search.setOnClickListener((v) -> {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
+        });
+        // test signout service
+        signout.setOnClickListener(v -> {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
             // [START config_signin]
@@ -121,49 +118,6 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentSignin);
         });
-        icon.setOnClickListener((v)->{
-            utils.replaceFragment(getActivity().getSupportFragmentManager(),new ProfileFragment(),"account");
-        });
-        renderEvent();
-        renderUser();
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("fragment", String.valueOf(getActivity().getSupportFragmentManager().getFragments().get(0).isVisible()));
-        organise.setOnClickListener((v) -> {
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm, new PublishEvent(), "publish_event");
-        });
-        // for testing location service;
-        search.setOnClickListener((v) -> {
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm, new DiscoverEventFragment(), "discover_event");
-        });
-        // test signout service
-//        signout.setOnClickListener(v -> {
-//            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//            mAuth.signOut();
-//            // [START config_signin]
-//            // Configure Google Sign In
-//            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                    .requestIdToken(getString(R.string.default_web_client_id))
-//                    .requestEmail()
-//                    .build();
-//            // [END config_signin]
-//            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
-//            if (mGoogleSignInClient != null){
-//                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                    }
-//                });
-//            }
-//            Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
-//            startActivity(intentSignin);
-//        });
 
     }
     public ArrayList<Event> getParentEventList(){
@@ -188,7 +142,9 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
         user = getParentUser();
         if(user !=null){
             welcome.setText(WELCOME+user.firstName+" "+user.lastName);
-            icon.setImageResource(R.drawable.photo);
+//          Connect to database and retrieve the profile image from database under "User"
+            user.loadProfileImage(getActivity(), currentUID,icon);
+
         }
 
     }

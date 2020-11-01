@@ -45,6 +45,7 @@
                 app:cardBackgroundColor="#FFFCFC"
                 app:cardCornerRadius="75dp">
                 <ImageView
+                    android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/photo"/>
@@ -137,7 +138,7 @@
 
             </LinearLayout>
             <Button
-
+                android:id="@+id/see_Friend"
                 style="@style/label_button"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
@@ -168,7 +169,7 @@
                 style="@style/normal_text"
                 android:paddingLeft="45dp"
                 android:paddingRight="25dp"
-                android:text=""/>
+                android:text="I am a food Lover"/>
             <RelativeLayout
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"

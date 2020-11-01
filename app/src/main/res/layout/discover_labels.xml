@@ -97,36 +97,36 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/Date"
-                android:text="Date"
+                android:id="@+id/Within"
+                android:text="Within"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 style="@style/bold_text"/>
         <Button
             style="@style/detail_button"
-            android:id="@+id/today_button"
+            android:id="@+id/one_day_button"
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="Today"
+            android:text="One day"
             android:textAllCaps="false"
             />
         <Button
             style="@style/detail_button"
-            android:id="@+id/this_week_button"
+            android:id="@+id/one_week_button"
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="This Week"
+            android:text="One Week"
             android:textAllCaps="false"
             />
         <Button
             style="@style/detail_button"
-            android:id="@+id/this_month_button"
+            android:id="@+id/one_month_button"
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="This Month"
+            android:text="One Month"
             android:textAllCaps="false"/>
 
 
