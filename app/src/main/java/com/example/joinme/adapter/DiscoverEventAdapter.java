@@ -83,21 +83,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
             detail = (Button)itemView.findViewById(R.id.detail_button);
             join = (Button)itemView.findViewById(R.id.detail_button);
             detail.setOnClickListener((v)->{
-                /*
-                e.sort(new Comparator<Event>() {
-                    @Override
-                    public int compare(Event o1, Event o2) {
-                        if(o1.getLocation().distanceTo(DiscoverEventAdapter.loc)<o2.getLocation().distanceTo(DiscoverEventAdapter.loc)){
-                            return -1;
-                        }
-                        else if(o1.getLocation().distanceTo(DiscoverEventAdapter.loc)>o2.getLocation().distanceTo(DiscoverEventAdapter.loc)){
-                            return 1;
-                        }
-                        return 0;
-                    }
 
-                });*/
-                adapter.sortEvents();
             });
             join.setOnClickListener((v)->{
                 Collections.reverse(adapter.eventList);
@@ -118,7 +104,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
         Event event = filteredList.get(position);
         ((ViewHolder) holder).title.setText(event.getEventName());
         if(event.getDatetime()!=null) ((ViewHolder) holder).time.setText(event.getDatetime().toString());
-        if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+event.getLocation().distanceTo(loc));
+        if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+Math.round(event.getLocation().distanceTo(loc))+" meters");
 
     }
     /*
@@ -133,9 +119,5 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
     }
 
 
-    public void sortEvents(){
-        Collections.shuffle(eventList);
-        this.notifyDataSetChanged();
-    }
 }
 

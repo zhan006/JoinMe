@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class DiscoverEventFragment extends Fragment {
+public class  DiscoverEventFragment extends Fragment {
 
     public RecyclerView eventRecyclerView;
     private Button study,entertainment, dailyLife;
@@ -101,8 +101,8 @@ public class DiscoverEventFragment extends Fragment {
         setTopicListener(entertainment);
         setTopicListener(dailyLife);
 
-        setDistanceLimitListener(distance1,1);
-        setDistanceLimitListener(distance1,5);
+        setDistanceLimitListener(distance1,1000);
+        setDistanceLimitListener(distance1,5000);
         setDistanceLimitListener(distance1,Integer.MAX_VALUE);
 
         setDateListener(oneDay,"oneDay");
@@ -145,24 +145,27 @@ public class DiscoverEventFragment extends Fragment {
         List<Event> selected = new ArrayList<>();
         for(int i=0;i<initEvents().size();i++){
             Event e = initEvents().get(i);
+
             if(!topic.equals("")&&!e.getEventCategory().equals(topic)){
                 continue;
             }
-            if(e.getLocation().distanceTo(curLocation())>1000*distanceLimit)
+
+            if(e.getLocation().distanceTo(curLocation())>distanceLimit)
                 continue;
             if(!date.equals("")){
                 if(date.equals("oneDay")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()>24*60*60*1000){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<24*60*60*1000){
+
                         continue;
                     }
                 }
                 else if(date.equals("oneWeek")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()>7*24*60*60*1000){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<7*24*60*60*1000){
                         continue;
                     }
                 }
                 else if(date.equals("oneMonth")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()>30*24*60*60*1000){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<30*24*60*60*1000){
                         continue;
                     }
                 }
@@ -264,7 +267,7 @@ public class DiscoverEventFragment extends Fragment {
         ArrayList<String> ids = new ArrayList<>();
         for(int i=0;i<5;i++){
             eventNames.add("EVENT"+Integer.toString(i));
-            locations.add(new location(-37.797+0.001*i, 144.961+0.001*i,"Unimelb"));
+            locations.add(new location(curLocation().getLatitude()+0.003*i, curLocation().getLongitude()+0.001*i,"Unimelb"));
             datetimes.add(new DateTime());
             categorys.add("Study");
             usr_ids.add("1");
@@ -283,8 +286,10 @@ public class DiscoverEventFragment extends Fragment {
         FirebaseAPI.getFirebaseData(eventPath, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    Event event = ds.getValue(Event.class);
+                //Event e = snapshot.getValue(Event.class);
+                for(DataSnapshot child: snapshot.getChildren()){
+
+                    Event event = child.getValue(Event.class);
                     events.add(event);
                 }
             }
