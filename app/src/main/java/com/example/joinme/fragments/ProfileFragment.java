@@ -73,7 +73,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int prev = ((NavBar)getActivity().findViewById(R.id.navbar)).getPrevSelected();
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));

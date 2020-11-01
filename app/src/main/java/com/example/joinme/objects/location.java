@@ -2,9 +2,10 @@ package com.example.joinme.objects;
 
 import android.location.Location;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class location {
+public class location implements Serializable {
     double latitude,longitude;
     String address;
     public location(){};
