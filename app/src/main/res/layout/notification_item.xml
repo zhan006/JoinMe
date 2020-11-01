@@ -27,7 +27,7 @@
         android:layout_height="30dp"
         style="@style/bold_text"
         android:textColor="@color/blue"
-        android:text="Lunch Together"
+        android:text=""
         android:layout_marginLeft="5dp"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,20 +39,12 @@
             android:layout_height="50dp"
             android:background="@color/colorSecondary"
             android:drawableLeft="@drawable/baseline_place_black_18dp"
-            android:text="South Lawn"
+            android:text=""
             android:textAllCaps="false"
             android:textSize="20dp"
             android:textColor="@color/orange"
             android:layout_alignParentLeft="true"/>
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:text="12:00pm -- 1:00 pm"
-            android:gravity="center"
-            style="@style/normal_text"
-            android:textColor="@color/green"/>
+
 
 
     </RelativeLayout>

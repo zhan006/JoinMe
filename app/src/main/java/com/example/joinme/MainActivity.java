@@ -218,7 +218,20 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                     1);
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10,
-                location -> Log.d("location", location.getLatitude()+""));
+        else{
+            LocationListener listener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    Log.d("location", location.getLatitude()+"");
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10,
+                    listener);
+        }
     }
 }

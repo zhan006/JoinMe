@@ -53,7 +53,6 @@ public class EventManagementFragment extends Fragment implements EventRenderable
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int prev = ((NavBar)getActivity().findViewById(R.id.navbar)).getPrevSelected();
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
@@ -69,6 +68,7 @@ public class EventManagementFragment extends Fragment implements EventRenderable
         invitedBtn = v.findViewById(R.id.see_invited);
         organise = v.findViewById(R.id.organised_event);
         attend = v.findViewById(R.id.attending_event);
+        attend.setSelected(true);
         eventRecycler = v.findViewById(R.id.event_mng_recycle);
         eventRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ImageButton search = v.findViewById(R.id.search_button);
@@ -83,6 +83,8 @@ public class EventManagementFragment extends Fragment implements EventRenderable
     }
     public void setOnClickListener(){
         this.organise.setOnClickListener((v)->{
+            organise.setSelected(true);
+            attend.setSelected(false);
             String uid = ((MainActivity)getActivity()).getUid();
             String organizePath = "OrganizedEvents/"+uid;
             FirebaseAPI.getFirebaseData(organizePath, new ValueEventListener() {
@@ -105,6 +107,8 @@ public class EventManagementFragment extends Fragment implements EventRenderable
             });
         });
         this.attend.setOnClickListener((v)->{
+            organise.setSelected(false);
+            attend.setSelected(true);
             renderEvent();
         });
     }
