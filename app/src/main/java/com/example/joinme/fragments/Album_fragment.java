@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class Album_fragment extends Fragment {
     private TitleBar bar;
     private RecyclerView album;
-    private ArrayList<String> imageUrls = new ArrayList<String>();
+    private ArrayList<String> imageUrls;
     private String uid;
     private AlbumAdapter adapter;
     public Album_fragment(String uid){
@@ -39,6 +39,7 @@ public class Album_fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.from(getContext()).inflate(R.layout.activity_photo_gallery,container,false);
+        imageUrls = new ArrayList<String>();
         initView(view);
         initAlbum();
         return view;
