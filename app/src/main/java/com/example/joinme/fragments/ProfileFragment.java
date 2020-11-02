@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,14 +35,17 @@ import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
 import com.example.joinme.adapter.photoAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
+import com.google.firebase.database.DatabaseReference;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -62,6 +68,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private User user;
     private Uri imageUri;
     private final int PHOTO = 1;
+    private boolean visitorMode = false;
     LinearLayout friendGallery;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -106,11 +113,16 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         super.onActivityCreated(savedInstanceState);
         String uid = ((MainActivity)getActivity()).getUid();
         editProfile.setOnClickListener((v)->{
-            EditProfileFragment f = new EditProfileFragment();
-            Bundle bd = new Bundle();
-            bd.putSerializable("user",getParentUser());
-            f.setArguments(bd);
-            utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
+            if(!visitorMode){
+                EditProfileFragment f = new EditProfileFragment();
+                Bundle bd = new Bundle();
+                bd.putSerializable("user",getParentUser());
+                f.setArguments(bd);
+                utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
+            }
+
+
+
         });
         seeFriend.setOnClickListener((v)->{
             utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(uid),"follower");
@@ -207,5 +219,38 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             }
 
         }
+
+    }
+
+    public void setUser(User newUser) {
+        if(newUser != null){
+            user = newUser;
+            setName(user.username);
+            setAboutMe(user.about);
+            if(user.getLocation()!=null){
+                location.setText(user.getLocation().getAddress());
+            }
+            if(!(user.getUsername().equals(getParentUser().username))){
+                visitorMode = true;
+            }
+        }
+        if(visitorMode){
+            editProfile.setText("Follow");
+        }
+
+    }
+    void follow(String pageUserId) {
+        String userID = FirebaseAPI.getUser().getUid();
+        String followingUserPath = "FollowingUser/" + pageUserId+ "/" + userID;
+        String userFollowingPath = "UserFollowing/" + userID + "/" + pageUserId;
+
+        // get unique message ID for current message
+
+        // create current message
+
+        Log.d("Follow", userID+"> "+pageUserId);
+        FirebaseAPI.rootRef.child("FollowingUser").child(pageUserId).child(userID).setValue(true);
+        FirebaseAPI.rootRef.child("UserFollowing").child(userID).child(pageUserId).setValue(true);
+
     }
 }
