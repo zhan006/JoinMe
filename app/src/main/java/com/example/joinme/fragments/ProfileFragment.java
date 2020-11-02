@@ -4,15 +4,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,12 +37,8 @@ import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Message;
-import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
-import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -57,17 +48,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firebase.database.DatabaseReference;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -75,6 +61,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public static final int FRIEND_DISPLAY=3, TAKE_PHOTO=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
+    private ImageView profileImage;
     private Button editProfile,seeFriend;
     private ArrayList<Event> eventList;
     private ArrayList<String> imageUrls;
@@ -85,6 +72,8 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private String uid;
     private RecyclerView.Adapter adapter,friendAdapter;
     LinearLayout albumContainer;
+    private Uri imageUri;
+    private String currentUID;
     private final int PHOTO = 1;
     private boolean visitorMode = false;
     LinearLayout friendGallery;
@@ -105,6 +94,9 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
         uid = ((MainActivity)getActivity()).getUid();
+
+        profileImage = view.findViewById(R.id.profile_image);
+        currentUID = ((MainActivity) getActivity()).getUid();
         aboutMe = view.findViewById(R.id.aboutMe);
         albums = view.findViewById(R.id.albums);
         addAlbum=view.findViewById(R.id.addAlbum);
@@ -138,7 +130,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         renderEvent();
         renderUser();
         initAlbum();
-        initFriends(1);
+//        initFriends(1);
         return view;
     }
 
@@ -320,6 +312,8 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         if(user !=null){
             setName(user.username);
             setAboutMe(user.about);
+
+            user.loadProfileImage(getActivity(), currentUID, profileImage);
             if(user.getLocation()!=null){
                 location.setText(user.getLocation().getAddress());
             }
