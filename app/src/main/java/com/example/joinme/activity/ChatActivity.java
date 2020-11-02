@@ -33,6 +33,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -40,6 +41,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,6 +194,28 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+    void markMessageAsSeen(){
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // update all messages under this chat to be seen
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    if (dataSnapshot.hasChild("seen")) {
+                        Log.d(TAG, "onDataChange: child seen => "+
+                                dataSnapshot.child("seen").getValue().toString());
+                        dataSnapshot.child("seen").getRef().setValue(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseAPI.getFirebaseData("Chat/"+this.currentUid+"/"+
+                this.friendUid, valueEventListener );
+    }
 
     void sendMessage() {
         String sendText = inputText.getText().toString();
@@ -252,10 +276,10 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 Uri resultUri = result.getUri();
-
+                Calendar now = Calendar.getInstance();
 
                 final StorageReference filepath = FirebaseAPI.getStorageRef(
-                        "chat_images/" + currentUid);
+                        "chat_images/" + currentUid+"/"+String.valueOf(now.getTimeInMillis()));
 
                 Bitmap bitmap = null;
 
