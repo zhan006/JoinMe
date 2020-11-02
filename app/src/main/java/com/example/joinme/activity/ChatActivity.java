@@ -100,6 +100,7 @@ public class ChatActivity extends AppCompatActivity {
         // set friend username in title bar
         TitleBar titleBar = findViewById(R.id.chat_title_bar);
         titleBar.setTitle(this.friendUsername);
+        titleBar.setOnClickBackListener((v)->finish());
 
         messageRecyclerView = findViewById(R.id.chat_message_list);
         inputText = findViewById(R.id.chat_input_message);

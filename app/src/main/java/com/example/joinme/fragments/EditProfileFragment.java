@@ -27,6 +27,7 @@ import com.example.joinme.R;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.example.joinme.objects.location;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
@@ -55,6 +56,7 @@ public class EditProfileFragment extends Fragment {
     private PlacesClient placesClient;
     private Button save;
     private ImageView profileImage;
+    private TitleBar bar;
     private static final int GALLERY_PICK = 1;
     private String currentUid, downloadUri;
     private static final String TAG = "EditProfileFragment";
@@ -66,6 +68,9 @@ public class EditProfileFragment extends Fragment {
         View view = inflater.from(getContext()).inflate(R.layout.edit_profile_fragment, container, false);
         initPlaces();
         initView(view);
+        bar = view.findViewById(R.id.edit_profile_title);
+        bar.setOnClickBackListener((v)->{
+            getActivity().getSupportFragmentManager().popBackStack();});
         return view;
     }
 

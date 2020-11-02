@@ -6,31 +6,31 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class location implements Serializable {
-    double latitude,longitude;
-    String address;
+    public double latitude,longtitude;
+    public String address;
     public location(){};
     public location(HashMap data){
         latitude = (double)data.get("latitude");
-        longitude = (double)data.get("longtitude");
+        longtitude = (double)data.get("longtitude");
         address = (String)data.get("address");
     }
 
-    public location(double latitude, double longitude) {
+    public location(double latitude, double longtitude) {
         this.latitude = latitude;
-        this.longitude = longitude;
+        this.longtitude = longtitude;
     }
-    public location(double latitude, double longitude,String address) {
+    public location(double latitude, double longtitude,String address) {
         this.latitude = latitude;
-        this.longitude = longitude;
+        this.longtitude = longtitude;
         this.address = address;
     }
 
-    public void setLatitude(double latitude) {
+    public void setlatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public void setLongitude(double longtitude) {
-        this.longitude = longtitude;
+    public void setlongtitude(double longtitude) {
+        this.longtitude = longtitude;
     }
 
     public double getLatitude() {
@@ -38,7 +38,7 @@ public class location implements Serializable {
     }
 
     public double getLongitude() {
-        return longitude;
+        return longtitude;
     }
 
     public void setAddress(String address) {
@@ -50,15 +50,15 @@ public class location implements Serializable {
     }
 
     public double distanceTo(location l){
-        return GetDistance(longitude,latitude,l.getLongitude(),l.getLatitude());
+        return GetDistance(longtitude,latitude,l.getLongitude(),l.getLatitude());
     }
 
     public double distanceTo(Location l){
-        return GetDistance(longitude,latitude,l.getLongitude(),l.getLatitude());
+        return GetDistance(longtitude,latitude,l.getLongitude(),l.getLatitude());
     }
 
     public double distanceTo(double lo, double la){
-        return GetDistance(longitude,latitude,lo,la);
+        return GetDistance(longtitude,latitude,lo,la);
     }
 
     private static final  double EARTH_RADIUS = 6378137;
