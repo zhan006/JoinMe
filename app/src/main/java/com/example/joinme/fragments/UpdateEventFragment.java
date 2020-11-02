@@ -103,6 +103,7 @@ public class UpdateEventFragment extends Fragment implements DateTimeClick {
         });
         titleBar.setTitle(event.getEventName());
         titleBar.setOnClickBackListener((v)->{
+
             getActivity().getSupportFragmentManager().popBackStack();
         });
         event_name.setText(event.getEventName());

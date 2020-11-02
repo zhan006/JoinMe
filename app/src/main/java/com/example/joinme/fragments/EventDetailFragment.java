@@ -2,6 +2,7 @@ package com.example.joinme.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.CaseMap;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -27,6 +28,7 @@ import com.example.joinme.adapter.CommentAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Comment;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -58,6 +60,10 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
         going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+        TitleBar bar = v.findViewById(R.id.event_title_bar);
+        bar.setOnClickBackListener((view)->{
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
 
 
         organiserProfile = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
@@ -146,6 +152,7 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         commentRecyclerView.setAdapter(new CommentAdapter(initComments()));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     List<Comment> initComments(){
         ArrayList<Comment> comments = new ArrayList<>();
         comments.add(new Comment("Zhan", "Wang", R.drawable.host_profile_pic,"That sounds interesting!"));
