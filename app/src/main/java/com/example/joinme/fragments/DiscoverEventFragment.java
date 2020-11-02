@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,11 @@ import com.example.joinme.adapter.ManageEventAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.User;
 import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -100,7 +103,7 @@ public class  DiscoverEventFragment extends Fragment {
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
         initButtons(v);
         initEvent(v);
-        if(target!=null&& !target.equals(""))
+        if(target!=null&&!target.toString().equals(""))
             search();
         return v;
     }
@@ -253,33 +256,6 @@ public class  DiscoverEventFragment extends Fragment {
 
 
 
-    /*
-    List<String> initTopics() {
-        ArrayList<String> topics = new ArrayList<>();
-        topics.add("Basketball");
-        topics.add("Movie");
-        topics.add("Music");
-        topics.add("Study");
-        return topics;
-    }
-
-    List<String> initDistances() {
-        ArrayList<String> distances = new ArrayList<>();
-        distances.add("0-5km");
-        distances.add("5-8km");
-        distances.add(">8km");
-        return distances;
-    }
-
-    List<String> initDates() {
-        ArrayList<String> dates = new ArrayList<>();
-        dates.add("Aug 1");
-        dates.add("Aug 2");
-        dates.add("Aug 3");
-        dates.add("After");
-        return dates;
-    }
-    */
     List<Event> initEvents(){
 
         ArrayList<Event> events = new ArrayList<>();
@@ -292,7 +268,7 @@ public class  DiscoverEventFragment extends Fragment {
         ArrayList<String> ids = new ArrayList<>();
         for(int i=0;i<5;i++){
             eventNames.add("EVENT"+Integer.toString(i));
-            locations.add(new location(curLocation().getLatitude()+0.003*i, curLocation().getLongitude()+0.001*i,"Unimelb"));
+            locations.add(new location(38+0.003*i, -147+0.003*i,"Unimelb"));
             datetimes.add(new DateTime());
             categorys.add("Study");
             usr_ids.add("1");
@@ -306,24 +282,33 @@ public class  DiscoverEventFragment extends Fragment {
         }
 
 
-        String eventPath = "Event";
 
-        FirebaseAPI.getFirebaseData(eventPath, new ValueEventListener() {
+        FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //Event e = snapshot.getValue(Event.class);
-                for(DataSnapshot child: snapshot.getChildren()){
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Event event = snapshot.getValue(Event.class);
+                Log.d("Discover", "onDataChange: Event => "+event.toString());
+                events.add(event);
+                eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLoc));
+            }
 
-                    Event event = child.getValue(Event.class);
-                    events.add(event);
-                }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+
 
 
 
