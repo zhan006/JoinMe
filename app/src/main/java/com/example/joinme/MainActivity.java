@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 msg.what = GET_USER;
                 Bundle bd = new Bundle();
                 bd.putSerializable("user", user);
-                Log.d("user", user.toString());
                 msg.setData(bd);
                 handler.sendMessage(msg);
                 //Log.d(TAG, "onDataChange: username = "+username);

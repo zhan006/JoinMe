@@ -35,6 +35,7 @@ import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class  DiscoverEventFragment extends Fragment {
 
@@ -55,6 +57,7 @@ public class  DiscoverEventFragment extends Fragment {
     private String date="";
     private Editable target;
     public Location curLoc;
+    public TitleBar bar;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -81,7 +84,10 @@ public class  DiscoverEventFragment extends Fragment {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.discover_events, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
-
+        bar = v.findViewById(R.id.search_event_title);
+        bar.setOnClickBackListener((view)->{
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+        });
         ImageButton searchButton = v.findViewById(R.id.search_button);
         searchButton.setOnClickListener(v1 -> {
             target = searchBar.getText();
@@ -94,7 +100,7 @@ public class  DiscoverEventFragment extends Fragment {
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
         initButtons(v);
         initEvent(v);
-        if(!target.equals(""))
+        if(target!=null&& !target.equals(""))
             search();
         return v;
     }

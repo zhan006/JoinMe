@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginTop="10dp"
-              android:layout_marginLeft="20dp">
+              android:layout_marginLeft="0dp">
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -15,8 +15,9 @@
                 android:id="@+id/Topic"
                 android:text="Topic"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
         <Button
             style="@style/detail_button"
             android:id="@+id/study_button"
@@ -56,8 +57,9 @@
                 android:id="@+id/Distance"
                 android:text="Distance"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
 
         <Button
             style="@style/detail_button"
@@ -100,8 +102,9 @@
                 android:id="@+id/Within"
                 android:text="Within"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
         <Button
             style="@style/detail_button"
             android:id="@+id/one_day_button"

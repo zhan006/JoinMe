@@ -22,6 +22,7 @@ import com.example.joinme.adapter.SearchConditionAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -52,10 +53,14 @@ public class AddFriendFragment extends Fragment {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_friend, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
+        TitleBar bar = v.findViewById(R.id.add_friend_title);
+        bar.setOnClickBackListener((view)->{
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
 
         initUserList(v);
 //        loadUsers();
-        initHobbyList(v);
+//        initHobbyList(v);
         initGenderList(v);
         initAgeList(v);
 
@@ -70,13 +75,13 @@ public class AddFriendFragment extends Fragment {
         addFriendAdapter.startListening();
     }
 
-    private void initHobbyList(View v) {
-        RecyclerView hobbyRecyclerView = v.findViewById(R.id.hobby_search_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        hobbyRecyclerView.setLayoutManager(layoutManager);
-        hobbyRecyclerView.setAdapter(new SearchConditionAdapter(initHobbies()));
-    }
+//    private void initHobbyList(View v) {
+//        RecyclerView hobbyRecyclerView = v.findViewById(R.id.hobby_search_list);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        hobbyRecyclerView.setLayoutManager(layoutManager);
+//        hobbyRecyclerView.setAdapter(new SearchConditionAdapter(initHobbies()));
+//    }
 
     private void initGenderList(View v) {
         RecyclerView genderRecyclerView = v.findViewById(R.id.gender_search_list);
@@ -122,14 +127,14 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-    List<String> initHobbies() {
-        ArrayList<String> hobbies = new ArrayList<>();
-        hobbies.add("Guitar");
-        hobbies.add("Movie");
-        hobbies.add("Basketball");
-        hobbies.add("Singing");
-        return hobbies;
-    }
+//    List<String> initHobbies() {
+//        ArrayList<String> hobbies = new ArrayList<>();
+//        hobbies.add("Guitar");
+//        hobbies.add("Movie");
+//        hobbies.add("Basketball");
+//        hobbies.add("Singing");
+//        return hobbies;
+//    }
 
     List<String> initGender() {
         ArrayList<String> genders = new ArrayList<>();

@@ -2,7 +2,6 @@ package com.example.joinme.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +15,25 @@ import com.example.joinme.R;
 
 import java.util.ArrayList;
 
-public class photoAdapter extends RecyclerView.Adapter {
+public class AlbumAdapter extends RecyclerView.Adapter {
     private ArrayList<String> images;
     private Context context;
     public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
         public ViewHolder(View itemView){
             super(itemView);
-            image = itemView.findViewById(R.id.photo);
+            image = itemView.findViewById(R.id.img);
         }
     }
-    public photoAdapter(ArrayList<String> images, Context context){
+    public AlbumAdapter(ArrayList<String> images, Context mContext){
         this.images = images;
-        this.context = context;
+        context = mContext;
     }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.album_item, parent, false);
-        photoAdapter.ViewHolder viewHolder = new photoAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 

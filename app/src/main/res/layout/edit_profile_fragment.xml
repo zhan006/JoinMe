@@ -23,8 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User Profile"
-        android:textSize="25dp"
-        android:textStyle="bold"
+        style="@style/large_title"
         android:textColor="@color/black"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp" />
@@ -84,12 +83,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="User Name:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    />
 
                 <EditText
                     android:id="@+id/user_name"
@@ -106,8 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="First Name:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -128,8 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Last Name:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -150,8 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gender:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -173,8 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Email:*"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -195,8 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phone:"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -212,13 +204,13 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_marginTop="5dp"
+                android:layout_height="35dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Location:"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
@@ -239,18 +231,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bio:"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
+                    style="@style/normal_title"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_gravity="start"/>
 
                 <EditText
                     android:id="@+id/bio"
                     android:background="@drawable/bio_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:padding="5dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp">
@@ -277,7 +269,7 @@
                     style="@style/long_button"
                     android:text="Save"
                     android:textSize="20dp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/ptsans_bold"
                     android:textColor="@color/black"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true" />

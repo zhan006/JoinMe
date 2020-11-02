@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,16 +40,16 @@ public class AddFriendAdapter{
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, about;
         ImageView profilePhoto;
-        ImageButton profileBtn;
-        ImageButton followBtn;
-        ImageButton messageBtn;
+
+        Button followBtn;
+        Button messageBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.user_name);
             about = itemView.findViewById(R.id.user_about);
             profilePhoto = itemView.findViewById(R.id.profile_photo);
-            profileBtn = itemView.findViewById(R.id.profile_btn);
+
             followBtn = itemView.findViewById(R.id.follow_btn);
             messageBtn = itemView.findViewById(R.id.message_icon);
         }
@@ -127,11 +128,11 @@ public class AddFriendAdapter{
                         holder.setProfile(userID);
 
                         // TODO: view user's profile
-                        ((ViewHolder) holder).profileBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        });
+//                        ((ViewHolder) holder).profileBtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                            }
+//                        });
 
                         // follow this user
                         ((ViewHolder) holder).followBtn.setOnClickListener(new View.OnClickListener() {
