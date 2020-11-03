@@ -17,7 +17,6 @@
         android:id="@+id/chat_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="August 8th, 13:48"
         android:layout_below="@id/chat_title_bar"
         android:layout_marginTop="10dp"
         android:gravity="center"

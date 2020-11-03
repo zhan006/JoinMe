@@ -45,9 +45,12 @@ public class Time {
     public String getTime() {
         Calendar calendar = Calendar.getInstance();
         // in 12-hour format with am/pm
-
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
         time = currentTimeFormat.format(calendar.getTime());
+        return time;
+    }
+
+    public String time() {
         return time;
     }
 

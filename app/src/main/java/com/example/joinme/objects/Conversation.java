@@ -4,21 +4,30 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class Conversation {
-    private String name;
-    private Message latestMessage;
-    private List<Message> messageList;
-    public Conversation(String name){
-        this.name = name;
-    };
-    public Conversation(String name, Message msg){
-        this.name = name;
-        this.latestMessage = msg;
-    };
-    public String getName() {
-        return name;
+    private boolean seen;
+    private Time time;
+
+    public Conversation() {
     }
 
-    public Message getLatestMessage() {
-        return latestMessage;
+    public Conversation(boolean seen, Time time) {
+        this.seen = seen;
+        this.time = time;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
     }
 }

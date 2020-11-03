@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.R;
 import com.example.joinme.adapter.MessageAdapter;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
 import com.example.joinme.reusableComponent.TitleBar;
@@ -69,7 +70,6 @@ public class ChatActivity extends AppCompatActivity {
 
         friendUid = getIntent().getStringExtra("friendUid");
         friendUsername = getIntent().getStringExtra("friendUsername");
-//        currentUid = "dVPWSkIeVHT3SPDfSMYPbAf52Pz2";
         currentUid = FirebaseAPI.getUser().getUid();
 
 
@@ -152,6 +152,13 @@ public class ChatActivity extends AppCompatActivity {
         Log.d(TAG, "onDataChange: datasnapshot message => "+message.toString());
     }
 
+    // add to conversation list
+    void add2Conversation(Time time) {
+        Conversation conversation = new Conversation(false, time);
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).setValue(conversation);
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid).setValue(conversation);
+    }
+
     void loadMessages() {
         FirebaseAPI.rootRef.child("Chat").child(this.currentUid).child(this.friendUid).addChildEventListener(new ChildEventListener() {
             @Override
@@ -194,6 +201,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
     void markMessageAsSeen(){
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -246,6 +254,9 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
             FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
+
+            // and current chat to current user's conversation list
+            add2Conversation(time);
         }
     }
 
@@ -342,6 +353,9 @@ public class ChatActivity extends AppCompatActivity {
                                 }
                             };
                             FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
+
+                            // and current chat to current user's conversation list
+                            add2Conversation(time);
                         } else {
                             Toast.makeText(ChatActivity.this, "Please write messages First... ", Toast.LENGTH_SHORT).show();
                         }

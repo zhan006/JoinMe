@@ -1,7 +1,9 @@
 package com.example.joinme.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +16,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.joinme.R;
+import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Conversation;
+import com.example.joinme.objects.Time;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 public class ChatListAdapter {
+
+    private static final String TAG = "ChatListAdapter";
+
     private Context context;
     private String currentUid;
+    private DatabaseReference chatRef;
+    private DatabaseReference conversationListRef;
 
     public ChatListAdapter(Context context) {
         this.context = context;
         currentUid = FirebaseAPI.getUser().getUid();
+        chatRef = FirebaseAPI.rootRef.child("Chat").child(currentUid);
+        chatRef.keepSynced(true);
+        conversationListRef = FirebaseAPI.rootRef.child("ConversationList").child(currentUid);
+        conversationListRef.keepSynced(true);
     }
 
     public class ChatListViewHolder extends RecyclerView.ViewHolder{
@@ -67,8 +81,11 @@ public class ChatListAdapter {
         public void setLatestMsg(String msg, boolean seen) {
             if (msg != null) {
                 this.latestMsg.setText(msg);
+            } else {
+                return;
             }
-
+            Log.d(TAG, "setLatestMsg: current last msg=> "+latestMsg.getTypeface().toString());
+            Log.d(TAG, "setLatestMsg: seen? "+seen);
             if (seen) {
                 unreadIcon.setVisibility(View.GONE);
                 latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.NORMAL);
@@ -76,6 +93,7 @@ public class ChatListAdapter {
                 unreadIcon.setVisibility(View.VISIBLE);
                 latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.BOLD);
             }
+            Log.d(TAG, "setLatestMsg: unread visibility: "+unreadIcon.getVisibility());
         }
 
         public ImageView getProfilePhoto() {
@@ -128,8 +146,8 @@ public class ChatListAdapter {
     }
 
     public FirebaseRecyclerAdapter<Conversation, ChatListViewHolder> chatListAdaptor() {
-        Query chatListQuery = FirebaseAPI.rootRef.child("MessageList")
-                .child(currentUid).orderByChild("time/timestamp");
+        // order all messages by timestamp
+        Query chatListQuery = conversationListRef.orderByChild("time/timestamp");
         chatListQuery.keepSynced(true);
         FirebaseRecyclerOptions<Conversation> options =
                 new FirebaseRecyclerOptions.Builder<Conversation>()
@@ -141,7 +159,7 @@ public class ChatListAdapter {
                 // uid of current chatting user
                 String chatUserID = getRef(position).getKey();
                 // retrieve latest msg
-                Query latestMsgQuery = FirebaseAPI.rootRef.child("Chat").child(currentUid).child(chatUserID).limitToLast(1);
+                Query latestMsgQuery = chatRef.child(chatUserID).limitToLast(1);
                 latestMsgQuery.keepSynced(true);
                 // listen to the last message and update it
                 latestMsgQuery.addChildEventListener(new ChildEventListener() {
@@ -149,13 +167,24 @@ public class ChatListAdapter {
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         String msg = null;
                         boolean seen = false;
+                        String type = "text";
                         if (snapshot.hasChild("messageContent")) {
                             msg = snapshot.child("messageContent").getValue().toString();
                         }
                         if (snapshot.hasChild("seen")) {
                             seen = (boolean) snapshot.child("seen").getValue();
+                            conversationListRef.child(chatUserID).child("seen").setValue(seen);
                         }
+                        if (snapshot.hasChild("time")) {
+                            Time time = snapshot.child("time").getValue(Time.class);
+                            holder.setLatestMsgTime(time.time());
+                        }
+                        if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
+                            msg = "Image";
+                        }
+
                         holder.setLatestMsg(msg, seen);
+
                     }
 
                     @Override
@@ -171,6 +200,36 @@ public class ChatListAdapter {
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                // retrieve friend
+                FirebaseAPI.getFirebaseData("User/" + chatUserID, new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String friendUsername = "";
+                        if (snapshot.hasChild("username")) {
+                            friendUsername = snapshot.child("username").getValue().toString();
+                            holder.setFriendName(friendUsername);
+                        }
+                        if (snapshot.hasChild("profileImage")) {
+                            holder.setProfilePhoto(chatUserID);
+                        }
+                        String finalFriendUsername = friendUsername;
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent chatIntent = new Intent(context, ChatActivity.class);
+                                chatIntent.putExtra("friendUid", chatUserID);
+                                chatIntent.putExtra("friendUsername", finalFriendUsername);
+                                context.startActivity(chatIntent);
+                            }
+                        });
                     }
 
                     @Override

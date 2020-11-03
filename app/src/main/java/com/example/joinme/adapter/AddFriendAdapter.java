@@ -108,13 +108,13 @@ public class AddFriendAdapter{
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(userQuery, User.class)
                 .build();
-        Log.d(TAG, "addFriendAdaptor: userQuery => " + userQuery.toString());
+//        Log.d(TAG, "addFriendAdaptor: userQuery => " + userQuery.toString());
         return new FirebaseRecyclerAdapter<User, ViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
                 // retrieve user uid
                 String userID = getRef(position).getKey();
-                Log.d(TAG, "addFriendAdaptor: userID => " + userID);
+//                Log.d(TAG, "addFriendAdaptor: userID => " + userID);
                 FirebaseAPI.getFirebaseData("User/" + userID, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -170,8 +170,8 @@ public class AddFriendAdapter{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
-                        Log.d(TAG, "onDataChange: has user?  "+snapshot.getKey());
+//                        Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
+//                        Log.d(TAG, "onDataChange: has user?  "+snapshot.getKey());
 
                         // already follow this user, hide follow btn
                         if (snapshot.hasChild(userID) || userID.equals(currentUid)) {

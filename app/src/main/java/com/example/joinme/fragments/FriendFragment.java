@@ -72,21 +72,26 @@ public class FriendFragment extends Fragment {
     }
 
     private void initData() {
-        chatListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // set up linear layout manager for recycler view
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        chatListRecyclerView.setLayoutManager(linearLayoutManager);
 //        chatList.setAdapter(new FriendAdapter(initFriend(), getContext()));
-        chatListRecyclerView.setAdapter(new ChatListAdapter(getContext()).chatListAdaptor());
+        chatListAdapter = new ChatListAdapter(getContext()).chatListAdaptor();
+        chatListRecyclerView.setAdapter(chatListAdapter);
         chatListAdapter.startListening();
     }
 
-    List<Conversation> initFriend(){
-        ArrayList<Conversation> conversationArrayList = new ArrayList<>();
-        conversationArrayList.add(new Conversation("Abby",new Message("Yuema","text","userA",new Time(), false)));
-        conversationArrayList.add(new Conversation("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
-        conversationArrayList.add(new Conversation("Ming",new Message("gou","text","userA",new Time(),false)));
-        conversationArrayList.add(new Conversation("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
-        conversationArrayList.add(new Conversation("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
-        return conversationArrayList;
-    }
+//    List<Conversation> initFriend(){
+//        ArrayList<Conversation> conversationArrayList = new ArrayList<>();
+//        conversationArrayList.add(new Conversation("Abby",new Message("Yuema","text","userA",new Time(), false)));
+//        conversationArrayList.add(new Conversation("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
+//        conversationArrayList.add(new Conversation("Ming",new Message("gou","text","userA",new Time(),false)));
+//        conversationArrayList.add(new Conversation("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
+//        conversationArrayList.add(new Conversation("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
+//        return conversationArrayList;
+//    }
 
     /**
      * Replace by Add Friend Fragment
