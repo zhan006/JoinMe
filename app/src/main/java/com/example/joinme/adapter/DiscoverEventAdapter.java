@@ -86,7 +86,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
 
             });
             join.setOnClickListener((v)->{
-                Collections.reverse(adapter.eventList);
+
             });
         }
     }
@@ -107,11 +107,6 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
         if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+Math.round(event.getLocation().distanceTo(loc))+" meters");
 
     }
-    /*
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-    }*/
 
     @Override
     public int getItemCount() {

@@ -134,7 +134,7 @@ public class  DiscoverEventFragment extends Fragment {
     }
     private void setTopicListener(Button b){
         b.setOnClickListener(v -> {
-            if(b.isPressed()){
+            if(topic.equals(b.getText())){
                 topic="";
                 refreshRV();
                 b.setPressed(false);
@@ -152,7 +152,7 @@ public class  DiscoverEventFragment extends Fragment {
     }
     private void setDistanceLimitListener(Button b, int i){
         b.setOnClickListener(v->{
-            if(b.isPressed()){
+            if(distanceLimit==i){
                 distanceLimit = Integer.MAX_VALUE;
                 refreshRV();
                 b.setPressed(false);
@@ -169,7 +169,7 @@ public class  DiscoverEventFragment extends Fragment {
     }
     private void setDateListener (Button b, String d){
         b.setOnClickListener(v->{
-            if(b.isPressed()){
+            if(date.equals(d)){
                 date = "";
                 refreshRV();
                 b.setPressed(false);
@@ -179,7 +179,6 @@ public class  DiscoverEventFragment extends Fragment {
                 oneWeek.setPressed(false);
                 oneMonth.setPressed(false);
                 date = d;
-                refreshRV();
                 refreshRV();
                 b.setPressed(true);
             }
@@ -195,12 +194,13 @@ public class  DiscoverEventFragment extends Fragment {
                 selected.add(e);
             }
         }
-        Log.println(Log.INFO,"SelectedSize",Integer.toString(selected.size()));
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
     }
 
 
     private void refreshRV(){
+        //Log.println(Log.INFO,"Discover configure:::",topic+" "+Integer.valueOf(distanceLimit)+" "+date);
+
         List<Event> selected = new ArrayList<>();
 
         for(int i=0;i<events.size();i++){
@@ -208,36 +208,34 @@ public class  DiscoverEventFragment extends Fragment {
             if(!topic.equals("")&&!e.getEventCategory().equals(topic)){
                 continue;
             }
-            //Log.println(Log.INFO,"Distance:",Double.toString(e.getLocation().distanceTo(curLocation())));
-            //Log.println(Log.INFO,"DistanceLimit:",Integer.toString(distanceLimit));
+
             if(e.getLocation().distanceTo(curLocation())>distanceLimit){
-                Log.println(Log.INFO,"Distance:","Skip"+Integer.toString(distanceLimit));
                 continue;
             }
 
             if(!date.equals("")){
+                long timestampDifference = e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp();
+                Log.println(Log.INFO,"timestampDifference",timestampDifference+" "+timestampDifference / 1000 / 60 / 60 / 24);
                 if(e.getDatetime()==null)
                     continue;
                 if(date.equals("oneDay")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<24*60*60*1000){
+                    if(timestampDifference>((long)24)*60*60*1000){
                         continue;
                     }
                 }
                 else if(date.equals("oneWeek")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<7*24*60*60*1000){
+                    if(timestampDifference>((long)7)*24*60*60*1000){
                         continue;
                     }
                 }
                 else if(date.equals("oneMonth")){
-                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<30*24*60*60*1000){
+                    if(timestampDifference>((long)30)*24*60*60*1000){
                         continue;
                     }
                 }
             }
             selected.add(e);
         }
-        Log.println(Log.INFO, "Refresh",Integer.toString(selected.size())+"!!!!!");
-        //selected.add(initEvents().get(0));
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
   }
 
@@ -316,13 +314,16 @@ public class  DiscoverEventFragment extends Fragment {
             events.add(e);
 
         }*/
-        Log.println(Log.INFO,"events get!!!!","events get!!!");
+        DateTime curDate = new DateTime();
+        Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+Long.valueOf(curDate.getTimeStamp()));
         FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Event event = snapshot.getValue(Event.class);
-                Log.d("Discover", "onDataChange: Event => "+event.toString());
-                events.add(event);
+                DateTime edt = event.getDatetime();
+
+                if(curDate.getTimeStamp()<event.getDatetime().getTimeStamp())
+                    events.add(event);
                 eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLoc));
             }
 
