@@ -54,6 +54,7 @@
             android:src="@drawable/photo_icon" />
 
         <ImageButton
+            android:id="@+id/message_take_photo_btn"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginHorizontal="5dp"

@@ -1,21 +1,28 @@
 package com.example.joinme.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +47,10 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private static final int GALLERY_PICK = 1;
+    private static final int ACTIVITY_IMAGE_CAPTURE = 3;
     private List<Message> messageList = new ArrayList<>();
     private String friendUid;
     private String friendUsername;
@@ -62,7 +74,14 @@ public class ChatActivity extends AppCompatActivity {
     private EditText inputText;
     private ImageButton sendBtn;
     private ImageButton imageButton;
+    private ImageButton takePhotoBtn;
     private RecyclerView messageRecyclerView;
+    
+    private Uri originalUri;
+    private String currentPhotoPath;
+    private FileInputStream is = null;
+    private Bitmap bitmap;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +115,13 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        takePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhoto();
+            }
+        });
+
     }
 
     private void initView() {
@@ -108,6 +134,7 @@ public class ChatActivity extends AppCompatActivity {
         inputText = findViewById(R.id.chat_input_message);
         sendBtn = findViewById(R.id.send_message_btn);
         imageButton = findViewById(R.id.message_send_image_btn);
+        takePhotoBtn = findViewById(R.id.message_take_photo_btn);
     }
 
     private void initData() {
@@ -269,6 +296,47 @@ public class ChatActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "select image"), GALLERY_PICK);
     }
 
+    private void takePhoto() {
+        // use the camera
+//        Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+//        startActivityForResult(mIntent, ACTIVITY_IMAGE_CAPTURE);
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create the File where the photo should go
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+            Log.w("False", "Create image file false at takePhoto()");
+        }
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.example.joinme.fileprovider",
+                    photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, ACTIVITY_IMAGE_CAPTURE);
+        }
+        Log.w("True", "有这一步");
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "takePhoto";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -280,6 +348,34 @@ public class ChatActivity extends AppCompatActivity {
             CropImage.activity(imageUri)
                     .setAspectRatio(1, 1)
                     .start(this);
+        }
+
+        if (requestCode == ACTIVITY_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Log.d(TAG, "成功");
+            bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            if (data.getData()!=null){
+                imageUri =data.getData();
+            }else {
+                imageUri = Uri.parse(MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, null,null));
+            }
+
+            CropImage.activity(imageUri)
+                    .setAspectRatio(1, 1)
+                    .start(this);
+
+
+//            Bundle bundle = data.getExtras();
+//            Bitmap bitmap = (Bitmap) bundle.get("data");
+//            if (data.getData()!=null){
+//                imageUri =data.getData();
+//            }else {
+//                imageUri = Uri.parse(MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, null,null));
+//            }
+//
+//            CropImage.activity(imageUri)
+//                    .setAspectRatio(1, 1)
+//                    .start(this);
+
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {

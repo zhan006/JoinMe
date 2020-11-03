@@ -3,4 +3,7 @@
     <external-cache-path
         name="my_image"
         path="/"/>
+    <external-files-path
+        name="takePhoto"
+        path="/"/>
 </paths>
