@@ -81,7 +81,7 @@
             />
         <Button
             style="@style/detail_button"
-            android:id="@+id/distance_all_button"
+            android:id="@+id/within10_button"
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"

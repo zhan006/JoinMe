@@ -114,7 +114,7 @@ public class  DiscoverEventFragment extends Fragment {
         dailyLife = v.findViewById(R.id.daily_life_button);
         distance1 = v.findViewById(R.id.within1_button);
         distance2 = v.findViewById(R.id.within5_button);
-        distance3 = v.findViewById(R.id.distance_all_button);
+        distance3 = v.findViewById(R.id.within10_button);
         oneDay = v.findViewById(R.id.one_day_button);
         oneWeek = v.findViewById(R.id.one_week_button);
         oneMonth = v.findViewById(R.id.one_month_button);
@@ -124,7 +124,7 @@ public class  DiscoverEventFragment extends Fragment {
 
         setDistanceLimitListener(distance1,1000);
         setDistanceLimitListener(distance2,5000);
-        setDistanceLimitListener(distance3,Integer.MAX_VALUE);
+        setDistanceLimitListener(distance3,10000);
 
         setDateListener(oneDay,"oneDay");
         setDateListener(oneWeek,"oneWeek");
@@ -134,20 +134,55 @@ public class  DiscoverEventFragment extends Fragment {
     }
     private void setTopicListener(Button b){
         b.setOnClickListener(v -> {
-            topic = (String) b.getText();
-            refreshRV();
+            if(b.isPressed()){
+                topic="";
+                refreshRV();
+                b.setPressed(false);
+            }
+            else{
+                study.setPressed(false);
+                entertainment.setPressed(false);
+                dailyLife.setPressed(false);
+                topic = (String) b.getText();
+                refreshRV();
+                b.setPressed(true);
+            }
+
         });
     }
     private void setDistanceLimitListener(Button b, int i){
         b.setOnClickListener(v->{
-            distanceLimit = i;
-            refreshRV();
+            if(b.isPressed()){
+                distanceLimit = Integer.MAX_VALUE;
+                refreshRV();
+                b.setPressed(false);
+            }
+            else{
+                distance1.setPressed(false);
+                distance2.setPressed(false);
+                distance3.setPressed(false);
+                distanceLimit = i;
+                refreshRV();
+                b.setPressed(true);
+            }
         });
     }
     private void setDateListener (Button b, String d){
         b.setOnClickListener(v->{
-            date = d;
-            refreshRV();
+            if(b.isPressed()){
+                date = "";
+                refreshRV();
+                b.setPressed(false);
+            }
+            else{
+                oneDay.setPressed(false);
+                oneWeek.setPressed(false);
+                oneMonth.setPressed(false);
+                date = d;
+                refreshRV();
+                refreshRV();
+                b.setPressed(true);
+            }
         });
     }
 
