@@ -42,9 +42,8 @@ public class AddFriendAdapter{
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, about;
         ImageView profilePhoto;
-        ImageButton profileBtn;
-        ImageButton followBtn;
-        ImageButton messageBtn;
+        Button followBtn;
+        Button messageBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,7 +51,6 @@ public class AddFriendAdapter{
             about = itemView.findViewById(R.id.user_about);
             profilePhoto = itemView.findViewById(R.id.profile_photo);
 
-            profileBtn = itemView.findViewById(R.id.profile_btn);
             followBtn = itemView.findViewById(R.id.follow_btn);
             messageBtn = itemView.findViewById(R.id.message_icon);
         }
@@ -129,11 +127,18 @@ public class AddFriendAdapter{
 
                         // load profile image
                         holder.setProfile(userID);
-
-                        // TODO: view user's profile
-                        holder.profileBtn.setOnClickListener(new View.OnClickListener() {
+                        holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                viewUserProfile();
+                            }
+                        });
+
+                        // view user's profile
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                viewUserProfile();
                             }
                         });
 
@@ -165,14 +170,15 @@ public class AddFriendAdapter{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                        Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
+                        Log.d(TAG, "onDataChange: has user?  "+snapshot.getKey());
+
                         // already follow this user, hide follow btn
-                        if (snapshot.hasChild(userID)) {
-                            holder.followBtn.setImageResource(R.drawable.tick_icon);
-                        } else if (userID.equals(currentUid)) {
+                        if (snapshot.hasChild(userID) || userID.equals(currentUid)) {
+//                            Log.d(TAG, "onDataChange: already follow this user! "+snapshot.child(userID));
                             holder.followBtn.setVisibility(View.GONE);
-                        }
-                        else {
-                            holder.followBtn.setImageResource(R.drawable.add_icon);
+                        } else {
+                            holder.followBtn.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -192,6 +198,10 @@ public class AddFriendAdapter{
                 return viewHolder;
             }
         };
+    }
+
+    private void viewUserProfile() {
+
     }
 
     private void followUser(String userID) {

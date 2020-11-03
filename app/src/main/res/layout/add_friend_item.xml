@@ -28,73 +28,47 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-            <TextView
-                android:id="@+id/user_name"
-                style="@style/bold_text"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="15dp"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/user_name"
+            style="@style/bold_text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="15dp"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/user_about"
-                style="@style/normal_text"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="15dp" />
+        <TextView
+            android:id="@+id/user_about"
+            style="@style/normal_text"
+            android:layout_width="170dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp" />
     </LinearLayout>
     <LinearLayout
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:layout_marginEnd="0dp">
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical"
+        android:layout_marginRight="15dp"
+        >
+        <Button
+            android:id="@+id/message_icon"
+            style="@style/bright_button"
+            android:textAllCaps="false"
+            android:text="Message"
+            android:layout_marginTop="5dp"
+            />
+        <Button
+            android:layout_marginTop="5dp"
+            android:id="@+id/follow_btn"
+            style="@style/bright_button"
+            android:text="Follow"
+            android:textAllCaps="false"
+            android:visibility="visible"/>
 
-            <ImageButton
-                android:id="@+id/profile_btn"
-                style="@style/add_friend_btn"
-                android:layout_height="40dp"
-                android:layout_width="35dp"
-                android:src="@drawable/profile_icon"/>
-
-            <ImageButton
-                android:id="@+id/message_icon"
-                style="@style/add_friend_btn"
-                android:layout_height="40dp"
-                android:layout_width="35dp"
-                android:src="@drawable/message_icon"/>
-            <ImageButton
-                android:id="@+id/follow_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/add_icon"
-                android:visibility="visible"
-                android:background="@null"/>
-
-<!--        </LinearLayout>-->
-<!--            android:layout_marginTop="0dp"-->
-<!--            android:orientation="vertical"-->
-<!--            android:layout_marginRight="15dp"-->
-<!--            >-->
-<!--            <Button-->
-<!--                android:id="@+id/message_icon"-->
-<!--                style="@style/bright_button"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:text="Message"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                />-->
-<!--            <Button-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:id="@+id/follow_btn"-->
-<!--                style="@style/bright_button"-->
-<!--                android:text="Follow"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:visibility="visible"/>-->
     </LinearLayout>
 
 </RelativeLayout>
