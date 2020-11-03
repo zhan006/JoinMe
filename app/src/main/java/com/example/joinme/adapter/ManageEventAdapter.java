@@ -17,6 +17,7 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.EventDetailFragment;
 import com.example.joinme.fragments.UpdateEventFragment;
 import com.example.joinme.objects.Event;
+import com.example.joinme.utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -107,8 +108,7 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
                     ((ViewHolder)holder).update.setOnClickListener((v)->{
                         UpdateEventFragment f = new UpdateEventFragment();
                         f.setArguments(bd);
-                        ((AppCompatActivity)v.getContext()).getSupportFragmentManager().
-                                beginTransaction().replace(R.id.main_fragment_container, f,null).commit();
+                        utils.replaceFragment(((AppCompatActivity)v.getContext()).getSupportFragmentManager(),f,"update_event");
                     });
                     ((ViewHolder)holder).cancel.setOnClickListener((v)->{
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());

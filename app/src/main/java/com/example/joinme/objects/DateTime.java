@@ -2,6 +2,7 @@ package com.example.joinme.objects;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -11,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class DateTime implements Comparable<DateTime>{
+public class DateTime implements Comparable<DateTime>, Serializable {
     String date,time;
     Long timeStamp;
     private Calendar cal_date;

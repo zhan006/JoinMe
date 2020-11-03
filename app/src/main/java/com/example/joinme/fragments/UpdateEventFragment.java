@@ -64,9 +64,6 @@ public class UpdateEventFragment extends Fragment implements DateTimeClick {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Snackbar.make(getView(),event.getId(),Snackbar.LENGTH_LONG).show();
-
-
     }
 
     private void initView(View view){
@@ -105,6 +102,10 @@ public class UpdateEventFragment extends Fragment implements DateTimeClick {
             }
         });
         titleBar.setTitle(event.getEventName());
+        titleBar.setOnClickBackListener((v)->{
+
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
         event_name.setText(event.getEventName());
         min_group_size.setText(String.valueOf(event.getMin()));
         max_group_size.setText(String.valueOf(event.getMax()));

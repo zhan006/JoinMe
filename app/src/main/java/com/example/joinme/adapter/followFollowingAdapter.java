@@ -38,6 +38,7 @@ public class followFollowingAdapter extends RecyclerView.Adapter {
         public ImageView icon;
         public TextView name,bio;
         public ImageButton message;
+        public Context context;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -45,6 +46,7 @@ public class followFollowingAdapter extends RecyclerView.Adapter {
             name = itemView.findViewById(R.id.user_name);
             bio = itemView.findViewById(R.id.user_about);
             message = itemView.findViewById(R.id.message_icon);
+            context = itemView.getContext();
         }
     }
 
@@ -66,6 +68,7 @@ public class followFollowingAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         String uid = this.uids.get(position);
         String path = "User/"+uid;
+        User.loadProfileImage(((ViewHolder)holder).context,uid,((ViewHolder)holder).icon);
         FirebaseAPI.getFirebaseData(path, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

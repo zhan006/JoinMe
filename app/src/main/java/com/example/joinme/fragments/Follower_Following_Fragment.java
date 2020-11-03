@@ -22,6 +22,7 @@ import com.example.joinme.adapter.ManageEventAdapter;
 import com.example.joinme.adapter.followFollowingAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,7 +50,10 @@ public class Follower_Following_Fragment extends Fragment {
         try{setOnClickListener();}
         catch (Exception e){Log.d("Debug",e.getMessage());};
         follower.performClick();
-
+        TitleBar bar = v.findViewById(R.id.friend_title);
+        bar.setOnClickBackListener((view -> {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }));
         return v;
     }
 
