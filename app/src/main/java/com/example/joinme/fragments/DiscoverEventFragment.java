@@ -235,9 +235,10 @@ public class  DiscoverEventFragment extends Fragment {
 
 
     public Location curLocation(){
+        /*
         if(curLoc!=null){
             return curLoc;
-        }
+        }*/
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
