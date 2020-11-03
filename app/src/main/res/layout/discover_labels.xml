@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginTop="10dp"
-              android:layout_marginLeft="20dp">
+              android:layout_marginLeft="0dp">
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -15,14 +15,36 @@
                 android:id="@+id/Topic"
                 android:text="Topic"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/topic_list"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp" />
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/study_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Study"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/entertainment_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Entertainment"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/daily_life_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Daily Life"
+            android:textAllCaps="false"
+            />
     </LinearLayout>
     <LinearLayout
             android:layout_width="match_parent"
@@ -35,15 +57,37 @@
                 android:id="@+id/Distance"
                 android:text="Distance"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/distance_list"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp" />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/within1_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Within 1km"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/within5_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Within 5km"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/distance_all_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="All"
+            android:textAllCaps="false"
+            />
 
     </LinearLayout>
     <LinearLayout
@@ -55,17 +99,39 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/Date"
-                android:text="Date"
+                android:id="@+id/Within"
+                android:text="Within"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                style="@style/bold_text"/>
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/date_list"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"/>
+                android:layout_marginLeft="5dp"
+                style="@style/large_title"
+                android:textColor="@color/black"/>
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/one_day_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="One day"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/one_week_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="One Week"
+            android:textAllCaps="false"
+            />
+        <Button
+            style="@style/detail_button"
+            android:id="@+id/one_month_button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="One Month"
+            android:textAllCaps="false"/>
+
 
     </LinearLayout>
 

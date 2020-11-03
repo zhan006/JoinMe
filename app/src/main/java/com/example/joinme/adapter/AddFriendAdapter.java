@@ -6,12 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,15 +21,12 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddFriendAdapter{
@@ -54,6 +51,7 @@ public class AddFriendAdapter{
             name = itemView.findViewById(R.id.user_name);
             about = itemView.findViewById(R.id.user_about);
             profilePhoto = itemView.findViewById(R.id.profile_photo);
+
             profileBtn = itemView.findViewById(R.id.profile_btn);
             followBtn = itemView.findViewById(R.id.follow_btn);
             messageBtn = itemView.findViewById(R.id.message_icon);
@@ -67,7 +65,7 @@ public class AddFriendAdapter{
             if (name == null) {
                 name = "";
             }
-           this.name.setText(name.toString());
+            this.name.setText(name.toString());
         }
 
         public TextView getAbout() {

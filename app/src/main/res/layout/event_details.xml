@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:title="Event Details"
-        custom:backable="false" />
+        custom:backable="true" />
 
 
 
@@ -55,7 +55,7 @@
                 style="@style/normal_text"
                 android:text="30 September, 2020"
                 android:textColor="#F80A0A"
-                android:padding="10dp"
+                android:layout_marginStart="20dp"
 
                 />
 
@@ -71,8 +71,8 @@
                     style="@style/bold_text"
                     android:text="Japanese Lunch Catch Up"
                     android:textColor="#030303"
-                    android:padding="5dp"
                     android:textStyle="bold"
+                    android:layout_marginStart="20dp"
 
                     />
 
@@ -88,7 +88,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="55dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="45dp"
                         android:scaleX="1.1"
                         android:scaleY="1.1"
 
@@ -98,7 +99,8 @@
                         android:id="@+id/event_checkbox_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="40dp"
                         android:layout_below="@id/event_checkbox_going"
                         android:text="Going"
                         android:textSize="15sp"
@@ -107,32 +109,10 @@
 
 
 
-                    <ImageButton
-                        android:id="@+id/event_button_share"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleY="0.8"
-                        android:scaleX="0.8"
-                        android:background="@null"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@id/event_checkbox_going"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/share_icon" />
 
 
-                    <TextView
-                        android:id="@+id/event_share_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Share"
-                        android:textSize="15sp"
-                        android:layout_toEndOf="@id/event_checkbox_text"
-                        android:layout_below="@id/event_button_share"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignBottom="@id/event_checkbox_text"
-                        android:layout_alignTop="@id/event_checkbox_text"
 
-                        />
+
 
                 </RelativeLayout>
 
@@ -306,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/user_name"
+                            android:id="@+id/event_host_name"
                             style="@style/bold_text"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
@@ -317,7 +297,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/user_about"
+                            android:id="@+id/event_host_about"
                             style="@style/normal_text"
                             android:layout_width="170dp"
                             android:layout_height="30dp"
@@ -392,6 +372,8 @@
                         android:background="@null"
                         android:hint="What are we going to do?"
                         android:gravity="top"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
                         />
                 </LinearLayout>
 

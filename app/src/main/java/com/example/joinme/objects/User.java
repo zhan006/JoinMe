@@ -75,7 +75,7 @@ public class User implements Serializable {
     /**
      * Load profile image from firebase
      */
-    public void loadProfileImage(Context context, String uid, ImageView imageView) {
+    public static void loadProfileImage(Context context, String uid, ImageView imageView) {
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

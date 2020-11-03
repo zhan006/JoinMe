@@ -1,0 +1,797 @@
+commit b25867c363fd25e46fd46755ed4f79bc3ddff367
+Merge: 0f37d83 b8bda18
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Fri Oct 30 12:59:08 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe into zhanwang
+
+commit 0f37d83bf805d620cbd02b0bbef71970200ce51d
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Fri Oct 30 12:58:58 2020 +1100
+
+    some bug fixed for new user
+
+commit b8bda18529f469fc0d0d4d2786260cb6e4552e7b
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Thu Oct 29 08:29:02 2020 +1100
+
+    finish discover_event page/distance calculation/distance sort
+
+commit 58c42d957fcba93230cd4c496d68a87c053e8f91
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Tue Oct 27 22:01:49 2020 +1100
+
+    For Google sign in, add user in the realtime database and set username
+
+commit e5eac1436fa50934d0558cb09cc8196b144d2343
+Merge: ec02cbd 6ae9eb5
+Author: Deng <dpan968@gmail.com>
+Date:   Tue Oct 27 21:25:12 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 6ae9eb5f1755764f2855655bb683ac79a6d87b09
+Merge: d5755b9 febc9f3
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Tue Oct 27 17:11:06 2020 +0800
+
+    Merge branch 'Giovanna'
+
+commit febc9f36674fc21e55f528fc04f361625e0e3dfd
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Tue Oct 27 17:10:44 2020 +0800
+
+    add friend from firebase
+
+commit ec02cbd9a581d269490255ca171ea49ec7f683a6
+Merge: 19ba299 d5755b9
+Author: Deng <dpan968@gmail.com>
+Date:   Tue Oct 27 20:00:01 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit d5755b9386af955e24cfb7f1f95d5d24b207f6f5
+Merge: 992b699 2e96d1d
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Tue Oct 27 18:36:26 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 992b699c2ca7844649f8882d5258821ec9b0d9b4
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Tue Oct 27 18:36:09 2020 +1100
+
+    add user in the realtime database and set username
+
+commit 2e96d1d0b2a18548a3b335bb33fc6ca613a65370
+Merge: 9c72be2 fbc875e
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Tue Oct 27 17:50:11 2020 +1100
+
+    Merge pull request #8 from zhan006/zhanwang
+    
+    update user profile
+
+commit fbc875e17b6086a449d332c9ad6fe5b23a1c06b9
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Tue Oct 27 17:49:25 2020 +1100
+
+    update user profile
+
+commit 9c72be20f52e75d06f11e8ee9130353bdd13b4f6
+Merge: 76517ee 5218005
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Tue Oct 27 16:37:41 2020 +1100
+
+    Merge pull request #7 from zhan006/zhanwang
+    
+    update event
+
+commit 52180055213b2eb20534dac4787d843a3fd9df56
+Merge: dfb39e5 76517ee
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Tue Oct 27 16:36:48 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe into zhanwang
+
+commit dfb39e5063424108cd9800294a0f0d95fb60e6a4
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Tue Oct 27 16:36:33 2020 +1100
+
+    update organised event
+
+commit 76517eed793994ded5e1332b331f17f17a8395fe
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Mon Oct 26 20:41:14 2020 +0800
+
+    load profile image
+
+commit 9fcdd0b954f7d157676e335e3193ceb8407c97dd
+Merge: fdb7be4 d6bedc6
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Mon Oct 26 17:54:25 2020 +1100
+
+    Merge pull request #6 from zhan006/zhanwang
+    
+    EventManagement & cancel event
+
+commit d6bedc674ae30bfe810b1778f61f5a03915f7e0e
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 26 17:52:54 2020 +1100
+
+    Event Management page & cancel event function
+
+commit c56353ea3fba1be2c70d5f5031534f1c8510ab51
+Merge: 99e525e fdb7be4
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 26 13:34:52 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe into zhanwang
+
+commit 19ba299e594243e26d259d20942fc6b953465fc9
+Merge: 67443dc fdb7be4
+Author: Deng <dpan968@gmail.com>
+Date:   Sun Oct 25 12:35:47 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 67443dc408e733ff369be9d79a9ef6dd2ab3a4b9
+Author: Deng <dpan968@gmail.com>
+Date:   Sun Oct 25 12:34:55 2020 +1100
+
+    Updates on Comment:
+       1. Instead of showing relative creation time, we are showing the creation time directly.
+       2. Reply function in Comment is still in progress, user can now click Reply and a Dialog will pop up from the bottom.
+    
+    Incoming work:
+      The logic of comment button in the dialog needs to be implemented. i.e. @ original comment owner and add the reply to the list and showing at the correct position.
+
+commit fdb7be4e875f8e6b5f97e2fbaff6d82c2cdd5951
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Sat Oct 24 21:19:05 2020 +1100
+
+    the version has to be changed to 6.5
+
+commit b75ba5391269f6e5d9e8e4c3fddb05260bae81f5
+Author: Deng <dpan968@gmail.com>
+Date:   Fri Oct 23 20:42:07 2020 +1100
+
+    Minor debug
+
+commit 4893ac7d6aa82d67154383f4754e070791c77fab
+Author: Deng <dpan968@gmail.com>
+Date:   Fri Oct 23 20:39:27 2020 +1100
+
+    Updates in Event Details Page:
+       1. Organiser Profile button now working, click action leads to organiser's profile page
+       2. Follow button now working, click action will add relationships for both users in Firebase database, the button source will change after clicking as well.
+       3. Message button working, click action leads to a dummy chatactivity with the organiser.
+
+commit 865649a7d47f854df87f0573e9acecfc5407f107
+Author: Deng <dpan968@gmail.com>
+Date:   Fri Oct 23 16:17:24 2020 +1100
+
+    Going button logic completed.
+      - Tick the box will add a record in Firebase realtime database
+      - Untick the box will delete the record in the Firebase realtime database
+      - Both action will have a Toast popup once the action succeeds.
+
+commit f6526d9fbdb3b0fac38e7543f0519fc5fafffbfe
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Fri Oct 23 05:30:17 2020 +1100
+
+    finish discover_event page/distance calculation/distance sort
+
+commit 99e525e8012f3776e06a18a51469d86b98cd3cd8
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Thu Oct 22 20:57:52 2020 +1100
+
+    sort and filter event by datetime
+
+commit 78fbd3c66699ce060881e4b18e5004ecbec89563
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Thu Oct 22 20:00:38 2020 +1100
+
+    publish event success!
+
+commit 58c6f8a841c6ce2ca28702d5689fa341706eedfa
+Author: Deng <dpan968@gmail.com>
+Date:   Thu Oct 22 15:18:43 2020 +1100
+
+    Added UpVote Button Logic, now users can click and see the upvote number increasing.
+
+commit 765530859f98754f92f4f87732f062e264524824
+Author: Deng <dpan968@gmail.com>
+Date:   Thu Oct 22 12:16:22 2020 +1100
+
+    Merge branch 'master' of C:\Users\User\AndroidStudioProjects\JoinMe with conflicts.
+
+commit c6738654a9e3fffe5c7eeb6e353f766565097636
+Merge: a6af678 90f1237
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Wed Oct 21 22:34:49 2020 +1100
+
+    Merge pull request #5 from Pamelagaooo/pamela
+    
+    Pamela
+
+commit 90f12373e171025b2f9a5bda1e870bd4fb5a5be4
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Wed Oct 21 22:22:34 2020 +1100
+
+    DateTime objects & publish event datetime selector
+
+commit 5e94be3b9a726ff81f1458aa668a8aa3767ee0d9
+Merge: ac54fb2 9768dcf
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Wed Oct 21 21:50:06 2020 +1100
+
+    Merge branch 'zhanwang' of https://github.com/zhan006/JoinMe
+    
+     Conflicts:
+    	app/src/main/java/com/example/joinme/fragments/PublishEvent.java
+    	app/src/main/java/com/example/joinme/objects/Event.java
+
+commit ac54fb2fe0ec77e6bf3b78295ecc77154808f5c6
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Wed Oct 21 21:46:47 2020 +1100
+
+    ready for merge
+
+commit 9768dcfde5d7dc7595b86d40803d709f6c5449e0
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 21 21:45:51 2020 +1100
+
+    event object refined
+
+commit a6af678e9dda25612a7eefee56e30c9a916e73d9
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 21 19:17:47 2020 +1100
+
+    event object refined
+
+commit 1e767ed45f1e3f50bf0a8cc2c8c3c2e13f2eaf8e
+Merge: 925f6ec c77688f
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 21 19:09:18 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+    
+     Conflicts:
+    	app/src/main/java/com/example/joinme/LoginActivity.java
+
+commit 925f6eca63f82933d81e3086996a854c683db2aa
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 21 19:07:52 2020 +1100
+
+    event object refined
+
+commit c77688f3ec49ac269fb82c64f40f95c6e475b1d9
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Wed Oct 21 00:00:26 2020 +1100
+
+    Google Sign in finished; Add Sign out button; Sign out finished; Keep Sign in finished
+
+commit 2aeedbee5b6d186b35b948ebfc03fba39996d349
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Tue Oct 20 04:31:49 2020 +1100
+
+    Enable mulidex
+
+commit d5d65a869f3d062a924c4ef3515054ac2461057d
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Tue Oct 20 03:31:55 2020 +1100
+
+    Button disabled if unchecked
+
+commit 442c8ff06ab514adc1097933ee62ff6e5541abc1
+Merge: 0e02c6e 9948717
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Mon Oct 19 16:54:37 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 0e02c6e9c6604c29c435404193e4ffde49043898
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Mon Oct 19 16:51:21 2020 +1100
+
+    discovereventsFragment
+
+commit 9948717e38683000aa7da0914b15d755031f2fc1
+Merge: 67a1a4c 298306c
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Mon Oct 19 16:51:04 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 67a1a4c40f5a57458c8a0922e2e6dea0fbe38c4f
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Mon Oct 19 16:50:31 2020 +1100
+
+    Account and Password automatic filled in Finished
+
+commit 854054edec7e1e357bb984eb6f7e85ec7c16e75b
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Mon Oct 19 16:02:29 2020 +1100
+
+    discovereventsFragment
+
+commit a4d8df0c86012fa664956c2016d524cc352bd0b1
+Merge: 9709e91 298306c
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Mon Oct 19 15:45:38 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+
+commit 0c4ba04a9d17de8f06b1e61e1392c9c6c979ba57
+Merge: eda312a 298306c
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Mon Oct 19 14:00:22 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+    
+     Conflicts:
+    	app/src/main/java/com/example/joinme/fragments/PublishEvent.java
+    	app/src/main/res/layout/activity_publish_event.xml
+
+commit eda312a2a15af210b92bb1914a45b4d6bc966737
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Mon Oct 19 13:56:44 2020 +1100
+
+    Revert "Edit_Published_event_page"
+    
+    This reverts commit 28c5cee5
+
+commit 28c5cee5004b832403920a55c96d0df8a58317f8
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Mon Oct 19 13:39:58 2020 +1100
+
+    Edit_Published_event_page
+
+commit 298306c330702cb91253481fd926e2b67556dd88
+Merge: 389e792 ad1c54c
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 19 13:35:26 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 9709e91a84c4418cb96ff95fffb08844fe439751
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Mon Oct 19 08:15:37 2020 +1100
+
+    discovereventsFragment
+
+commit 389e7926e0acd8a37366c351fc2321e25bf9d16d
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Sun Oct 18 14:56:37 2020 +1100
+
+    location picker
+
+commit ad1c54c81433ccda22fb49f2fa42cf1352e7d61a
+Author: Deng <dpan968@gmail.com>
+Date:   Sun Oct 18 09:56:34 2020 +1100
+
+    Minor change on Event Detail Page
+
+commit 11b134bcf3084fc72e4c0de6c0478c5d715c7ba0
+Author: Deng <dpan968@gmail.com>
+Date:   Sun Oct 18 09:47:32 2020 +1100
+
+    Finished the RecyclerView section (Comments area) in Event Detail Page. Now some dummy comments showing there.
+    
+    Add in class Comment, CommentAdapter, EventDetailFragment
+
+commit 51f861a744b6b1e0578de26084d605a11c8e6972
+Merge: 290a36d 1f03561
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sat Oct 17 10:29:20 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+
+commit 290a36d261e643e5b2f50162d60b51538466e7b0
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sat Oct 17 10:28:27 2020 +1100
+
+    Edit_Published_event_page
+
+commit 1f03561fb121f5a856977c9ea3ea4709ae837fb9
+Merge: 4936c6e 6d6f32d
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 22:44:14 2020 +0800
+
+    Merge branch 'Giovanna'
+
+commit 6d6f32d2cf8ca0bc344d69ec693333d79b6551c3
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 22:39:52 2020 +0800
+
+    send image & crop image in chat
+
+commit 4936c6e722ff881cfb2c718064484eb0d097f0f6
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Fri Oct 16 23:12:18 2020 +1100
+
+    Account and Password automatic filled in Finished
+
+commit e69956fd1b7dc6e737393b6b57cb99adf704689f
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Fri Oct 16 22:15:25 2020 +1100
+
+    Sign in and Sign up procedure
+
+commit a868cc4bb60614e7cc386cff62c6816521b29ce4
+Merge: 1e5397c 20ce5a3
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Fri Oct 16 20:51:25 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+
+commit 1e5397cc30e5c93a107348270c5c26a6f11af20e
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Fri Oct 16 20:51:11 2020 +1100
+
+    reconstruction of API request function!
+
+commit 20ce5a3cf571b5f04936cff6c6650b8b2c577fc9
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 17:24:08 2020 +0800
+
+    update manifest for chat activity
+
+commit 512d2742e23a6f718239e064d10c5b2be7f49556
+Merge: 872cc87 b9d9bcf
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 17:22:29 2020 +0800
+
+    Merge branch 'Giovanna'
+
+commit b9d9bcfed04e20a0a3a06061fd0d947f4138cbf3
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 16:16:28 2020 +0800
+
+    update one-to-one chat time
+
+commit f2900ad73f46f38bf35040882a340849849e9b3f
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 16:08:53 2020 +0800
+
+    send message
+
+commit 872cc87465a90870d7ba8ebd4295e1d4ba37648d
+Merge: 6cda014 40c7fc8
+Author: Deng <dpan968@gmail.com>
+Date:   Fri Oct 16 14:46:46 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 6cda014d72edf1856d7ee4f7ed9b101aebab8de8
+Author: Deng <dpan968@gmail.com>
+Date:   Fri Oct 16 12:23:46 2020 +1100
+
+    Added the 1st draft of the page "Event Details",
+    Added a some required icons as well as a background picture for the event
+    
+    Still working on:
+       The RecyclerView of the comments section
+
+commit 40c7fc85af844c9795b2ea079398e270979502d1
+Merge: 726808f 104111e
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Fri Oct 16 05:15:55 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 726808ffaf587db628b2a567096be104baa3c2c5
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Fri Oct 16 05:15:40 2020 +1100
+
+    Sign in and Sign up procedure
+
+commit e7e068b992d9e93a7b556b2886fb0e0889779f7d
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Fri Oct 16 01:03:41 2020 +0800
+
+    load messages from firebase
+
+commit 069b95aaa6a8cbfa8d4bf149795940d52e08856a
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Thu Oct 15 23:20:05 2020 +0800
+
+    one-to-one message adapter
+    
+    with tested data
+
+commit 02b33dc4a6ae8a6b477d508a16bb5a8a8ba45d88
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Thu Oct 15 23:18:56 2020 +0800
+
+    one-to-one message layout
+
+commit 104111efdb9f4550a615b36a9cf9faee9198a995
+Author: WangRRRui <wr19960611@gmail.com>
+Date:   Fri Oct 16 01:02:47 2020 +1100
+
+    buttons
+
+commit 5d5f06f341a49ed845e44a4fe671725be2e4b500
+Merge: 0706c91 f8373f0
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Thu Oct 15 22:24:31 2020 +1100
+
+    Merge branch 'master' of https://github.com/zhan006/JoinMe
+
+commit 0706c913e8eac3140100a549c52e3d5ea1e6ac42
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Thu Oct 15 22:24:21 2020 +1100
+
+    DownloadingTask
+
+commit f8373f08fe0dd407414b187c7a032c692c1240c4
+Merge: 92c9e54 2f1fc89
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 20:35:40 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 92c9e54dfa37b8c567b977449b03b2a1d1cd27fb
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 20:35:19 2020 +1100
+
+    set password invisible
+
+commit 2f1fc8967767b02368398e8c5e26a7143d4f15aa
+Merge: fed10d4 1863968
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Thu Oct 15 19:13:46 2020 +1100
+
+    Merge pull request #4 from Pamelagaooo/master
+    
+    publish event
+
+commit fed10d458b69b47597ee3a05dec75d430f42e386
+Merge: c7887bd 4adce83
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 05:17:08 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit c7887bd02c71564f072cf4342f2ab23639400dc4
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 05:16:36 2020 +1100
+
+    Change entry activity to LoginActivity
+
+commit 4adce83bad01fd301d443b4b05a35e9b07ee0de1
+Author: Lixian Sun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 01:12:05 2020 +1100
+
+    add welcomepic.png
+
+commit 845e79ddcfb68db772996158d800cdd45e37869e
+Author: Lixian Sun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 01:11:02 2020 +1100
+
+    Delete welcomePic.png
+
+commit ca86e3eb0ca25db3225325d4a59e52cff74d6465
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 01:10:11 2020 +1100
+
+    Edit register page
+
+commit eb8a7d163640ddde4ceac8b58eb96d903eef6c01
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Thu Oct 15 00:47:01 2020 +1100
+
+    Add register page
+
+commit e2c3860c62c43d9b5848af74190e1c4bd75c4c34
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Wed Oct 14 21:32:10 2020 +1100
+
+    Edit login page
+
+commit 93bd646304518ac1a4a8af599154ab48502026ef
+Merge: 7e37d4c b7f5fac
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Wed Oct 14 21:26:11 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 7e37d4ceb7adb15dc45759d080f94c316c1caad0
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Wed Oct 14 21:10:01 2020 +1100
+
+    Edit login page
+
+commit b7f5fac2e3ed715915ac17b2420c1be9aa4905d6
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 14 21:06:26 2020 +1100
+
+    API request
+
+commit f8c89d469238de551d1b84831d2f11779bdbfe61
+Merge: cbbaae9 06e3727
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 14 20:57:20 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/src/main/AndroidManifest.xml
+
+commit cbbaae950dab2e7b983f2c2eb4ab4327abcdb9b9
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Wed Oct 14 20:55:44 2020 +1100
+
+    API request
+
+commit 06e3727b63e52ea1a5da1a589b55a4c689e7da60
+Merge: 4a5317b 3e8ecb8
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Wed Oct 14 17:33:24 2020 +0800
+
+    Merge branch 'Giovanna'
+
+commit 3e8ecb8697cabf1b5cb7af687c518f30b69dc0be
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Wed Oct 14 16:57:34 2020 +0800
+
+    chat layout
+
+commit 4a5317b8a8d046f8693e155d0aa1a136d399db15
+Author: lixiansun <sunlixian2014@tju.edu.cn>
+Date:   Wed Oct 14 19:45:45 2020 +1100
+
+    Add login page design
+
+commit 75945565c0c3a04be24b1d40e070c725a2592496
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Tue Oct 13 22:53:15 2020 +0800
+
+    search condition layout & adapter
+
+commit 3aaecac57409cf6950cadcc101547a98f9f5e2aa
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Tue Oct 13 20:24:27 2020 +0800
+
+    add friend adapter & viewholder
+
+commit aae6eedff28b3e42256b2cdf95d088dfc6f72850
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Mon Oct 12 22:13:56 2020 +0800
+
+    add common icon for title bar
+
+commit 8c930cb7758280b25c2ba0d03722375e9e1b0a65
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Mon Oct 12 20:52:14 2020 +0800
+
+    add people btn in titlebar
+
+commit eb9136b5a63b54b208eaf15a423495e003cecc00
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Sun Oct 11 22:23:55 2020 +1100
+
+    UI appearance
+
+commit 91f685f30dcf13e3d352d5ee0bbc510fef6ce855
+Merge: b413a3c 6e8df55
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Sun Oct 11 22:06:49 2020 +1100
+
+    Merge pull request #3 from zhan006/Giovanna
+    
+    firebase testing demo
+
+commit b413a3cf17e8039edc4040d76072f5d094aefe6a
+Merge: 238060d f4ba928
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Sun Oct 11 22:05:08 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 238060dd0d9f3437023f8f46c5d4e6bf4eaa8e1f
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Sun Oct 11 22:04:48 2020 +1100
+
+    friend fragment
+
+commit 6e8df559efa3ce3af19619ea26a16f260bdeced6
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Sun Oct 11 18:30:14 2020 +0800
+
+    firebase testing demo
+
+commit 1863968c8c1a3dff1590e87c5014f165f58f1289
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sun Oct 11 21:28:53 2020 +1100
+
+    Edit_Published_event_page
+
+commit 7663f5206b98eef66b8d513a31718fccb51119cd
+Merge: 070b74e 02e7571
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sun Oct 11 21:19:41 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 070b74e242b67f6fbce38760b4a20948d4249a46
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sun Oct 11 21:19:05 2020 +1100
+
+    Publish_event_page
+
+commit f4ba928e7a23cdb7f94d48cf776eac76da090367
+Merge: 1c5bbe9 02e7571
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Sun Oct 11 20:32:16 2020 +1100
+
+    Merge pull request #2 from Pamelagaooo/master
+    
+    edit profile upload
+
+commit 02e757193066237050c7bbb9df84a630852e7207
+Merge: acbb408 1c5bbe9
+Author: zhan006 <38913518+zhan006@users.noreply.github.com>
+Date:   Sun Oct 11 20:31:40 2020 +1100
+
+    Merge branch 'master' into master
+
+commit acbb408d0647a006a7bd9c985e9c8c1dde93b027
+Author: Pamelagaooo <pamelagao1995@gmail.com>
+Date:   Sun Oct 11 20:27:25 2020 +1100
+
+    edit profile upload
+
+commit 1c5bbe94071f9a458dfed854eb81f16b6b0ec38e
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Sun Oct 11 19:17:55 2020 +1100
+
+    event management page
+
+commit 8d5708e76753a96b7b9d7eee315a29098d0f153b
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Fri Oct 9 12:00:01 2020 +1100
+
+    event recycler view & home page
+
+commit 3e3a560ae255708df14e4b7cbb4ab9babdef048a
+Merge: ed47800 93916e2
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Tue Oct 6 15:22:28 2020 +1100
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       app/build.gradle
+
+commit ed47800e745a75dcb13d528c8544c7b736fd5cc5
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Tue Oct 6 15:21:38 2020 +1100
+
+    profile page finalised
+
+commit 93916e250b40973653abf3e19509ed5d3cd62303
+Author: Tong Su <tsu2@student.unimelb.edu.au>
+Date:   Tue Oct 6 12:06:23 2020 +0800
+
+    firebase setup
+
+commit f4c6de928853d202c8f6aeac4a5338b9f20f2585
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 5 18:37:27 2020 +1100
+
+    BottomNavigation
+
+commit d9737626d540f7d4da9e2efbdef65b6a5674d888
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 5 15:55:14 2020 +1100
+
+    first commit
+
+commit 78d3a0543bcdec287d3370ee8eb029a21767f9c8
+Author: zhan006 <zhan006@ntu.edu.sg>
+Date:   Mon Oct 5 15:47:53 2020 +1100
+
+    first commit

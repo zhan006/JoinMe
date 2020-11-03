@@ -33,6 +33,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -255,6 +262,39 @@ public class LoginActivity extends AppCompatActivity {
                             // get UID from current user
                             currentUser = mAuth.getCurrentUser();
                             String UID = currentUser.getUid();
+                            String name = currentUser.getDisplayName();
+//                            Toast.makeText(LoginActivity.this, "name: " + name,
+//                                    Toast.LENGTH_SHORT).show();
+
+                            // create user in the database
+                            String userPath = "User/" + UID;
+                            FirebaseAPI.getFirebaseData(userPath, new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (!snapshot.hasChild("username")){
+//                                        Toast.makeText(LoginActivity.this, "Don't have",
+//                                                Toast.LENGTH_SHORT).show();
+                                        Map<String, Object> messagePush = new HashMap<>();
+                                        Map<String, String> userInfo = new HashMap<>();
+                                        userInfo.put("username", name);
+                                        messagePush.put(userPath, userInfo);
+                                        DatabaseReference.CompletionListener batchCompletionListener = (error, ref) -> {
+                                            if (error != null){
+                                                Log.d("SEND_CHAT_MESSAGE_ERROR", error.getMessage().toString());
+                                            }
+                                        };
+                                        FirebaseAPI.updateBatchData(messagePush, batchCompletionListener);
+                                    }else {
+//                                        Toast.makeText(LoginActivity.this, "Already have",
+//                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
 
                             // send uid to the main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

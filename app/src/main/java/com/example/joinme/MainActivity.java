@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         NavBar nav = findViewById(R.id.navbar);
         fm.beginTransaction().replace(R.id.main_fragment_container, new HomePageFragment(), "home").commit();
         nav.setSelectedItem(R.id.tab_home);
-        uid = "qa6KACdJ0RYZfVDXLtpKL2HcxJ43";
         getCurrentLocation();
         new Thread(getUserProfile).start();
         new Thread(getAttendingList).start();
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String currentUID = intent.getStringExtra("UID");
 //        this should be used after implementing insert new user into the database
-//        uid = currentUID;
+        uid = currentUID;
         Toast.makeText(MainActivity.this, "current UID: " + currentUID,
                 Toast.LENGTH_SHORT).show();
     }
@@ -132,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 msg.what = GET_USER;
                 Bundle bd = new Bundle();
                 bd.putSerializable("user", user);
-                Log.d("user", user.toString());
                 msg.setData(bd);
                 handler.sendMessage(msg);
                 //Log.d(TAG, "onDataChange: username = "+username);
@@ -219,7 +217,20 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                     1);
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10,
-                location -> Log.d("location", location.getLatitude()+""));
+        else{
+            LocationListener listener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    Log.d("location", location.getLatitude()+"");
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10,
+                    listener);
+        }
     }
 }

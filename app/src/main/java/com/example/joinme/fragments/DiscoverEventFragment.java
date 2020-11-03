@@ -6,12 +6,16 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,17 +27,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
+import com.example.joinme.adapter.DiscoverConditionAdapter;
 import com.example.joinme.adapter.DiscoverEventAdapter;
-import com.example.joinme.adapter.SearchConditionAdapter;
+
+import com.example.joinme.adapter.ManageEventAdapter;
+import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
+import com.example.joinme.objects.User;
 import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
-public class DiscoverEventFragment extends Fragment {
+public class  DiscoverEventFragment extends Fragment {
+
+    public RecyclerView eventRecyclerView;
+    private Button study,entertainment, dailyLife;
+    private Button distance1,distance2,distance3;
+    private Button oneDay, oneWeek, oneMonth;
+    private String topic = "";
+    private int distanceLimit = Integer.MAX_VALUE;
+    private String date="";
+    private ArrayList<Event> events = new ArrayList<>();
+    private Editable target;
+    public Location curLoc;
+    public TitleBar bar;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -46,29 +74,146 @@ public class DiscoverEventFragment extends Fragment {
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
 
     }
-
+    public DiscoverEventFragment(){
+        super();
+    }
+    public DiscoverEventFragment(Editable t){
+        super();
+        target=t;
+//        search();
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.discover_events, container, false);
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
-        initTopicList(v);
-        initDistanceList(v);
-        initDateList(v);
-        initEvent(v);
-
-
+        bar = v.findViewById(R.id.search_event_title);
+        bar.setOnClickBackListener((view)->{
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+        });
+        ImageButton searchButton = v.findViewById(R.id.search_button);
+        searchButton.setOnClickListener(v1 -> {
+            target = searchBar.getText();
+            search();
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
+        eventRecyclerView.setLayoutManager(layoutManager);
+        initEvents();
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLocation()));
+        initButtons(v);
+        if(target!=null&&!target.toString().equals(""))
+            search();
         return v;
+    }
+    private void initButtons(View v){
+        study = v.findViewById( R.id.study_button);
+        entertainment = v.findViewById(R.id.entertainment_button);
+        dailyLife = v.findViewById(R.id.daily_life_button);
+        distance1 = v.findViewById(R.id.within1_button);
+        distance2 = v.findViewById(R.id.within5_button);
+        distance3 = v.findViewById(R.id.distance_all_button);
+        oneDay = v.findViewById(R.id.one_day_button);
+        oneWeek = v.findViewById(R.id.one_week_button);
+        oneMonth = v.findViewById(R.id.one_month_button);
+        setTopicListener(study);
+        setTopicListener(entertainment);
+        setTopicListener(dailyLife);
+
+        setDistanceLimitListener(distance1,1000);
+        setDistanceLimitListener(distance2,5000);
+        setDistanceLimitListener(distance3,Integer.MAX_VALUE);
+
+        setDateListener(oneDay,"oneDay");
+        setDateListener(oneWeek,"oneWeek");
+        setDateListener(oneMonth,"oneMonth");
+
+
+    }
+    private void setTopicListener(Button b){
+        b.setOnClickListener(v -> {
+            topic = (String) b.getText();
+            refreshRV();
+        });
+    }
+    private void setDistanceLimitListener(Button b, int i){
+        b.setOnClickListener(v->{
+            distanceLimit = i;
+            refreshRV();
+        });
+    }
+    private void setDateListener (Button b, String d){
+        b.setOnClickListener(v->{
+            date = d;
+            refreshRV();
+        });
+    }
+
+    public void search() {
+        List<Event> selected = new ArrayList<>();
+        initEvents();
+        for(int i=0;i<events.size();i++){
+            Event e = events.get(i);
+            if(e.getEventName().contains(target.toString())||e.getDescription().contains(target.toString())){
+                selected.add(e);
+            }
+        }
+        Log.println(Log.INFO,"SelectedSize",Integer.toString(selected.size()));
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
     }
 
 
+    private void refreshRV(){
+        List<Event> selected = new ArrayList<>();
+
+        for(int i=0;i<events.size();i++){
+            Event e = events.get(i);
+            if(!topic.equals("")&&!e.getEventCategory().equals(topic)){
+                continue;
+            }
+            //Log.println(Log.INFO,"Distance:",Double.toString(e.getLocation().distanceTo(curLocation())));
+            //Log.println(Log.INFO,"DistanceLimit:",Integer.toString(distanceLimit));
+            if(e.getLocation().distanceTo(curLocation())>distanceLimit){
+                Log.println(Log.INFO,"Distance:","Skip"+Integer.toString(distanceLimit));
+                continue;
+            }
+
+            if(!date.equals("")){
+                if(e.getDatetime()==null)
+                    continue;
+                if(date.equals("oneDay")){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<24*60*60*1000){
+                        continue;
+                    }
+                }
+                else if(date.equals("oneWeek")){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<7*24*60*60*1000){
+                        continue;
+                    }
+                }
+                else if(date.equals("oneMonth")){
+                    if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<30*24*60*60*1000){
+                        continue;
+                    }
+                }
+            }
+            selected.add(e);
+        }
+        Log.println(Log.INFO, "Refresh",Integer.toString(selected.size())+"!!!!!");
+        //selected.add(initEvents().get(0));
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
+  }
+
+
+    /*
     private void initTopicList(View v) {
         RecyclerView topicRecyclerView = v.findViewById(R.id.topic_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         topicRecyclerView.setLayoutManager(layoutManager);
-        topicRecyclerView.setAdapter(new SearchConditionAdapter(initTopics()));
+        topicRecyclerView.setAdapter(new DiscoverConditionAdapter(initTopics(),this));
     }
 
     private void initDistanceList(View v) {
@@ -76,7 +221,7 @@ public class DiscoverEventFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         disRecyclerView.setLayoutManager(layoutManager);
-        disRecyclerView.setAdapter(new SearchConditionAdapter(initDistances()));
+        disRecyclerView.setAdapter(new DiscoverConditionAdapter(initDistances(),this));
 
     }
 
@@ -85,21 +230,14 @@ public class DiscoverEventFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         datetimeRecyclerView.setLayoutManager(layoutManager);
-        datetimeRecyclerView.setAdapter(new SearchConditionAdapter(initDates()));
-    }
+        datetimeRecyclerView.setAdapter(new DiscoverConditionAdapter(initDates(),this));
+    }*/
 
 
-    private void initEvent(View v) {
-        RecyclerView eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        eventRecyclerView.setLayoutManager(layoutManager);
-        eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
-
-
-    }
-
-    private Location curLocation(){
+    public Location curLocation(){
+        if(curLoc!=null){
+            return curLoc;
+        }
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -110,41 +248,15 @@ public class DiscoverEventFragment extends Fragment {
             // for ActivityCompat#requestPermissions for more details.
             return null;
         }
-        return((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        curLoc = ((MainActivity) getActivity()).locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return curLoc;
     }
 
 
 
+    void initEvents(){
 
-    List<String> initTopics() {
-        ArrayList<String> topics = new ArrayList<>();
-        topics.add("Basketball");
-        topics.add("Movie");
-        topics.add("Music");
-        topics.add("Study");
-        return topics;
-    }
-
-    List<String> initDistances() {
-        ArrayList<String> distances = new ArrayList<>();
-        distances.add("0-5km");
-        distances.add("5-8km");
-        distances.add(">8km");
-        return distances;
-    }
-
-    List<String> initDates() {
-        ArrayList<String> dates = new ArrayList<>();
-        dates.add("Aug 1");
-        dates.add("Aug 2");
-        dates.add("Aug 3");
-        dates.add("After");
-        return dates;
-    }
-
-    List<Event> initEvents(){
-        ArrayList<Event> events = new ArrayList<>();
+        events = new ArrayList<>();/*
         ArrayList<String> eventNames = new ArrayList<>();
         ArrayList<location> locations = new ArrayList<>();
         ArrayList<DateTime> datetimes = new ArrayList<>();
@@ -154,9 +266,9 @@ public class DiscoverEventFragment extends Fragment {
         ArrayList<String> ids = new ArrayList<>();
         for(int i=0;i<5;i++){
             eventNames.add("EVENT"+Integer.toString(i));
-            locations.add(new location(-37.797+0.001*i, 144.961+0.001*i,"Unimelb"));
+            locations.add(new location(38+0.003*i, -147+0.003*i,"Unimelb"));
             datetimes.add(new DateTime());
-            categorys.add("study");
+            categorys.add("Study");
             usr_ids.add("1");
             descriptions.add("");
             ids.add(Integer.toString(i));
@@ -165,9 +277,34 @@ public class DiscoverEventFragment extends Fragment {
             Event e = new Event(eventNames.get(i),locations.get(i),datetimes.get(i),categorys.get(i),usr_ids.get(i),descriptions.get(i),ids.get(i));
             events.add(e);
 
-        }
+        }*/
+        Log.println(Log.INFO,"events get!!!!","events get!!!");
+        FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Event event = snapshot.getValue(Event.class);
+                Log.d("Discover", "onDataChange: Event => "+event.toString());
+                events.add(event);
+                eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLoc));
+            }
 
-        return events;
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
 
     }
 }
