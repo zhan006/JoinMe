@@ -56,6 +56,7 @@ public class  DiscoverEventFragment extends Fragment {
     private String topic = "";
     private int distanceLimit = Integer.MAX_VALUE;
     private String date="";
+    private ArrayList<Event> events = new ArrayList<>();
     private Editable target;
     public Location curLoc;
 
@@ -94,9 +95,9 @@ public class  DiscoverEventFragment extends Fragment {
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         eventRecyclerView = v.findViewById(R.id.discover_events_recycle);
         eventRecyclerView.setLayoutManager(layoutManager);
-        eventRecyclerView.setAdapter(new DiscoverEventAdapter(initEvents(),curLocation()));
+        initEvents();
+        eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLocation()));
         initButtons(v);
-        initEvent(v);
         if(target!=null&&!target.toString().equals(""))
             search();
         return v;
@@ -116,8 +117,8 @@ public class  DiscoverEventFragment extends Fragment {
         setTopicListener(dailyLife);
 
         setDistanceLimitListener(distance1,1000);
-        setDistanceLimitListener(distance1,5000);
-        setDistanceLimitListener(distance1,Integer.MAX_VALUE);
+        setDistanceLimitListener(distance2,5000);
+        setDistanceLimitListener(distance3,Integer.MAX_VALUE);
 
         setDateListener(oneDay,"oneDay");
         setDateListener(oneWeek,"oneWeek");
@@ -143,38 +144,41 @@ public class  DiscoverEventFragment extends Fragment {
             refreshRV();
         });
     }
-    public void setTarget (Editable t){
-        target = t;
-        search();
-    }
 
     public void search() {
         List<Event> selected = new ArrayList<>();
-        for(int i=0;i<initEvents().size();i++){
-            Event e = initEvents().get(i);
-            if(e.getEventName().contains(target)||e.getDescription().contains(target)){
+        initEvents();
+        for(int i=0;i<events.size();i++){
+            Event e = events.get(i);
+            if(e.getEventName().contains(target.toString())||e.getDescription().contains(target.toString())){
                 selected.add(e);
             }
         }
+        Log.println(Log.INFO,"SelectedSize",Integer.toString(selected.size()));
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
     }
 
 
     private void refreshRV(){
         List<Event> selected = new ArrayList<>();
-        for(int i=0;i<initEvents().size();i++){
-            Event e = initEvents().get(i);
 
+        for(int i=0;i<events.size();i++){
+            Event e = events.get(i);
             if(!topic.equals("")&&!e.getEventCategory().equals(topic)){
                 continue;
             }
-
-            if(e.getLocation().distanceTo(curLocation())>distanceLimit)
+            //Log.println(Log.INFO,"Distance:",Double.toString(e.getLocation().distanceTo(curLocation())));
+            //Log.println(Log.INFO,"DistanceLimit:",Integer.toString(distanceLimit));
+            if(e.getLocation().distanceTo(curLocation())>distanceLimit){
+                Log.println(Log.INFO,"Distance:","Skip"+Integer.toString(distanceLimit));
                 continue;
+            }
+
             if(!date.equals("")){
+                if(e.getDatetime()==null)
+                    continue;
                 if(date.equals("oneDay")){
                     if(e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp()<24*60*60*1000){
-
                         continue;
                     }
                 }
@@ -190,8 +194,9 @@ public class  DiscoverEventFragment extends Fragment {
                 }
             }
             selected.add(e);
-
         }
+        Log.println(Log.INFO, "Refresh",Integer.toString(selected.size())+"!!!!!");
+        //selected.add(initEvents().get(0));
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
   }
 
@@ -223,13 +228,6 @@ public class  DiscoverEventFragment extends Fragment {
     }*/
 
 
-    private void initEvent(View v) {
-
-
-
-
-    }
-
     public Location curLocation(){
         if(curLoc!=null){
             return curLoc;
@@ -250,9 +248,9 @@ public class  DiscoverEventFragment extends Fragment {
 
 
 
-    List<Event> initEvents(){
+    void initEvents(){
 
-        ArrayList<Event> events = new ArrayList<>();
+        events = new ArrayList<>();/*
         ArrayList<String> eventNames = new ArrayList<>();
         ArrayList<location> locations = new ArrayList<>();
         ArrayList<DateTime> datetimes = new ArrayList<>();
@@ -273,10 +271,8 @@ public class  DiscoverEventFragment extends Fragment {
             Event e = new Event(eventNames.get(i),locations.get(i),datetimes.get(i),categorys.get(i),usr_ids.get(i),descriptions.get(i),ids.get(i));
             events.add(e);
 
-        }
-
-
-
+        }*/
+        Log.println(Log.INFO,"events get!!!!","events get!!!");
         FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -303,10 +299,6 @@ public class  DiscoverEventFragment extends Fragment {
             }
         });
 
-
-
-
-        return events;
 
     }
 }

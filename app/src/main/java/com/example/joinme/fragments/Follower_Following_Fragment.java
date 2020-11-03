@@ -71,7 +71,7 @@ public class Follower_Following_Fragment extends Fragment {
                         }
                     }
                     Log.d("friend",followerList.toString());
-                    recyclerView.setAdapter(new followFollowingAdapter(followerList));
+                    recyclerView.setAdapter(new followFollowingAdapter(followerList,Follower_Following_Fragment.this));
                 }
 
                 @Override
@@ -95,7 +95,7 @@ public class Follower_Following_Fragment extends Fragment {
                             if(map.get(k)){followingList.add(k);}
                         }
                     }
-                    recyclerView.setAdapter(new followFollowingAdapter(followingList));
+                    recyclerView.setAdapter(new followFollowingAdapter(followingList,Follower_Following_Fragment.this));
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
