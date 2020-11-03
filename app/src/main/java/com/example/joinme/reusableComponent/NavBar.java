@@ -15,7 +15,6 @@ import com.example.joinme.fragments.EventManagementFragment;
 import com.example.joinme.fragments.FriendFragment;
 import com.example.joinme.fragments.HomePageFragment;
 import com.example.joinme.fragments.ProfileFragment;
-import com.example.joinme.objects.Friend;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NavBar extends LinearLayout {

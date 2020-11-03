@@ -41,7 +41,7 @@ commit febc9f36674fc21e55f528fc04f361625e0e3dfd
 Author: Tong Su <tsu2@student.unimelb.edu.au>
 Date:   Tue Oct 27 17:10:44 2020 +0800
 
-    add friend from firebase
+    add conversation from firebase
 
 commit ec02cbd9a581d269490255ca171ea49ec7f683a6
 Merge: 19ba299 d5755b9
@@ -655,7 +655,7 @@ commit 3aaecac57409cf6950cadcc101547a98f9f5e2aa
 Author: Tong Su <tsu2@student.unimelb.edu.au>
 Date:   Tue Oct 13 20:24:27 2020 +0800
 
-    add friend adapter & viewholder
+    add conversation adapter & viewholder
 
 commit aae6eedff28b3e42256b2cdf95d088dfc6f72850
 Author: Tong Su <tsu2@student.unimelb.edu.au>
@@ -695,7 +695,7 @@ commit 238060dd0d9f3437023f8f46c5d4e6bf4eaa8e1f
 Author: zhan006 <zhan006@ntu.edu.sg>
 Date:   Sun Oct 11 22:04:48 2020 +1100
 
-    friend fragment
+    conversation fragment
 
 commit 6e8df559efa3ce3af19619ea26a16f260bdeced6
 Author: Tong Su <tsu2@student.unimelb.edu.au>

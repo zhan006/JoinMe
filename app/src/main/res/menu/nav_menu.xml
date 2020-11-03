@@ -13,5 +13,5 @@
         android:title="event"/>
     <item android:id="@+id/tab_friend"
         android:icon="@drawable/friend_button"
-        android:title="friend"/>
+        android:title="conversation"/>
 </menu>

@@ -194,12 +194,12 @@ public class AddFriendAdapter{
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.add_friend_item, parent, false);
-                ViewHolder viewHolder = new ViewHolder(view);
-                return viewHolder;
+                return new ViewHolder(view);
             }
         };
     }
 
+    // TODO: direct to profile page
     private void viewUserProfile() {
 
     }

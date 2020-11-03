@@ -5,23 +5,21 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
 
 import com.example.joinme.activity.ChatActivity;
-import com.example.joinme.objects.Friend;
+import com.example.joinme.objects.Conversation;
 
 import java.util.List;
 
 public class FriendAdapter extends RecyclerView.Adapter {
-    private List<Friend> mFriendList;
+    private List<Conversation> mConversationList;
     private Context mContext;
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView name,latestMsg,lastTime;
@@ -34,8 +32,8 @@ public class FriendAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public FriendAdapter(List<Friend> friendList, Context context){
-        mFriendList=friendList;
+    public FriendAdapter(List<Conversation> conversationList, Context context){
+        mConversationList = conversationList;
         mContext = context;
     }
     @NonNull
@@ -48,10 +46,10 @@ public class FriendAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Friend friend = mFriendList.get(position);
-        ((ViewHolder)holder).name.setText(friend.getName());
-        ((ViewHolder)holder).latestMsg.setText(friend.getLatestMessage().getMessageContent());
-        ((ViewHolder)holder).lastTime.setText(friend.getLatestMessage().getTime().getTime());
+        Conversation conversation = mConversationList.get(position);
+        ((ViewHolder)holder).name.setText(conversation.getName());
+        ((ViewHolder)holder).latestMsg.setText(conversation.getLatestMessage().getMessageContent());
+        ((ViewHolder)holder).lastTime.setText(conversation.getLatestMessage().getTime().getTime());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +67,6 @@ public class FriendAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mFriendList.size();
+        return mConversationList.size();
     }
 }

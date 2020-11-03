@@ -3,14 +3,14 @@ package com.example.joinme.objects;
 import java.time.LocalTime;
 import java.util.List;
 
-public class Friend {
+public class Conversation {
     private String name;
     private Message latestMessage;
     private List<Message> messageList;
-    public Friend(String name){
+    public Conversation(String name){
         this.name = name;
     };
-    public Friend(String name, Message msg){
+    public Conversation(String name, Message msg){
         this.name = name;
         this.latestMessage = msg;
     };

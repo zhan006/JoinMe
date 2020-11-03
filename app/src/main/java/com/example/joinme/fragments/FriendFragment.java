@@ -19,18 +19,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.R;
-import com.example.joinme.adapter.FriendAdapter;
-import com.example.joinme.objects.Friend;
+import com.example.joinme.adapter.ChatListAdapter;
+import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
-import com.example.joinme.reusableComponent.NavBar;
-import com.example.joinme.utils;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FriendFragment extends Fragment {
-    //private EditText search;
+    private EditText search;
+    private String currentUid;
+    private RecyclerView chatListRecyclerView;
+    private FirebaseRecyclerAdapter<Conversation, ChatListAdapter.ChatListViewHolder> chatListAdapter;
+    private ImageButton addFriendBtn;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,29 +49,43 @@ public class FriendFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.friend_activity,container,false);
-        //search = v.findViewById(R.id.search_text);
-        ImageButton search = v.findViewById(R.id.search_button);
-        EditText target = v.findViewById(R.id.search_text);
-        search.setOnClickListener((v1) -> {
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            utils.replaceFragment(fm, new DiscoverEventFragment(target.getText()), "discover_event_2");
-        });
-        RecyclerView friends = v.findViewById(R.id.friends);
-        friends.setLayoutManager(new LinearLayoutManager(getContext()));
-        friends.setAdapter(new FriendAdapter(initFriend(), getContext()));
-        ImageButton addFriendBtn = v.findViewById(R.id.icon_btn);
+
+        currentUid = FirebaseAPI.getUser().getUid();
+        initView(v);
+        initData();
+
         addFriendBtn.setOnClickListener(v1 -> addFriendFragment());
+
+        //        search.setOnClickListener((v1) -> {
+//            FragmentManager fm = getActivity().getSupportFragmentManager();
+//            utils.replaceFragment(fm, new DiscoverEventFragment(target.getText()), "discover_event_2");
+//        });
         return v;
     }
 
-    List<Friend> initFriend(){
-        ArrayList<Friend> friendArrayList = new ArrayList<>();
-        friendArrayList.add(new Friend("Abby",new Message("Yuema","text","userA",new Time(), false)));
-        friendArrayList.add(new Friend("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
-        friendArrayList.add(new Friend("Ming",new Message("gou","text","userA",new Time(),false)));
-        friendArrayList.add(new Friend("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
-        friendArrayList.add(new Friend("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
-        return friendArrayList;
+    private void initView(View v) {
+        search = v.findViewById(R.id.search_text);
+//        ImageButton search = v.findViewById(R.id.search_button);
+//        EditText target = v.findViewById(R.id.search_text);
+        chatListRecyclerView = v.findViewById(R.id.friends);
+        addFriendBtn = v.findViewById(R.id.icon_btn);
+    }
+
+    private void initData() {
+        chatListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        chatList.setAdapter(new FriendAdapter(initFriend(), getContext()));
+        chatListRecyclerView.setAdapter(new ChatListAdapter(getContext()).chatListAdaptor());
+        chatListAdapter.startListening();
+    }
+
+    List<Conversation> initFriend(){
+        ArrayList<Conversation> conversationArrayList = new ArrayList<>();
+        conversationArrayList.add(new Conversation("Abby",new Message("Yuema","text","userA",new Time(), false)));
+        conversationArrayList.add(new Conversation("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
+        conversationArrayList.add(new Conversation("Ming",new Message("gou","text","userA",new Time(),false)));
+        conversationArrayList.add(new Conversation("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
+        conversationArrayList.add(new Conversation("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
+        return conversationArrayList;
     }
 
     /**
