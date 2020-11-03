@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
+import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,13 +46,15 @@ import java.util.List;
 
 public class EventDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "EventDetailFragment";
-    private String uid, eventOrganizerUID, event_host, currentEventID;
+    private String uid, eventOrganizerUID, event_host, currentEventID, hostName;
     private CheckBox going;
-    private ImageButton organiserProfile, followOrganiser, messageOrganiser;
+    private ImageButton hostProfileBtn, followOrganiser, messageOrganiser;
     private ImageView hostProfile;
     private Context mContext;
     private TextView eventDate, eventName, eventLocation, eventDateTime, eventGroupSize,
             eventCurrentParticipants, eventHost, eventDetails, eventHostName, eventHostAbout;
+    private long count;
+
 
 
 
@@ -86,8 +90,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         eventCurrentParticipants = (TextView) v.findViewById(R.id.event_participants_number);
         eventHost = (TextView) v.findViewById(R.id.event_host_text);
 
-        organiserProfile = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
-        organiserProfile.setOnClickListener(this);
+        hostProfileBtn = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
+//        organiserProfile.setOnClickListener(this);
 
         followOrganiser = (ImageButton) v.findViewById(R.id.event_follow_btn);
         followOrganiser.setOnClickListener(this);
@@ -175,13 +179,10 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.event_message_icon:
-                Toast.makeText(getActivity(), "Let's contact the organizer", Toast.LENGTH_SHORT).show();
                 // jump to chat activity
                 Intent chatActivity = new Intent(getActivity(), ChatActivity.class);
-
-                // Testing purpose
-                chatActivity.putExtra("friendUid", "qa6KACdJ0RYZfVDXLtpKL2HcxJ43");
-                chatActivity.putExtra("friendUsername", "IU");
+                chatActivity.putExtra("friendUid", eventOrganizerUID);
+                chatActivity.putExtra("friendUsername", hostName);
                 startActivity(chatActivity);
                 break;
 
@@ -249,7 +250,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         FirebaseAPI.getFirebaseData("EventMember/" + currentEventID, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long count = snapshot.getChildrenCount();
+                count = snapshot.getChildrenCount();
+                Log.d(TAG, "The event ID is "+ currentEventID);
                 Log.d(TAG, "The count is " + count);
                 eventCurrentParticipants.setText("Current Participants: " + count + " ppl");
 
@@ -266,8 +268,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         FirebaseAPI.getFirebaseData("User/" + eventOrganizerUID, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String hostName = snapshot.child("username").getValue().toString();
-                Log.d(TAG, "The host is "+ hostName);
+                hostName = snapshot.child("username").getValue().toString();
+
                 eventHost.setText("Hosted by "+ hostName);
                 eventHostName.setText(hostName);
             }
@@ -292,6 +294,17 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                 if (!image.equals("null")){
                     Glide.with(getContext()).load(image).into(hostProfile);
                 }
+
+                hostProfileBtn.setOnClickListener(view -> {
+                    visitorProfileFragment f = new visitorProfileFragment(eventOrganizerUID);
+                    Bundle bd = new Bundle();
+                    bd.putSerializable("host", host);
+                    f.setArguments(bd);
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    utils.replaceFragment(fm, f, "null");
+                    Log.d(TAG, "I'm passing an User object" + host.getEmail());
+
+                });
 
             }
 

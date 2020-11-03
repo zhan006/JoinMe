@@ -13,14 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
-import com.example.joinme.fragments.DiscoverEventFragment;
 import com.example.joinme.fragments.Follower_Following_Fragment;
 import com.example.joinme.fragments.visitorProfileFragment;
-import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
 import com.example.joinme.utils;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
 
 public class followFollowingAdapter extends RecyclerView.Adapter {
     private ArrayList<String> uids;

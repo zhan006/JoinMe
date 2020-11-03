@@ -7,7 +7,6 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,25 +26,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
-import com.example.joinme.adapter.DiscoverConditionAdapter;
 import com.example.joinme.adapter.DiscoverEventAdapter;
-
-import com.example.joinme.adapter.ManageEventAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.User;
-import com.example.joinme.objects.location;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 

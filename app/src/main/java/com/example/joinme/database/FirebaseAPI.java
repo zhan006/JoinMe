@@ -3,8 +3,6 @@ package com.example.joinme.database;
 import android.util.Log;
 
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.User;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,10 +75,14 @@ public class FirebaseAPI {
         String eventPath = "Event/"+id;
         String organisedPath = "OrganizedEvents/"+uid+"/"+id;
         String attendPath = "AttendingList/"+uid+"/"+id;
+        String eventMemberPath = "EventMember/" + id +"/"+uid;
+
+
         HashMap<String,Object> map = new HashMap();
         map.put(eventPath,event);
         map.put(organisedPath,true);
         map.put(attendPath,true);
+        map.put(eventMemberPath, true);
         updateBatchData(map,completionListener);
     }
 

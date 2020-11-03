@@ -59,6 +59,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements UserRenderable, EventRenderable {
     public static final int FRIEND_DISPLAY=3, TAKE_PHOTO=1;
+    private static final String TAG = "ProfileFragment";
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
     private ImageView profileImage;
@@ -73,10 +74,10 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private RecyclerView.Adapter adapter,friendAdapter;
     LinearLayout albumContainer;
     private Uri imageUri;
-    private String currentUID;
     private final int PHOTO = 1;
     private boolean visitorMode = false;
     LinearLayout friendGallery;
+    private User hostUser;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -86,6 +87,11 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
 
+
+
+
+
+
     }
 
     @Nullable
@@ -93,10 +99,14 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
+
+
+
+
+
         uid = ((MainActivity)getActivity()).getUid();
 
         profileImage = view.findViewById(R.id.profile_image);
-        currentUID = ((MainActivity) getActivity()).getUid();
         aboutMe = view.findViewById(R.id.aboutMe);
         albums = view.findViewById(R.id.albums);
         addAlbum=view.findViewById(R.id.addAlbum);
@@ -313,7 +323,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             setName(user.username);
             setAboutMe(user.about);
 
-            user.loadProfileImage(getActivity(), currentUID, profileImage);
+            user.loadProfileImage(getActivity(), uid, profileImage);
             if(user.getLocation()!=null){
                 location.setText(user.getLocation().getAddress());
             }

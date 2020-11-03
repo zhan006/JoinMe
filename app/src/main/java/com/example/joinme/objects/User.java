@@ -1,6 +1,6 @@
 package com.example.joinme.objects;
 
-import android.location.Location;
+import android.content.Context;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +13,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
-
-import android.content.Context;
 
 public class User implements Serializable {
     public String firstName;
@@ -27,6 +24,7 @@ public class User implements Serializable {
     public String email,phone;
     public List<String> album;
     public location location;
+
 
     public User() {
     }
@@ -40,6 +38,10 @@ public class User implements Serializable {
         this.about = about;
         this.album = album;
     }
+
+
+
+
     public void setLocation(location l){location = l;}
     public location getLocation(){return location;}
     public String getGender(){return gender;};

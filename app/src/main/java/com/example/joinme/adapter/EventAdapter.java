@@ -39,12 +39,6 @@ public class EventAdapter extends RecyclerView.Adapter {
             eventLocation = (TextView) itemView.findViewById(R.id.event_location);
             eventDatetime = (TextView) itemView.findViewById(R.id.event_datetime);
             detail=(Button)itemView.findViewById(R.id.detail_button);
-            //for testing use, it should redirect to event details page
-//            detail.setOnClickListener((v)->{
-//                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-//                        new EventDetailFragment(),null).commit();
-//            });
-
 
         }
     }
@@ -66,9 +60,6 @@ public class EventAdapter extends RecyclerView.Adapter {
                 Toast.makeText(view.getContext(), "You clicked on detail button of " + currentEvent1.getEventName(), Toast.LENGTH_SHORT).show();
                 EventDetailFragment f = new EventDetailFragment();
                 Bundle bd = new Bundle();
-                Log.d(TAG, "@EventAdapther The Event is "+ currentEvent1.getEventName());
-                Log.d(TAG, "@EventAdapter The Event ID is "+ currentEvent1.getId());
-                Log.d(TAG, "********************************************************************");
                 bd.putSerializable("current_event", currentEvent1);
                 f.setArguments(bd);
                 utils.replaceFragment(((AppCompatActivity)view.getContext()).getSupportFragmentManager(),f, null);
