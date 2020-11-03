@@ -45,12 +45,19 @@ import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +66,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class visitorProfileFragment extends Fragment implements UserRenderable, EventRenderable {
     public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
+    public static final int TAKE_PHOTO=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
     private Button followButton,seeFriend;
@@ -69,7 +77,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     private Uri imageUri;
     private String pageUserID;
     private final int PHOTO = 1;
-    LinearLayout friendGallery;
+    RecyclerView friendGallery;
     public visitorProfileFragment(String uid){
         super();
         this.pageUserID = uid;
@@ -132,19 +140,6 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode){
-            case PHOTO:
-                if(resultCode == RESULT_OK){
-                    try{
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri));
-                        images.add(bitmap);
-                        albums.setAdapter(new photoAdapter(images));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-        }
     }
 
     public void setName(String name){
