@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.EventAdapter;
+import com.example.joinme.adapter.FriendPhotoAdapter;
 import com.example.joinme.adapter.photoAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
@@ -48,7 +49,11 @@ import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -65,16 +70,20 @@ import java.util.Map;
 import static android.app.Activity.RESULT_OK;
 
 public class visitorProfileFragment extends Fragment implements UserRenderable, EventRenderable {
-    public static final int ALBUM_DISPLAY=3, FRIEND_DISPLAY=3, UPDATE_MSG=0,GET_EVENT=1;
+    public static final int FRIEND_DISPLAY=3;
     public static final int TAKE_PHOTO=1;
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
-    private Button followButton,seeFriend;
+    private ImageView profileImage;
+    private Button followButton,seeFriend,viewMorePhoto;
     private ArrayList<Event> eventList;
+    private ArrayList<String> imageUrls;
+    private ArrayList<String> followingUids;
     private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-    private RecyclerView upcomming_event,albums;
+    private RecyclerView upcomming_event,albums,friends;
     private User user;
-    private Uri imageUri;
+    private User pageUser;
+    private RecyclerView.Adapter adapter,friendAdapter;
     private String pageUserID;
     private final int PHOTO = 1;
     RecyclerView friendGallery;
@@ -97,40 +106,52 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
-
+        profileImage = view.findViewById(R.id.profile_image);
         aboutMe = view.findViewById(R.id.aboutMe);
-        friendGallery = view.findViewById(R.id.friend_gallery);
         albums = view.findViewById(R.id.albums);
         addAlbum=view.findViewById(R.id.addAlbum);
         name = view.findViewById(R.id.name);
+        viewMorePhoto = view.findViewById(R.id.view_more_photo);
         location = view.findViewById(R.id.location);
         followButton = view.findViewById(R.id.edit_profile);
         seeFriend = view.findViewById(R.id.see_Friend);
-        addAlbum.setOnClickListener((v)->{
-            addAlbum(R.drawable.default_icon);
-        });
+        friends = view.findViewById(R.id.friend_gallery);
+        addAlbum.setVisibility(View.GONE);
+        imageUrls = new ArrayList<>();
+        followingUids = new ArrayList<>();
+        friendGallery = view.findViewById(R.id.friend_gallery);
         upcomming_event = view.findViewById(R.id.profile_upcomming_event);
         upcomming_event.setLayoutManager(new LinearLayoutManager(this.getContext()));
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        LinearLayoutManager lm1 = new LinearLayoutManager(getContext());
+        lm1.setOrientation(LinearLayoutManager.HORIZONTAL);
         albums.setLayoutManager(lm);
+        friends.setLayoutManager(lm1);
+        adapter = new photoAdapter(imageUrls,getContext());
+        friendAdapter = new FriendPhotoAdapter(followingUids,getContext());
+        albums.setAdapter(adapter);
+        friends.setAdapter(friendAdapter);
+        TextView albumText = view.findViewById(R.id.album_text);
+        viewMorePhoto.setOnClickListener((v)->{
+            Log.d("profile","clicked");
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Album_fragment(pageUserID),null);
+        });
         renderEvent();
         renderUser();
+        initAlbum();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String uid = ((MainActivity)getActivity()).getUid();
         followButton.setText("follow");
         followButton.setOnClickListener((v)->{
             follow();
             followButton.setText("Already followed");
         });
-        seeFriend.setOnClickListener((v)->{
-            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Follower_Following_Fragment(uid),"follower");
-        });
+        seeFriend.setVisibility(View.GONE);
     }
 
     @Override
@@ -151,6 +172,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     public void setAboutMe(String text){
         aboutMe.setText(text);
     }
+    /*
     public void addAlbum(int image){
         File output = new File(getContext().getExternalCacheDir(),"output.jpg");
         try{
@@ -169,7 +191,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
         startActivityForResult(intent,1);
-    }
+    }*/
     public void addFriends(int image){
         if(albums.getChildCount()<FRIEND_DISPLAY){
             ImageView v= new ImageView(getContext());
@@ -202,42 +224,90 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     @Override
     public void renderUser() {
         user = getParentUser();
-        if(user !=null){
-            setName(user.username);
-            setAboutMe(user.about);
-            if(user.getLocation()!=null){
-                location.setText(user.getLocation().getAddress());
+        FirebaseAPI.getFirebaseData("User/" + pageUserID, new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("username")) {
+                    setName(snapshot.child("username").getValue(String.class));
+                }
+                if (snapshot.hasChild("about")) {
+                    setAboutMe(snapshot.child("about").getValue(String.class));
+                }
+                if (snapshot.hasChild("location")) {
+                    setLocation(snapshot.child("location").child("address").getValue(String.class));
+                }
+                /*
+                // load profile image
+                holder.setProfile(userID);
+                holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewUserProfile();
+                    }
+                });
+
+                // view user's profile
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewUserProfile();
+                    }
+                });
+
+                // follow this user
+                holder.followBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        followUser(userID);
+                    }
+                });
+
+                // send message to this user
+                holder.messageBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chat(userID, snapshot.child("username").getValue().toString(), v);
+                    }
+                });*/
+
             }
-
-        }
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
-    /*
-    public void setUser(User newUser) {
-        if(newUser != null){
-            user = newUser;
-            setName(user.username);
-            setAboutMe(user.about);
-            if(user.getLocation()!=null){
-                location.setText(user.getLocation().getAddress());
-            }
-            if(!(user.getUsername().equals(getParentUser().username))){
-                visitorMode = true;
-            }
-        }
-        if(visitorMode){
-            editProfile.setText("Follow");
-        }
 
-    }*/
+    public void initAlbum(){
+        FirebaseAPI.rootRef.child("UserAlbum/"+pageUserID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String url = snapshot.getValue(String.class);
+                imageUrls.add(url);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     void follow() {
         String userID = FirebaseAPI.getUser().getUid();
         String followingUserPath = "FollowingUser/" + pageUserID+ "/" + userID;
         String userFollowingPath = "UserFollowing/" + userID + "/" + pageUserID;
-
-        // get unique message ID for current message
-
-        // create current message
 
         Log.d("Follow", userID+"> "+pageUserID);
         FirebaseAPI.rootRef.child("FollowingUser").child(pageUserID).child(userID).setValue(true);

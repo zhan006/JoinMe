@@ -27,54 +27,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdapter.ViewHolder> implements Filterable {
-    private List<Event> eventList;
-    private List<Event> filteredList;
-    private static Location loc;
+public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdapter.ViewHolder> {
+    private List<Event> eventList; //Hold all events for discovering in the database
+    private static Location loc; //Hold current location
+
     public DiscoverEventAdapter(List<Event> eventList, Location l) {
         this.eventList = eventList;
-        this.filteredList = eventList;
         this.loc = l;
     }
 
     public Location getLoc(){
         return loc;
     }
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    filteredList = eventList;
-                } else {
-                    List<Event> f = new ArrayList<>();
-                    for (Event e : eventList) {
-                        //这里根据需求，添加匹配规则
-                        if (e.getId().equals(charSequence)) {
-                            f.add(e);
-                        }
-                    }
-
-                    filteredList = f;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredList = (ArrayList<Event>) filterResults.values;
-                //刷新数据
-                notifyDataSetChanged();
-            }
-        };
-    }
-
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title,time,address;
@@ -124,7 +88,7 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Event event = filteredList.get(position);
+        Event event = eventList.get(position);
         ((ViewHolder) holder).title.setText(event.getEventName());
         if(event.getDatetime()!=null) ((ViewHolder) holder).time.setText(event.getDatetime().toString());
         if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+Math.round(event.getLocation().distanceTo(loc))+" meters");

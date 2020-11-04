@@ -75,7 +75,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     LinearLayout albumContainer;
     private Uri imageUri;
     private final int PHOTO = 1;
-    private boolean visitorMode = false;
     LinearLayout friendGallery;
     private User hostUser;
 
@@ -93,11 +92,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_profile,container,false);
-
-
-
-
-
         uid = ((MainActivity)getActivity()).getUid();
 
         profileImage = view.findViewById(R.id.profile_image);
@@ -144,15 +138,11 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         super.onActivityCreated(savedInstanceState);
 
         editProfile.setOnClickListener((v)->{
-            if(!visitorMode){
-                EditProfileFragment f = new EditProfileFragment();
-                Bundle bd = new Bundle();
-                bd.putSerializable("user",getParentUser());
-                f.setArguments(bd);
-                utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
-            }
-
-
+            EditProfileFragment f = new EditProfileFragment();
+            Bundle bd = new Bundle();
+            bd.putSerializable("user",getParentUser());
+            f.setArguments(bd);
+            utils.replaceFragment(getActivity().getSupportFragmentManager(),f,"edit_profile");
 
         });
         seeFriend.setOnClickListener((v)->{
@@ -326,7 +316,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         }
 
     }
-
+    /*
     public void setUser(User newUser) {
         if(newUser != null){
             user = newUser;
@@ -343,7 +333,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             editProfile.setText("Follow");
         }
 
-    }
+    }*/
     void follow(String pageUserId) {
         String userID = FirebaseAPI.getUser().getUid();
         String followingUserPath = "FollowingUser/" + pageUserId+ "/" + userID;
