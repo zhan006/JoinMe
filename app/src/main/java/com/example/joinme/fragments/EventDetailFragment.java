@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,8 +41,11 @@ import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -47,7 +54,8 @@ import java.util.List;
 
 public class EventDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "EventDetailFragment";
-    private String uid, eventOrganizerUID, event_host, currentEventID, hostName;
+    private String uid, eventOrganizerUID, currentEventID, hostName;
+    private User user;
     private CheckBox going;
     private ImageButton hostProfileBtn, followOrganiser, messageOrganiser;
     private ImageView hostProfile;
@@ -55,8 +63,14 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     private TextView eventDate, eventName, eventLocation, eventDateTime, eventGroupSize,
             eventCurrentParticipants, eventHost, eventDetails, eventHostName, eventHostAbout;
     private long count;
+    private Button makeComment;
+    private ArrayList<Comment> commentList = new ArrayList<>();
+    private BottomSheetDialog dialog;
+    private RecyclerView commentRecyclerView;
+//    private CommentAdapter commentAdapter;
 
-
+//    private FirebaseRecyclerAdapter<Comment, CommentAdapter.ViewHolder> commentAdapter;
+    private CommentAdapter addCommentAdapter;
 
 
 
@@ -107,6 +121,11 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         hostProfile = (ImageView) v.findViewById(R.id.host_profile_photo);
 
 
+        makeComment = (Button) v.findViewById(R.id.event_details_comment_btn);
+        makeComment.setOnClickListener(this);
+
+
+        commentRecyclerView = v.findViewById(R.id.event_comments_area);
 
         initEventDetail(v);
         initCommentList(v);
@@ -187,9 +206,75 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                 startActivity(chatActivity);
                 break;
 
+
+            case R.id.event_details_comment_btn:
+
+                View commentView = LayoutInflater.from(view.getContext()).inflate(R.layout.event_comment_dialog, null);
+                dialog = new BottomSheetDialog(commentView.getContext());
+                EditText commentText = (EditText) commentView.findViewById(R.id.comment_dialog_textArea);
+                Button comment_btn = (Button) commentView.findViewById(R.id.comment_dialog_reply_btn);
+
+                dialog.setContentView(commentView);
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                dialog.show();
+                comment_btn.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onClick(View view) {
+                        String replyContent = commentText.getText().toString().trim();
+                        if (!TextUtils.isEmpty((replyContent))) {
+                            dialog.dismiss();
+                            user = ((MainActivity) getActivity()).getUser();
+                            Comment newComment = new Comment(user, currentEventID,replyContent);
+                            Log.d(TAG, "You typed in " + newComment.getCommentContent());
+                            Log.d(TAG, "!!!!!!!!!!!!!!"+newComment.toString());
+                            addCommentAdapter.addNewComment(newComment);
+                            createComment(newComment);
+                            Toast.makeText(getActivity(), "Comment successfully!",Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(view.getContext(), "Cannot reply nothing", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                break;
+
             default:
                 break;
         }
+    }
+
+
+
+    public void createComment(Comment comment){
+        String key = FirebaseAPI.pushFirebaseNode("EventCommentList/"+currentEventID);
+        Log.d(TAG, "@EventDetailFragment, the eventID is "+ currentEventID);
+        Toast.makeText(getActivity(), "THe event is"+currentEventID, Toast.LENGTH_SHORT).show();
+        comment.setCommentID(key);
+        comment.setCommentContent(comment.getCommentContent());
+        comment.setFirstName(comment.getFirstName());
+        comment.setDateTime(comment.getDateTime());
+        comment.setProfileImgID(comment.getProfileImageId());
+        comment.setUserID(comment.getUserID());
+//        comment.setEventID(comment.getEventID());
+        Log.d(TAG, "@EventDetailFragment_step2, the EventID is "+ comment.getEventID());
+
+        FirebaseAPI.addComment(comment, key, currentEventID, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                if(error == null){
+                    Snackbar.make(getView(),"Success!",Snackbar.LENGTH_SHORT).show();
+
+                }
+                else{
+                    Snackbar.make(getView(),error.getDetails(),Snackbar.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+
     }
 
     @Override
@@ -199,25 +284,24 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void initCommentList(View v) {
-        RecyclerView commentRecyclerView = v.findViewById(R.id.event_comments_area);
+
+//        RecyclerView commentRecyclerView = v.findViewById(R.id.event_comments_area);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        commentRecyclerView.setAdapter(new CommentAdapter(initComments()));
-    }
+//        commentAdapter = new CommentAdapter(getActivity(),currentEventID,commentList).commentAdapter();
 
+        addCommentAdapter = new CommentAdapter(getActivity(), currentEventID, commentList);
+        commentRecyclerView.setAdapter(addCommentAdapter);
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    List<Comment> initComments() {
-        ArrayList<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("Zhan", "Wang", R.drawable.host_profile_pic, "That sounds interesting!"));
-        comments.add(new Comment("Lixian", "Sun", R.drawable.user_profile_pic_2, "So where shall we meetup?"));
-        comments.add(new Comment("Rui", "Wang", R.drawable.user_profile_pic3, "What about Melbourne Central? You can't miss the clock!"));
-        comments.add(new Comment("Zhan", "Wang", R.drawable.host_profile_pic, "Can we consider meeting up at Chinatown so we can go to the restaurant directly?"));
-        comments.add(new Comment("Lixian", "Sun", R.drawable.user_profile_pic_2, "Agree!"));
-        comments.add(new Comment("Rui", "Wang", R.drawable.user_profile_pic3, "I can't wait to have the grill pork! It was so good! Shall we go for milk tea afterwards?"));
-
-        return comments;
+//        commentAdapter.startListening();
 
     }
+
+
+
+
+
+
+
 
     public void initEventDetail(View view) {
 

@@ -386,22 +386,46 @@
                 android:layout_marginTop="10dp"
                 >
 
-                <TextView
-                    android:id="@+id/event_comments"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    style="@style/bold_text"
-                    android:text="Comments"
-                    android:layout_marginStart="10dp"
-                    />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/event_comments"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        style="@style/bold_text"
+                        android:text="Comments"
+                        android:layout_marginStart="10dp"
+                        />
+
+                    <Button
+                        style="@style/small_button"
+                        android:id="@+id/event_details_comment_btn"
+                        android:text="Comment"
+                        android:textAllCaps="false"
+                        android:layout_marginStart="120dp"
+                        />
+
+
+
+
+
+
+                </LinearLayout>
+
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/event_comments_area"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="300dp"
                     android:layout_marginTop="10dp"
                     android:paddingHorizontal="15dp"
                     android:background="#F9F4E3"
+
 
                     >
                 </androidx.recyclerview.widget.RecyclerView>
