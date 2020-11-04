@@ -51,7 +51,7 @@
             android:layout_marginEnd="5dp"
             android:background="@color/colorSecondary"
             android:scaleType="centerInside"
-            android:src="@drawable/photo_icon" />
+            android:src="@drawable/picture_icon" />
 
         <ImageButton
             android:id="@+id/message_take_photo_btn"
@@ -61,7 +61,7 @@
             android:layout_marginVertical="5dp"
             android:background="@color/colorSecondary"
             android:scaleType="centerInside"
-            android:src="@drawable/phone_icon" />
+            android:src="@drawable/photo_icon" />
 
         <ImageButton
             android:layout_width="35dp"
