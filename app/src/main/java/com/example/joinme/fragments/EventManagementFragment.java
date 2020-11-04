@@ -66,6 +66,10 @@ public class EventManagementFragment extends Fragment implements EventRenderable
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_management_activity,container,false);
         searchText = v.findViewById(R.id.search_text);
         invitedBtn = v.findViewById(R.id.see_invited);
+        invitedBtn.setOnClickListener((view -> {
+            Log.d("eventmanagement",this.attendingEvent.toString());
+            Log.d("eventmanagement",((MainActivity)getActivity()).getEventList().toString());
+        }));
         organise = v.findViewById(R.id.organised_event);
         attend = v.findViewById(R.id.attending_event);
         attend.setSelected(true);
@@ -120,7 +124,8 @@ public class EventManagementFragment extends Fragment implements EventRenderable
     @Override
     public void renderEvent() {
         String uid = ((MainActivity)getActivity()).getUid();
-        this.attendingEvent = getParentEvents();
+        attendingEvent = getParentEvents();
+        Log.d("EventManagement",attendingEvent.toString());
         if(attendingEvent!=null){
             eventRecycler.setAdapter(new ManageEventAdapter(this.attendingEvent,uid, ManageEventAdapter.EventType.ATTEND));
         }

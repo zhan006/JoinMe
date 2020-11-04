@@ -134,8 +134,12 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void renderEvent() {
-        eventList = getParentEventList();
-        if(eventList!=null){
+        ArrayList<Event> events = getParentEventList();
+
+        if(events!=null){
+            Log.d("HomePage",events.toString());
+            // in order to prevent altering parents events list
+            eventList = (ArrayList<Event>) events.clone();
             eventList.sort((event, t1) -> event.getDatetime().compareTo(t1.getDatetime()));
             eventList.removeIf((e)-> Calendar.getInstance().getTimeInMillis()>e.getDatetime().getTimeStamp());
             board.setAdapter(new NotificationAdapter(eventList));
@@ -149,7 +153,9 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             welcome.setText(WELCOME+user.firstName+" "+user.lastName);
 //          Connect to database and retrieve the profile image from database under "User"
             user.loadProfileImage(getActivity(), currentUID,icon);
-
+        }
+        else{
+            ((MainActivity)getActivity()).loadUserProfile();
         }
 
     }

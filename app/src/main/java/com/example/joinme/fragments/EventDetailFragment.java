@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventDetailFragment extends Fragment implements View.OnClickListener {
@@ -240,10 +241,29 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     }
 
     public void setGoingButton(){
+        FirebaseAPI.rootRef.child("EventMember").child(currentEventID).addValueEventListener(
+                new ValueEventListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        HashMap<String,Boolean> map = (HashMap)snapshot.getValue();
+                        if(map!=null && map.getOrDefault(uid,false)){
+                            going.setChecked(true);
+                        }
 
-        if(FirebaseAPI.rootRef.child("EventMember").child(uid) !=null){
-            going.setChecked(true);
-        }
+                        Log.d("event detail",snapshot.toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                }
+        );
+//        if(FirebaseAPI.rootRef.child("EventMember").child(currentEventID).child(uid) !=null){
+//
+//            going.setChecked(true);
+//        }
     }
 
     public void setEventCurrentParticipants(){

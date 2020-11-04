@@ -68,14 +68,20 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        // for attending events
         if(mEventList!=null){
             Event event = mEventList.get(position);
             ((ViewHolder)holder).eventName.setText(event.getEventName());
             if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
             if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
             ((ViewHolder)holder).update.setOnClickListener((v)->{
-                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
-                        new EventDetailFragment(),null).commit();
+                EventDetailFragment f = new EventDetailFragment();
+                Bundle bd = new Bundle();
+                bd.putSerializable("current_event",event);
+                f.setArguments(bd);
+                utils.replaceFragment(((AppCompatActivity)v.getContext()).getSupportFragmentManager(),f,null);
+//                ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
+//                        f,null).commit();
             });
 
             ((ViewHolder)holder).cancel.setOnClickListener((v)->{
@@ -84,6 +90,7 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
                 builder.setTitle("Alert");
                 builder.setPositiveButton("Confirm", (dialogInterface, i) ->{
                             FirebaseAPI.rootRef.child("AttendingList/"+uid).child(event.getId()).setValue(false);
+                            FirebaseAPI.rootRef.child("EventMember/").child(event.getId()).child(uid).setValue(false);
                             mEventList.remove(position);
                             this.notifyDataSetChanged();
                         });
@@ -93,6 +100,7 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
                 builder.create().show();
             });
         }
+        //for organised event
         else if(mEventIDs!=null){
             String id = mEventIDs.get(position);
             String path = "Event/"+id;
@@ -116,6 +124,7 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
                         builder.setTitle("Alert");
                         builder.setPositiveButton("Confirm", (dialogInterface, i) ->{
                             FirebaseAPI.rootRef.child("OrganizedEvents/"+uid).child(event.getId()).setValue(false);
+                            FirebaseAPI.rootRef.child("EventMember/").child(event.getId()).child(uid).setValue(false);
                             mEventIDs.remove(position);
                             notifyDataSetChanged();
                         });

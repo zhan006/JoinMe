@@ -4,5 +4,5 @@
         android:drawable="@drawable/button_pressed"/>
     <item android:state_selected="true"
         android:drawable="@drawable/button_pressed"/>
-    <item android:drawable="@drawable/rectangle_topround"/>
+    <item android:drawable="@drawable/rectangle_round"/>
 </selector>

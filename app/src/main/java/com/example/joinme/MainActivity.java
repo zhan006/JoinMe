@@ -71,13 +71,14 @@ public class MainActivity extends AppCompatActivity {
                                 HashMap map = (HashMap) snapshot.getValue();
                                 eventList = new ArrayList<Event>();
                                 for (String id : ids) {
-                                    Log.d("event", map.get(id).toString());
+
                                     Event event = new Event((HashMap)map.get(id));
                                     eventList.add(event);
-                                    Fragment cFragment = getCurrentFragment();
-                                    if (cFragment instanceof EventRenderable) {
-                                        ((EventRenderable) cFragment).renderEvent();
-                                    }
+                                }
+                                Log.d("MainActivity", eventList.toString());
+                                Fragment cFragment = getCurrentFragment();
+                                if (cFragment instanceof EventRenderable) {
+                                    ((EventRenderable) cFragment).renderEvent();
                                 }
                             }
 
@@ -108,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().replace(R.id.main_fragment_container, new HomePageFragment(), "home").commit();
         nav.setSelectedItem(R.id.tab_home);
         getCurrentLocation();
-        new Thread(getUserProfile).start();
-        new Thread(getAttendingList).start();
+        loadUserProfile();
+        loadAttendingList();
 
         // test the UID transformation from loginActivity
         Intent intent = getIntent();
@@ -118,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
         uid = currentUID;
         Toast.makeText(MainActivity.this, "current UID: " + currentUID,
                 Toast.LENGTH_SHORT).show();
+    }
+    public void loadUserProfile(){
+        new Thread(getUserProfile).start();
+    }
+    public void loadAttendingList(){
+        new Thread(getAttendingList).start();
     }
 
     private Runnable getUserProfile = () -> {
@@ -150,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String,Boolean> map = (HashMap) snapshot.getValue();
-
+                Log.d("event",map.toString());
                 Bundle bd = new Bundle();
                 ArrayList attendingList = new ArrayList();
                 if(map!=null){

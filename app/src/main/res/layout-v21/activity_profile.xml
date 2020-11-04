@@ -194,12 +194,28 @@
                     android:layout_toRightOf="@id/album_text"
                     android:src="@drawable/baseline_add_circle_outline_black_18dp"/>
             </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/albums"
-                android:layout_marginHorizontal="20dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/albums"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="300dp"
+                    android:layout_height="60dp"/>
+                <Button
+                    android:id="@+id/view_more_photo"
+                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:text="View more"
+                    android:layout_marginRight="10dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_background"
+                    android:layout_alignParentRight="true"
+                    android:drawableBottom="@drawable/baseline_arrow_forward_black_18dp"/>
+            </RelativeLayout>
+
+
 
 
             <RelativeLayout

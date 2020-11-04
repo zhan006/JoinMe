@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
     private TextView aboutMe,name,location;
     private ImageButton addAlbum;
     private ImageView profileImage;
-    private Button editProfile,seeFriend;
+    private Button editProfile,seeFriend,viewMorePhoto;
     private ArrayList<Event> eventList;
     private ArrayList<String> imageUrls;
     private ArrayList<String> followingUids;
@@ -86,12 +86,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
-
-
-
-
-
-
     }
 
     @Nullable
@@ -111,6 +105,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         albums = view.findViewById(R.id.albums);
         addAlbum=view.findViewById(R.id.addAlbum);
         name = view.findViewById(R.id.name);
+        viewMorePhoto = view.findViewById(R.id.view_more_photo);
         location = view.findViewById(R.id.location);
         editProfile = view.findViewById(R.id.edit_profile);
         seeFriend = view.findViewById(R.id.see_Friend);
@@ -133,7 +128,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         albums.setAdapter(adapter);
         friends.setAdapter(friendAdapter);
         TextView albumText = view.findViewById(R.id.album_text);
-        albumText.setOnClickListener((v)->{
+        viewMorePhoto.setOnClickListener((v)->{
             Log.d("profile","clicked");
             utils.replaceFragment(getActivity().getSupportFragmentManager(),new Album_fragment(uid),null);
         });
