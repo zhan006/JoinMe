@@ -121,6 +121,7 @@ public class HomePageFragment extends Fragment implements UserRenderable, EventR
             }
             Intent intentSignin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentSignin);
+            getActivity().finish();
         });
 
     }
