@@ -2,6 +2,7 @@ package com.example.joinme.database;
 
 import android.util.Log;
 
+import com.example.joinme.objects.Comment;
 import com.example.joinme.objects.Event;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -84,6 +85,18 @@ public class FirebaseAPI {
         map.put(attendPath,true);
         map.put(eventMemberPath, true);
         updateBatchData(map,completionListener);
+    }
+
+    public static void addComment(Comment comment, String key, String eventID,  DatabaseReference.CompletionListener completionListener){
+        Log.d(TAG, "The event ID is "+ eventID);
+//        String commentID = pushFirebaseNode("EventCommentList/"+eventID);
+        String commentID = key;
+        comment.setCommentID(commentID);
+        String eventCommentListPath = "EventCommentList/"+ eventID + "/" + commentID;
+        HashMap<String, Object> map = new HashMap();
+        map.put(eventCommentListPath, comment);
+        updateBatchData(map, completionListener);
+
     }
 
 

@@ -4,71 +4,97 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.joinme.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comment {
-    private String firstName;
-    private String lastName;
-    private int profileImageId;
-    private String commentContent;
-    private int upvoteCount;
-    private int upvoteIcon;
-    private String timeAgo;
-    private String timeCreated;
-
-
-//    private String replyToUsername;
+    private static final String TAG = "Comment";
+    private String commentID, userID, profileImgID, firstName, commentContent, dateTime, eventID;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Comment(String firstName, String lastName, int profileImageId, String commentContent){
+    public Comment(String firstName, String lastName, String profileImgID, String commentContent){
         this.firstName = firstName;
-        this.lastName = lastName;
         this.commentContent = commentContent;
-        this.profileImageId = profileImageId;
-        this.upvoteIcon = R.drawable.event_upvote_icon;
-        this.upvoteCount = 0;
-//        this.timeCreated = java.text.DateFormat.getDateTimeInstance().format(new Date());
+        this.profileImgID = profileImgID;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        this.timeCreated = dateFormat.format(new Date());
+        this.dateTime = dateFormat.format(new Date());
 
     }
+
+    public Comment(User user, String eventID, String commentContent){
+        this.firstName = user.getFirstName();
+        this.profileImgID = user.getProfileImage();
+        this.commentContent = commentContent;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        this.dateTime = dateFormat.format(new Date());
+        this.eventID = eventID;
+    }
+
+
+    public Comment(){
+
+    };
 
     public String getFirstName(){
         return firstName;
     }
 
-    public String getLastName(){
-        return lastName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
 
-    public int getProfileImageId(){
-        return profileImageId;
+    public String getProfileImageId(){
+        return profileImgID;
+    }
+
+    public void setProfileImgID(String profileImgID) {
+        this.profileImgID = profileImgID;
     }
 
     public String getCommentContent(){
         return commentContent;
     }
 
-    public int getUpvoteCount() {
-        return upvoteCount;
-    }
-
-    public void setUpvoteCount(int upvoteCount) {
-        this.upvoteCount = upvoteCount;
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 
 
-    public String getTimeAgo() {
-        return timeAgo;
+    public String getCommentID() {
+        return commentID;
     }
 
-    public String getTimeCreated() {
-        return timeCreated;
+    public void setCommentID(String commentID){
+        this.commentID = commentID;
     }
 
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
+    public String toString(){
+        return this.getFirstName()+this.commentContent+this.dateTime;
+    }
 }
