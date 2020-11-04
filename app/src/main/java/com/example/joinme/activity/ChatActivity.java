@@ -76,8 +76,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton imageButton;
     private ImageButton takePhotoBtn;
     private RecyclerView messageRecyclerView;
-    
-    private Uri originalUri;
+
     private String currentPhotoPath;
     private FileInputStream is = null;
     private Bitmap bitmap;
@@ -297,11 +296,21 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void takePhoto() {
-        // use the camera
+        /*
+        functions when you click the take a photo button
+        this function contains two version
+        one for reduced-size picture
+        another for the normal size picture
+         */
+
+        // this version is only for small picture
+        // use it when you want to reduce picture size
 //        Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
 //        startActivityForResult(mIntent, ACTIVITY_IMAGE_CAPTURE);
 
+        // this version for the normal size picture
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Create the File where the photo should go
         File photoFile = null;
         try {
@@ -310,25 +319,37 @@ public class ChatActivity extends AppCompatActivity {
             // Error occurred while creating the File
             Log.w("False", "Create image file false at takePhoto()");
         }
+
         // Continue only if the File was successfully created
         if (photoFile != null) {
+
+            // get uri of the file
+            // remembeer to add the permision
             Uri photoURI = FileProvider.getUriForFile(this,
                     "com.example.joinme.fileprovider",
                     photoFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+            // start the camera of the phone
             startActivityForResult(takePictureIntent, ACTIVITY_IMAGE_CAPTURE);
         }
-        Log.w("True", "有这一步");
     }
 
     private File createImageFile() throws IOException {
+        /*
+        create image file in the external space of the APP
+         */
+
         // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "takePhoto";
+
+        // get the save path for the image
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // create the image file
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
+                ".jpg",  /* suffix */
                 storageDir      /* directory */
         );
 
@@ -350,20 +371,29 @@ public class ChatActivity extends AppCompatActivity {
                     .start(this);
         }
 
+        // after take a picture useing the camrea of the phone
         if (requestCode == ACTIVITY_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Log.d(TAG, "成功");
+
+            // get the photo in bitmap type
+            Log.d(TAG, "take a picture from phone camera");
             bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+
+            // double check if we can get the uri from the intent
             if (data.getData()!=null){
                 imageUri =data.getData();
             }else {
+
+                // get the image URI from the bitmap
                 imageUri = Uri.parse(MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, null,null));
             }
 
+            // crop the image into appropriate size
             CropImage.activity(imageUri)
                     .setAspectRatio(1, 1)
                     .start(this);
 
 
+            // this is for the version 1 when you wanna get reduced size picture
 //            Bundle bundle = data.getExtras();
 //            Bitmap bitmap = (Bitmap) bundle.get("data");
 //            if (data.getData()!=null){
