@@ -87,7 +87,7 @@ public class ChatListAdapter {
             Log.d(TAG, "setLatestMsg: seen? "+seen);
             if (seen) {
                 unreadIcon.setVisibility(View.GONE);
-                latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.NORMAL);
+                latestMsg.setTypeface(null, Typeface.NORMAL);
             } else {
                 unreadIcon.setVisibility(View.VISIBLE);
                 latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.BOLD);
@@ -180,18 +180,23 @@ public class ChatListAdapter {
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        if (snapshot.hasChild("time")) {
-                            Time time = snapshot.child("time").getValue(Time.class);
-                            holder.setLatestMsgTime(time.time());
-                        }
+                        Log.d(TAG, "onChildChanged: child seen changed!!!!!!"+snapshot.child("seen").getValue().toString());
+//                        if (snapshot.hasChild("time")) {
+//                            Time time = snapshot.child("time").getValue(Time.class);
+//                            holder.setLatestMsgTime(time.time());
+//                        }
                         String msg = snapshot.child("messageContent").getValue().toString();
                         boolean seen = (boolean) snapshot.child("seen").getValue();
                         if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
                             msg = "Image";
                         }
-                        Log.d(TAG, "onChildAdded: "+seen);
+                        if (seen) {
+                            Log.d(TAG, "onChildChanged: ");
+                            holder.latestMsg.setTypeface(holder.latestMsg.getTypeface(), Typeface.NORMAL);
+                        }
+                        Log.d(TAG, "onChildChanged: "+seen);
                         holder.setLatestMsg(msg, seen);
-//                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
+
 
                     }
 
@@ -210,6 +215,30 @@ public class ChatListAdapter {
 
                     }
                 });
+
+//                // check text style based on seen status
+//                latestMsgQuery.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                        Log.d(TAG, "onDataChange: change last msg style: "+snapshot.child("seen").getValue().toString());
+//                        if (snapshot.hasChild("time")) {
+//                            Time time = snapshot.child("time").getValue(Time.class);
+//                            holder.setLatestMsgTime(time.time());
+//                        }
+//                        String msg = snapshot.child("messageContent").getValue().toString();
+//                        boolean seen = (boolean) snapshot.child("seen").getValue();
+//                        if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
+//                            msg = "Image";
+//                        }
+//                        Log.d(TAG, "onChildChanged: "+seen);
+//                        holder.setLatestMsg(msg, seen);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
 
                 // retrieve friend
                 FirebaseAPI.getFirebaseData("User/" + chatUserID, new ValueEventListener() {

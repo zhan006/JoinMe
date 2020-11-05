@@ -82,8 +82,10 @@ public class ChatActivity extends AppCompatActivity {
     private FileInputStream is = null;
     private Bitmap bitmap;
 
+    private ChildEventListener loadMsgListener;
     private ValueEventListener chatListener;
     private DatabaseReference messageListRef;
+    private TitleBar titleBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // monitor firebase messages
         loadMessages();
+        markMessageAsSeen();
 
         // send message
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,24 +130,24 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy ");
+        messageListRef.removeEventListener(loadMsgListener);
+        messageListRef.removeEventListener(chatListener);
+        super.onDestroy();
+    }
+
     private void initView() {
         messageListRef = FirebaseAPI.rootRef.child("Chat").child(currentUid).child(friendUid);
         // set friend username in title bar
-        TitleBar titleBar = findViewById(R.id.chat_title_bar);
+        titleBar = findViewById(R.id.chat_title_bar);
         titleBar.setTitle(this.friendUsername);
         titleBar.setOnClickBackListener((v)-> {
+            Log.d(TAG, "initView: ");
+            messageListRef.removeEventListener(loadMsgListener);
             messageListRef.removeEventListener(chatListener);
-//            messageListRef.removeEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    Log.d(TAG, "onDataChange: remove !!!!!");
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
+
             finish();
         });
 
@@ -201,7 +204,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void loadMessages() {
-        messageListRef.addChildEventListener(new ChildEventListener() {
+        loadMsgListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String messageID = snapshot.getKey();
@@ -219,8 +222,6 @@ public class ChatActivity extends AppCompatActivity {
                 // update last message time
                 TextView dateTime = findViewById(R.id.chat_time);
                 dateTime.setText(msg.getTime().toString());
-
-                markMessageAsSeen();
             }
 
             @Override
@@ -242,11 +243,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        messageListRef.addChildEventListener(loadMsgListener);
     }
 
     void markMessageAsSeen(){
-        Log.d(TAG, "markMessageAsSeen: current "+currentUid + "    friend "+friendUid);
         chatListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -262,11 +263,12 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d(TAG, "onCancelled: cancel listener!");
             }
         };
-        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
-                this.friendUid, chatListener);
+        messageListRef.addValueEventListener(chatListener);
+//        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
+//                this.friendUid, chatListener);
 //        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
     }
 

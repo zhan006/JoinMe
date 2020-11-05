@@ -96,4 +96,5 @@ public class FriendFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
 }
