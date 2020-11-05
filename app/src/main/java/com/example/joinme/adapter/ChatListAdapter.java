@@ -167,6 +167,8 @@ public class ChatListAdapter {
                         if (snapshot.hasChild("time")) {
                             Time time = snapshot.child("time").getValue(Time.class);
                             holder.setLatestMsgTime(time.time());
+//                            conversationListRef.child(chatUserID).child("time").setValue(time);
+//                            FirebaseAPI.rootRef.child("ConversationList").child(chatUserID)
                         }
                         String msg = snapshot.child("messageContent").getValue().toString();
                         boolean seen = (boolean) snapshot.child("seen").getValue();
@@ -175,7 +177,6 @@ public class ChatListAdapter {
                         }
                         Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
-//                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
                     }
 
                     @Override
@@ -196,8 +197,6 @@ public class ChatListAdapter {
                         }
                         Log.d(TAG, "onChildChanged: "+seen);
                         holder.setLatestMsg(msg, seen);
-
-
                     }
 
                     @Override
@@ -215,30 +214,6 @@ public class ChatListAdapter {
 
                     }
                 });
-
-//                // check text style based on seen status
-//                latestMsgQuery.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                        Log.d(TAG, "onDataChange: change last msg style: "+snapshot.child("seen").getValue().toString());
-//                        if (snapshot.hasChild("time")) {
-//                            Time time = snapshot.child("time").getValue(Time.class);
-//                            holder.setLatestMsgTime(time.time());
-//                        }
-//                        String msg = snapshot.child("messageContent").getValue().toString();
-//                        boolean seen = (boolean) snapshot.child("seen").getValue();
-//                        if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
-//                            msg = "Image";
-//                        }
-//                        Log.d(TAG, "onChildChanged: "+seen);
-//                        holder.setLatestMsg(msg, seen);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
 
                 // retrieve friend
                 FirebaseAPI.getFirebaseData("User/" + chatUserID, new ValueEventListener() {

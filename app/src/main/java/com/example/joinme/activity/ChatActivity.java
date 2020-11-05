@@ -171,6 +171,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void add2Conversation(Time time) {
+        // update conversation time to get correct order
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid)
+                .child("time").setValue(time);
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
+            .child("time").setValue(time);
         FirebaseAPI.rootRef.child("ConversationList").child(currentUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -193,6 +198,12 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     });
 
+                }
+                else {
+//                    // update conversation time to get correct order
+//                    dataSnapshot.child(friendUid).child("time").getRef().setValue(time);
+//                    FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
+//                            .child("time").setValue(time);
                 }
             }
 
