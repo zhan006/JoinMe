@@ -214,29 +214,6 @@
                     android:layout_alignParentRight="true"
                     android:drawableBottom="@drawable/baseline_arrow_forward_black_18dp"/>
             </RelativeLayout>
-
-
-
-
-            <RelativeLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/archive_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/baseline_archive_black_18dp"/>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/archive_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Check my past events"
-                    style="@style/bold_text"/>
-            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
