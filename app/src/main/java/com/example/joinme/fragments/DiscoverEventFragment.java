@@ -31,7 +31,6 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.LocationRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -63,7 +62,7 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int prev = ((NavBar) getActivity().findViewById(R.id.navbar)).getPrevSelected();
+        //int prev = ((NavBar) getActivity().findViewById(R.id.navbar)).getPrevSelected();
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
@@ -84,9 +83,7 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
         bar = v.findViewById(R.id.search_event_title);
-        bar.setOnClickBackListener((view)->{
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-        });
+        bar.setOnClickBackListener((view)-> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         ImageButton searchButton = v.findViewById(R.id.search_button);
 
         //click the search button to search
@@ -134,7 +131,7 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
     //set listener for topic buttons
     private void setTopicListener(Button b){
         b.setOnClickListener(v -> {
-            if(topic.equals(b.getText())){
+            if(topic.contentEquals(b.getText())){
                 //cancel selecting if the button is already selected;
                 topic="";
                 refreshRV();
@@ -226,20 +223,22 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
                 Log.println(Log.INFO,"timestampDifference",timestampDifference+" "+timestampDifference / 1000 / 60 / 60 / 24);
                 if(e.getDatetime()==null)
                     continue;
-                if(date.equals("oneDay")){
-                    if(timestampDifference>((long)24)*60*60*1000){
-                        continue;
-                    }
-                }
-                else if(date.equals("oneWeek")){
-                    if(timestampDifference>((long)7)*24*60*60*1000){
-                        continue;
-                    }
-                }
-                else if(date.equals("oneMonth")){
-                    if(timestampDifference>((long)30)*24*60*60*1000){
-                        continue;
-                    }
+                switch (date) {
+                    case "oneDay":
+                        if (timestampDifference > ((long) 24) * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
+                    case "oneWeek":
+                        if (timestampDifference > ((long) 7) * 24 * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
+                    case "oneMonth":
+                        if (timestampDifference > ((long) 30) * 24 * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
                 }
             }
             selected.add(e);
@@ -252,9 +251,9 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         if(curLoc!=null){
             return curLoc;
         }*/
-        ActivityCompat.requestPermissions(getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                 1);
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -274,12 +273,13 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         curLoc = curLocation();
         events = new ArrayList<>();
         DateTime curDate = new DateTime();
-        Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+Long.valueOf(curDate.getTimeStamp()));
+        Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+ curDate.getTimeStamp());
         FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Event event = snapshot.getValue(Event.class);
                 //only collect the upcoming events
+                assert event != null;
                 if(curDate.getTimeStamp()<event.getDatetime().getTimeStamp())
                     events.add(event);
                 eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLoc));
