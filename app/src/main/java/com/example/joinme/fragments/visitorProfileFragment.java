@@ -117,6 +117,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         seeFriend = view.findViewById(R.id.see_Friend);
         seeFriend.setVisibility(View.GONE);
         friends = view.findViewById(R.id.friend_gallery);
+        view.findViewById(R.id.friend_gallery).setVisibility(View.GONE);
         addAlbum.setVisibility(View.GONE);
         imageUrls = new ArrayList<>();
         followingUids = new ArrayList<>();
@@ -217,6 +218,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     @Override
     public void renderEvent() {
         eventList = getParentEventList();
+
         if(eventList!=null){
             upcomming_event.setAdapter(new EventAdapter(eventList));
         }
@@ -224,7 +226,8 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
 
     @Override
     public void renderUser() {
-        user = getParentUser();
+        //user = getParentUser();
+        user.loadProfileImage(getActivity(), pageUserID, profileImage);
         FirebaseAPI.getFirebaseData("User/" + pageUserID, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
