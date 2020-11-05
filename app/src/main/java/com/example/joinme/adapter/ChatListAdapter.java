@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +17,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Time;
+import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.FirebaseOptions;
@@ -40,9 +44,11 @@ public class ChatListAdapter {
     private String currentUid;
     private DatabaseReference chatRef;
     private DatabaseReference conversationListRef;
+    private User user;
 
-    public ChatListAdapter(Context context) {
+    public ChatListAdapter(Context context, User user) {
         this.context = context;
+        this.user = user;
         currentUid = FirebaseAPI.getUser().getUid();
         chatRef = FirebaseAPI.rootRef.child("Chat").child(currentUid);
         chatRef.keepSynced(true);
@@ -143,9 +149,10 @@ public class ChatListAdapter {
         }
     }
 
-    public FirebaseRecyclerAdapter<Conversation, ChatListViewHolder> chatListAdaptor() {
+    public FirebaseRecyclerAdapter<Conversation, ChatListViewHolder> chatListAdaptor(Query chatListQuery) {
+
         // order all messages by timestamp
-        Query chatListQuery = conversationListRef.orderByChild("time/timestamp");
+//        Query chatListQuery = conversationListRef.orderByChild("time/timestamp");
         chatListQuery.keepSynced(true);
         FirebaseRecyclerOptions<Conversation> options =
                 new FirebaseRecyclerOptions.Builder<Conversation>()
@@ -234,6 +241,7 @@ public class ChatListAdapter {
                                 Intent chatIntent = new Intent(context, ChatActivity.class);
                                 chatIntent.putExtra("friendUid", chatUserID);
                                 chatIntent.putExtra("friendUsername", finalFriendUsername);
+                                chatIntent.putExtra("currentUsername", user.getUsername());
                                 context.startActivity(chatIntent);
                             }
                         });

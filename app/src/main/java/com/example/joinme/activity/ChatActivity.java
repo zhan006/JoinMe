@@ -32,6 +32,7 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
+import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,7 @@ public class ChatActivity extends AppCompatActivity {
     private String friendUid;
     private String friendUsername;
     private String currentUid;
+    private String currentUsername;
 
     private MessageAdapter messageAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -94,8 +96,8 @@ public class ChatActivity extends AppCompatActivity {
 
         friendUid = getIntent().getStringExtra("friendUid");
         friendUsername = getIntent().getStringExtra("friendUsername");
+        currentUsername = getIntent().getStringExtra("currentUsername");
         currentUid = FirebaseAPI.getUser().getUid();
-
 
         initView();
         initData();
@@ -171,47 +173,49 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void add2Conversation(Time time) {
-        // update conversation time to get correct order
+
+        // update conversation time and name to get correct order
         FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid)
                 .child("time").setValue(time);
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid)
+                .child("username").setValue(friendUsername);
+
         FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
             .child("time").setValue(time);
-        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
+                .child("username").setValue(currentUsername);
 
-                // if chat user doesn't have any chat with current user, create one and add it to Firebase
-                if (!dataSnapshot.hasChild(friendUid)){
-                    Log.d(TAG, "onDataChange: add friend chat branch"+friendUid);
-                    Conversation currentConversation = new Conversation(time);
-
-                    Map conversations = new HashMap();
-                    conversations.put("ConversationList/" + currentUid + "/" +friendUid, currentConversation);
-                    conversations.put("ConversationList/" + friendUid + "/" + currentUid, currentConversation);
-
-                    FirebaseAPI.updateBatchData(conversations, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            if (databaseError != null){
-                                Log.d("CREATE_CONVERSATION", databaseError.getMessage().toString());
-                            }
-                        }
-                    });
-
-                }
-                else {
-//                    // update conversation time to get correct order
-//                    dataSnapshot.child(friendUid).child("time").getRef().setValue(time);
-//                    FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
-//                            .child("time").setValue(time);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                // if chat user doesn't have any chat with current user, create one and add it to Firebase
+////                if (!dataSnapshot.hasChild(friendUid)){
+//                Log.d(TAG, "onDataChange: add friend chat branch"+friendUid);
+//                Conversation currentConversation = new Conversation(time, friendUsername);
+//                Conversation friendConversation = new Conversation(time, currentUsername);
+//
+//                Map conversations = new HashMap();
+//                conversations.put("ConversationList/" + currentUid + "/" +friendUid, currentConversation);
+//                conversations.put("ConversationList/" + friendUid + "/" + currentUid, friendConversation);
+//
+//                FirebaseAPI.updateBatchData(conversations, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                        if (databaseError != null){
+//                            Log.d("CREATE_CONVERSATION", databaseError.getMessage().toString());
+//                        }
+//                    }
+//                });
+//
+//            }
+////            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     void loadMessages() {

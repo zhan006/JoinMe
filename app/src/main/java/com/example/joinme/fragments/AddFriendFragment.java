@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.AddFriendAdapter;
 import com.example.joinme.adapter.SearchConditionAdapter;
@@ -36,6 +37,8 @@ public class AddFriendFragment extends Fragment {
     private List<User> userList = new ArrayList<>();
 
     private FirebaseRecyclerAdapter<User, AddFriendAdapter.ViewHolder> addFriendAdapter;
+    private AddFriendAdapter adapter;
+    private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -70,7 +73,9 @@ public class AddFriendFragment extends Fragment {
     private void initUserList(View v) {
         RecyclerView userRecyclerView = v.findViewById(R.id.add_friends_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        addFriendAdapter = new AddFriendAdapter(getContext()).addFriendAdaptor();
+        user = ((MainActivity) getContext()).getUser();
+        adapter = new AddFriendAdapter(getContext(), user);
+        addFriendAdapter = adapter.addFriendAdaptor();
         userRecyclerView.setAdapter(addFriendAdapter);
         addFriendAdapter.startListening();
     }

@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
@@ -38,9 +39,12 @@ public class AddFriendAdapter{
     private static final String TAG = "AddFriendAdapter";
     private static final String currentUid = FirebaseAPI.getUser().getUid();
     private Context context;
+    private User user;
 
-    public AddFriendAdapter(Context context) {
+
+    public AddFriendAdapter(Context context, User user) {
         this.context = context;
+        this.user = user;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -234,6 +238,7 @@ public class AddFriendAdapter{
         chatActivity.putExtra("friendUid", userID);
         chatActivity.putExtra("friendUsername",
                 username);
+        chatActivity.putExtra("currentUsername", user.getUsername());
         context.startActivity(chatActivity);
     }
 }
