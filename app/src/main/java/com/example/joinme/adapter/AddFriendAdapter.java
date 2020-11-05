@@ -113,28 +113,19 @@ public class AddFriendAdapter{
         }
     }
 
-    public FirebaseRecyclerAdapter<User, ViewHolder> addFriendAdaptor() {
-        // TODO: order users based on search condition
-        Query userQuery = FirebaseAPI.rootRef.child("User");
+    public FirebaseRecyclerAdapter<User, ViewHolder> addFriendAdaptor(Query userQuery) {
+
+        Query test = FirebaseAPI.rootRef.child("User").child("gender").equalTo("Female");
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(userQuery, User.class)
                 .build();
-//        Log.d(TAG, "addFriendAdaptor: userQuery => " + userQuery.toString());
+
         return new FirebaseRecyclerAdapter<User, ViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
                 // retrieve user uid
                 String userID = getRef(position).getKey();
 
-//                holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.d("addfriend",userID);
-//                        FragmentManager fm = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
-//                        utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
-//                    }
-//                });
-//                Log.d(TAG, "addFriendAdaptor: userID => " + userID);
                 FirebaseAPI.getFirebaseData("User/" + userID, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

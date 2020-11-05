@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,11 @@ public class AddFriendFragment extends Fragment {
     private List<User> userList = new ArrayList<>();
 
     private FirebaseRecyclerAdapter<User, AddFriendAdapter.ViewHolder> addFriendAdapter;
+    private RecyclerView userRecyclerView;
     private AddFriendAdapter adapter;
     private User user;
+    private EditText searchCondition;
+    private ImageButton searchBtn;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -54,39 +59,36 @@ public class AddFriendFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_friend, container, false);
-        EditText searchBar = v.findViewById(R.id.search_text);
-        searchBar.setHint("search by name or ID");
+        searchCondition = v.findViewById(R.id.search_text);
+        searchCondition.setHint("search by username");
+        searchBtn = v.findViewById(R.id.search_button);
         TitleBar bar = v.findViewById(R.id.add_friend_title);
         bar.setOnClickBackListener((view)->{
             getActivity().getSupportFragmentManager().popBackStack();
         });
 
         initUserList(v);
-//        loadUsers();
-//        initHobbyList(v);
         initGenderList(v);
         initAgeList(v);
 
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchByName(searchCondition.getText().toString());
+            }
+        });
         return v;
     }
 
     private void initUserList(View v) {
-        RecyclerView userRecyclerView = v.findViewById(R.id.add_friends_list);
+        userRecyclerView = v.findViewById(R.id.add_friends_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         user = ((MainActivity) getContext()).getUser();
         adapter = new AddFriendAdapter(getContext(), user);
-        addFriendAdapter = adapter.addFriendAdaptor();
+        addFriendAdapter = adapter.addFriendAdaptor(FirebaseAPI.rootRef.child("User"));
         userRecyclerView.setAdapter(addFriendAdapter);
         addFriendAdapter.startListening();
     }
-
-//    private void initHobbyList(View v) {
-//        RecyclerView hobbyRecyclerView = v.findViewById(R.id.hobby_search_list);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//        hobbyRecyclerView.setLayoutManager(layoutManager);
-//        hobbyRecyclerView.setAdapter(new SearchConditionAdapter(initHobbies()));
-//    }
 
     private void initGenderList(View v) {
         RecyclerView genderRecyclerView = v.findViewById(R.id.gender_search_list);
@@ -132,15 +134,6 @@ public class AddFriendFragment extends Fragment {
         });
     }
 
-//    List<String> initHobbies() {
-//        ArrayList<String> hobbies = new ArrayList<>();
-//        hobbies.add("Guitar");
-//        hobbies.add("Movie");
-//        hobbies.add("Basketball");
-//        hobbies.add("Singing");
-//        return hobbies;
-//    }
-
     List<String> initGender() {
         ArrayList<String> genders = new ArrayList<>();
         genders.add("Girl");
@@ -156,5 +149,18 @@ public class AddFriendFragment extends Fragment {
         age.add("21 - 22");
         age.add("> 22");
         return age;
+    }
+
+    private void searchByName(String target) {
+        Query userQuery;
+        if (target.equals("")) {
+            userQuery = FirebaseAPI.rootRef.child("User");
+        } else {
+            userQuery = FirebaseAPI.rootRef.child("User").orderByChild("username").startAt(target).endAt(target+"\uf8ff");
+        }
+//        FirebaseAPI.rootRef.child("User").runTransaction();
+        addFriendAdapter = adapter.addFriendAdaptor(userQuery);
+        userRecyclerView.setAdapter(addFriendAdapter);
+        addFriendAdapter.startListening();
     }
 }
