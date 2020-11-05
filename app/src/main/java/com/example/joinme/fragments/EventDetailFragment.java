@@ -1,6 +1,5 @@
 package com.example.joinme.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +42,7 @@ import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +50,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class EventDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "EventDetailFragment";
@@ -59,7 +58,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     private CheckBox going;
     private ImageButton hostProfileBtn, followOrganiser, messageOrganiser;
     private ImageView hostProfile;
-    private Context mContext;
     private TextView eventDate, eventName, eventLocation, eventDateTime, eventGroupSize,
             eventCurrentParticipants, eventHost, eventDetails, eventHostName, eventHostAbout;
     private long count;
@@ -67,12 +65,7 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     private ArrayList<Comment> commentList = new ArrayList<>();
     private BottomSheetDialog dialog;
     private RecyclerView commentRecyclerView;
-//    private CommentAdapter commentAdapter;
-
-//    private FirebaseRecyclerAdapter<Comment, CommentAdapter.ViewHolder> commentAdapter;
     private CommentAdapter addCommentAdapter;
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -83,7 +76,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -92,41 +84,14 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
         uid = ((MainActivity) getActivity()).getUid();
-        eventDate = (TextView) v.findViewById(R.id.event_date);
-        eventName = (TextView) v.findViewById(R.id.event_name);
-        going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+
+
         TitleBar bar = v.findViewById(R.id.event_title_bar);
         bar.setOnClickBackListener((view)->{
             getActivity().getSupportFragmentManager().popBackStack();
         });
-        eventLocation = (TextView) v.findViewById(R.id.event_location_text);
-        eventDateTime = (TextView) v.findViewById(R.id.event_datetime_text);
-        eventGroupSize = (TextView) v.findViewById(R.id.event_groupsize_text);
-        eventCurrentParticipants = (TextView) v.findViewById(R.id.event_participants_number);
-        eventHost = (TextView) v.findViewById(R.id.event_host_text);
 
-        hostProfileBtn = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
-//        organiserProfile.setOnClickListener(this);
-
-        followOrganiser = (ImageButton) v.findViewById(R.id.event_follow_btn);
-        followOrganiser.setOnClickListener(this);
-
-        messageOrganiser = (ImageButton) v.findViewById(R.id.event_message_icon);
-        messageOrganiser.setOnClickListener(this);
-
-        eventDetails = (TextView) v.findViewById(R.id.event_details);
-
-        eventHostName = (TextView) v.findViewById(R.id.event_host_name);
-        eventHostAbout = (TextView) v.findViewById(R.id.event_host_about);
-        hostProfile = (ImageView) v.findViewById(R.id.host_profile_photo);
-
-
-        makeComment = (Button) v.findViewById(R.id.event_details_comment_btn);
-        makeComment.setOnClickListener(this);
-
-
-        commentRecyclerView = v.findViewById(R.id.event_comments_area);
-
+        setButtons(v);
         initEventDetail(v);
         initCommentList(v);
 
@@ -171,6 +136,40 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             }
         });
         return v;
+    }
+
+
+    public void setButtons(View v){
+        eventDate = (TextView) v.findViewById(R.id.event_date);
+        eventName = (TextView) v.findViewById(R.id.event_name);
+        going = (CheckBox) v.findViewById(R.id.event_checkbox_going);
+        eventLocation = (TextView) v.findViewById(R.id.event_location_text);
+        eventDateTime = (TextView) v.findViewById(R.id.event_datetime_text);
+        eventGroupSize = (TextView) v.findViewById(R.id.event_groupsize_text);
+        eventCurrentParticipants = (TextView) v.findViewById(R.id.event_participants_number);
+        eventHost = (TextView) v.findViewById(R.id.event_host_text);
+
+        hostProfileBtn = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
+//        organiserProfile.setOnClickListener(this);
+
+        followOrganiser = (ImageButton) v.findViewById(R.id.event_follow_btn);
+        followOrganiser.setOnClickListener(this);
+
+        messageOrganiser = (ImageButton) v.findViewById(R.id.event_message_icon);
+        messageOrganiser.setOnClickListener(this);
+
+        eventDetails = (TextView) v.findViewById(R.id.event_details);
+
+        eventHostName = (TextView) v.findViewById(R.id.event_host_name);
+        eventHostAbout = (TextView) v.findViewById(R.id.event_host_about);
+        hostProfile = (ImageView) v.findViewById(R.id.host_profile_photo);
+
+
+        makeComment = (Button) v.findViewById(R.id.event_details_comment_btn);
+        makeComment.setOnClickListener(this);
+
+
+        commentRecyclerView = v.findViewById(R.id.event_comments_area);
     }
 
     @Override
@@ -225,10 +224,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                         if (!TextUtils.isEmpty((replyContent))) {
                             dialog.dismiss();
                             user = ((MainActivity) getActivity()).getUser();
-                            Comment newComment = new Comment(user, currentEventID,replyContent);
-                            Log.d(TAG, "You typed in " + newComment.getCommentContent());
-                            Log.d(TAG, "!!!!!!!!!!!!!!"+newComment.toString());
-                            addCommentAdapter.addNewComment(newComment);
+                            Comment newComment = new Comment(user, uid,currentEventID,replyContent);
+//                            addCommentAdapter.addNewComment(newComment);
                             createComment(newComment);
                             Toast.makeText(getActivity(), "Comment successfully!",Toast.LENGTH_SHORT).show();
 
@@ -248,17 +245,12 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
 
     public void createComment(Comment comment){
         String key = FirebaseAPI.pushFirebaseNode("EventCommentList/"+currentEventID);
-        Log.d(TAG, "@EventDetailFragment, the eventID is "+ currentEventID);
-        Toast.makeText(getActivity(), "THe event is"+currentEventID, Toast.LENGTH_SHORT).show();
         comment.setCommentID(key);
         comment.setCommentContent(comment.getCommentContent());
         comment.setFirstName(comment.getFirstName());
         comment.setDateTime(comment.getDateTime());
         comment.setProfileImgID(comment.getProfileImageId());
         comment.setUserID(comment.getUserID());
-//        comment.setEventID(comment.getEventID());
-        Log.d(TAG, "@EventDetailFragment_step2, the EventID is "+ comment.getEventID());
-
         FirebaseAPI.addComment(comment, key, currentEventID, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
@@ -269,12 +261,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                 else{
                     Snackbar.make(getView(),error.getDetails(),Snackbar.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
     }
 
     @Override
@@ -284,29 +272,46 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void initCommentList(View v) {
-
-//        RecyclerView commentRecyclerView = v.findViewById(R.id.event_comments_area);
+        String path = "EventCommentList/" + currentEventID;
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        commentAdapter = new CommentAdapter(getActivity(),currentEventID,commentList).commentAdapter();
 
-        addCommentAdapter = new CommentAdapter(getActivity(), currentEventID, commentList);
-        commentRecyclerView.setAdapter(addCommentAdapter);
+        FirebaseAPI.rootRef.child(path).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Comment comment = snapshot.getValue(Comment.class);
+                if (comment != null){
+                    commentList.add(comment);
+                    addCommentAdapter = new CommentAdapter(getActivity(), currentEventID, commentList);
+                    commentRecyclerView.setAdapter(addCommentAdapter);
+                }
+            }
 
-//        commentAdapter.startListening();
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
 
-
-
-
-
-
-
     public void initEventDetail(View view) {
-
         Event currentEvent = (Event) getArguments().getSerializable("current_event");
-
         currentEventID = currentEvent.getId();
         eventOrganizerUID = currentEvent.getOrganizerid();
         eventName.setText(currentEvent.getEventName());
@@ -315,13 +320,10 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         eventDateTime.setText(currentEvent.getDatetime().toString());
         eventGroupSize.setText("Group size " + currentEvent.getMin() + "-" + currentEvent.getMax() + " ppl");
         eventDetails.setText(currentEvent.getDescription());
-
         setGoingButton();
         setEventCurrentParticipants();
         setHostName();
         setHostSection();
-
-
     }
 
     public void setGoingButton(){
@@ -334,20 +336,14 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                         if(map!=null && map.getOrDefault(uid,false)){
                             going.setChecked(true);
                         }
-
                         Log.d("event detail",snapshot.toString());
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 }
         );
-//        if(FirebaseAPI.rootRef.child("EventMember").child(currentEventID).child(uid) !=null){
-//
-//            going.setChecked(true);
-//        }
     }
 
     public void setEventCurrentParticipants(){
@@ -355,12 +351,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 count = snapshot.getChildrenCount();
-                Log.d(TAG, "The event ID is "+ currentEventID);
-                Log.d(TAG, "The count is " + count);
                 eventCurrentParticipants.setText("Current Participants: " + count + " ppl");
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -373,7 +365,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 hostName = snapshot.child("username").getValue().toString();
-
                 eventHost.setText("Hosted by "+ hostName);
                 eventHostName.setText(hostName);
             }
@@ -421,9 +412,9 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         FirebaseAPI.getFirebaseData("UserFollowing/" + uid, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean folloingHost = snapshot.hasChild(eventOrganizerUID);
+                boolean followingHost = snapshot.hasChild(eventOrganizerUID);
 
-                if(folloingHost){
+                if(followingHost){
                     followOrganiser.setImageResource(R.drawable.tick_icon);
                     followOrganiser.setVisibility(View.GONE);
                 }else{
@@ -437,9 +428,4 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             }
         });
     }
-
-
-
-
-
 }

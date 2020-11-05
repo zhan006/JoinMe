@@ -22,7 +22,8 @@ public class Comment {
 
     }
 
-    public Comment(User user, String eventID, String commentContent){
+    public Comment(User user, String userID, String eventID, String commentContent){
+        this.userID = userID;
         this.firstName = user.getFirstName();
         this.profileImgID = user.getProfileImage();
         this.commentContent = commentContent;
