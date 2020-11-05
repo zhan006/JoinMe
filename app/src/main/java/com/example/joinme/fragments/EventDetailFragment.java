@@ -382,11 +382,11 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User host = snapshot.getValue(User.class);
                 String about = host.getAbout();
-                String image = snapshot.child("profileImage").getValue().toString();
-                if (!about.equals("null")){
+                String image = snapshot.child("profileImage").getValue(String.class);
+                if (about!=null){
                     eventHostAbout.setText(host.getAbout());
                 }
-                if (!image.equals("null")){
+                if (image!=null){
                     Glide.with(getContext()).load(image).into(hostProfile);
                 }
 
