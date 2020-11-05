@@ -2,16 +2,10 @@ package com.example.joinme.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +13,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,52 +33,38 @@ import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Message;
-import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
-import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
-import static android.app.Activity.RESULT_OK;
 
-public class visitorProfileFragment extends Fragment implements UserRenderable, EventRenderable {
+//This fragment is to show user profile to visitors.
+//Comparing to user's own profile page, some private information is not shown.
+public class visitorProfileFragment extends Fragment implements UserRenderable{
     public static final int FRIEND_DISPLAY=3;
-    public static final int TAKE_PHOTO=1;
+
+    //Main components
     private TextView aboutMe,name,location;
-    private ImageButton addAlbum;
     private ImageView profileImage;
-    private Button followButton,seeFriend,viewMorePhoto;
-    private ArrayList<Event> eventList;
+    private Button followButton;
+
     private ArrayList<String> imageUrls;
-    private ArrayList<String> followingUids;
-    private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-    private RecyclerView upcomming_event,albums,friends;
-    private User user;
-    private User pageUser;
-    private RecyclerView.Adapter adapter,friendAdapter;
-    private String pageUserID;
-    private final int PHOTO = 1;
-    RecyclerView friendGallery;
+    //private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
+    //private User user;
+    //private User pageUser;
+
+    //private RecyclerView upcoming_event;
+    private RecyclerView albums;
+    private RecyclerView.Adapter adapter;
+    private final String pageUserID;
+    //RecyclerView friendGallery;
     public visitorProfileFragment(String uid){
         super();
         this.pageUserID = uid;
@@ -109,21 +87,26 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         profileImage = view.findViewById(R.id.profile_image);
         aboutMe = view.findViewById(R.id.aboutMe);
         albums = view.findViewById(R.id.albums);
-        addAlbum=view.findViewById(R.id.addAlbum);
+        ImageButton addAlbum = view.findViewById(R.id.addAlbum);
         name = view.findViewById(R.id.name);
-        viewMorePhoto = view.findViewById(R.id.view_more_photo);
+        Button viewMorePhoto = view.findViewById(R.id.view_more_photo);
         location = view.findViewById(R.id.location);
         followButton = view.findViewById(R.id.edit_profile);
-        seeFriend = view.findViewById(R.id.see_Friend);
+        Button seeFriend = view.findViewById(R.id.see_Friend);
         seeFriend.setVisibility(View.GONE);
-        friends = view.findViewById(R.id.friend_gallery);
-        view.findViewById(R.id.friend_gallery).setVisibility(View.GONE);
+        RecyclerView friends = view.findViewById(R.id.friend_gallery);
+        RelativeLayout friend_view = view.findViewById(R.id.friend_view);
+        friend_view.setVisibility(View.GONE);
         addAlbum.setVisibility(View.GONE);
         imageUrls = new ArrayList<>();
-        followingUids = new ArrayList<>();
-        friendGallery = view.findViewById(R.id.friend_gallery);
-        upcomming_event = view.findViewById(R.id.profile_upcomming_event);
-        upcomming_event.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        ArrayList<String> followingUids = new ArrayList<>();
+        //friendGallery = view.findViewById(R.id.friend_gallery);
+        RecyclerView profile_upcomming_event= view.findViewById(R.id.profile_upcomming_event);
+        //profile_upcomming_event.setVisibility(View.GONE);
+        RelativeLayout text_upcoming_event= view.findViewById(R.id.text_upcoming_event);
+        //text_upcoming_event.setVisibility(View.GONE);
+        //upcoming_event = view.findViewById(R.id.profile_upcomming_event);
+        //upcoming_event.setLayoutManager(new LinearLayoutManager(this.getContext()));
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
         LinearLayoutManager lm1 = new LinearLayoutManager(getContext());
@@ -131,15 +114,15 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         albums.setLayoutManager(lm);
         friends.setLayoutManager(lm1);
         adapter = new photoAdapter(imageUrls,getContext());
-        friendAdapter = new FriendPhotoAdapter(followingUids,getContext());
+        RecyclerView.Adapter friendAdapter = new FriendPhotoAdapter(followingUids, getContext());
         albums.setAdapter(adapter);
         friends.setAdapter(friendAdapter);
-        TextView albumText = view.findViewById(R.id.album_text);
+        //TextView albumText = view.findViewById(R.id.album_text);
         viewMorePhoto.setOnClickListener((v)->{
             Log.d("profile","clicked");
-            utils.replaceFragment(getActivity().getSupportFragmentManager(),new Album_fragment(pageUserID),null);
+            utils.replaceFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),new Album_fragment(pageUserID),null);
         });
-        renderEvent();
+        //renderEvent();
         renderUser();
         initAlbum();
         return view;
@@ -209,25 +192,30 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         events.add(new Event("League of Legends","netfish cafe",new DateTime()));
         return events;
     }
+
+    /*
     public ArrayList<Event> getParentEventList(){
-        return ((MainActivity)getActivity()).getEventList();
-    }
+        return ((MainActivity) Objects.requireNonNull(getActivity())).getEventList();
+    }*/
+
+    /*
     public User getParentUser(){
-        return ((MainActivity)getActivity()).getUser();
-    }
+        return ((MainActivity) Objects.requireNonNull(getActivity())).getUser();
+    }*/
+
+    /*
     @Override
     public void renderEvent() {
-        eventList = getParentEventList();
+        ArrayList<Event> eventList = getParentEventList();
 
-        if(eventList!=null){
-            upcomming_event.setAdapter(new EventAdapter(eventList));
+        if(eventList !=null){
+            upcoming_event.setAdapter(new EventAdapter(eventList));
         }
-    }
+    }*/
 
     @Override
     public void renderUser() {
-        //user = getParentUser();
-        user.loadProfileImage(getActivity(), pageUserID, profileImage);
+        User.loadProfileImage(getActivity(), pageUserID, profileImage);
         FirebaseAPI.getFirebaseData("User/" + pageUserID, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -240,40 +228,6 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
                 if (snapshot.hasChild("location")) {
                     setLocation(snapshot.child("location").child("address").getValue(String.class));
                 }
-                /*
-                // load profile image
-                holder.setProfile(userID);
-                holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewUserProfile();
-                    }
-                });
-
-                // view user's profile
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewUserProfile();
-                    }
-                });
-
-                // follow this user
-                holder.followBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        followUser(userID);
-                    }
-                });
-
-                // send message to this user
-                holder.messageBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        chat(userID, snapshot.child("username").getValue().toString(), v);
-                    }
-                });*/
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -310,9 +264,8 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
 
     void follow() {
         String userID = FirebaseAPI.getUser().getUid();
-        String followingUserPath = "FollowingUser/" + pageUserID+ "/" + userID;
-        String userFollowingPath = "UserFollowing/" + userID + "/" + pageUserID;
-
+        //String followingUserPath = "FollowingUser/" + pageUserID+ "/" + userID;
+        //String userFollowingPath = "UserFollowing/" + userID + "/" + pageUserID;
         Log.d("Follow", userID+"> "+pageUserID);
         FirebaseAPI.rootRef.child("FollowingUser").child(pageUserID).child(userID).setValue(true);
         FirebaseAPI.rootRef.child("UserFollowing").child(userID).child(pageUserID).setValue(true);

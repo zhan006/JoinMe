@@ -8,7 +8,8 @@ import java.util.HashMap;
 public class location implements Serializable {
     public double latitude,longtitude;
     public String address;
-    public location(){};
+    public location(){}
+
     public location(HashMap data){
         latitude = (double)data.get("latitude");
         longtitude = (double)data.get("longtitude");
@@ -49,6 +50,8 @@ public class location implements Serializable {
         return address;
     }
 
+
+    //calculate the distance to different format of locations.
     public double distanceTo(location l){
         return GetDistance(longtitude,latitude,l.getLongitude(),l.getLatitude());
     }
@@ -61,6 +64,7 @@ public class location implements Serializable {
         return GetDistance(longtitude,latitude,lo,la);
     }
 
+    //Using formula provided By GOOGLE MAP
     private static final  double EARTH_RADIUS = 6378137;
     private static double rad(double d){
         return d * Math.PI / 180.0;

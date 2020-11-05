@@ -171,6 +171,7 @@
                 android:paddingRight="25dp"
                 android:text="I am a food Lover"/>
             <RelativeLayout
+                android:id = "@+id/text_upcoming_event"
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
