@@ -123,13 +123,14 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
         friends.setAdapter(friendAdapter);
         TextView albumText = view.findViewById(R.id.album_text);
         viewMorePhoto.setOnClickListener((v)->{
-            Log.d("profile","clicked");
+            Log.d("profile",uid);
+
             utils.replaceFragment(getActivity().getSupportFragmentManager(),new Album_fragment(uid),null);
         });
         renderEvent();
         renderUser();
         initAlbum();
-//        initFriends(1);
+        initFriends(1);
         return view;
     }
 
@@ -168,7 +169,8 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
                     final StorageReference filepath = FirebaseAPI.getStorageRef(
                             "album/" +uid+"/"+now.getTimeInMillis());
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+//                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] bytes = baos.toByteArray();
                     UploadTask uploadTask = filepath.putBytes(bytes);
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -280,13 +282,7 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             }
         });
     }
-    public List<Event> initDummyEvents(){
-        ArrayList<Event> events = new ArrayList<Event>();
-        events.add(new Event("Hang out together","38 Little Lonsdale",new DateTime()));
-        events.add(new Event("Eat dinner","1 Bouverie",new DateTime()));
-        events.add(new Event("League of Legends","netfish cafe",new DateTime()));
-        return events;
-    }
+
     public ArrayList<Event> getParentEventList(){
         return ((MainActivity)getActivity()).getEventList();
     }

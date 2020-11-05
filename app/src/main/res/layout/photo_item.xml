@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deletePhoto"
+        android:src="@drawable/baseline_delete_black_18dp"
+        android:translationZ="1dp"
+        android:background="@color/white"
+        android:layout_alignRight="@id/img"
+        android:layout_alignTop="@id/img"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible"
+        />
 
     <ImageView
         android:id="@+id/img"
@@ -14,4 +27,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

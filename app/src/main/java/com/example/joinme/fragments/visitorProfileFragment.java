@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.text.CaseMap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.transition.TransitionInflater;
@@ -41,10 +43,10 @@ import com.example.joinme.interfaces.EventRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
 import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.NavBar;
+import com.example.joinme.reusableComponent.TitleBar;
 import com.example.joinme.utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -83,6 +85,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     private RecyclerView upcomming_event,albums,friends;
     private User user;
     private User pageUser;
+    private TitleBar bar;
     private RecyclerView.Adapter adapter,friendAdapter;
     private String pageUserID;
     private final int PHOTO = 1;
@@ -112,6 +115,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         addAlbum=view.findViewById(R.id.addAlbum);
         name = view.findViewById(R.id.name);
         viewMorePhoto = view.findViewById(R.id.view_more_photo);
+        bar = view.findViewById(R.id.profile_title);
         location = view.findViewById(R.id.location);
         followButton = view.findViewById(R.id.edit_profile);
         seeFriend = view.findViewById(R.id.see_Friend);
@@ -137,6 +141,10 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         viewMorePhoto.setOnClickListener((v)->{
             Log.d("profile","clicked");
             utils.replaceFragment(getActivity().getSupportFragmentManager(),new Album_fragment(pageUserID),null);
+        });
+        bar.setBackable(true);
+        bar.setOnClickBackListener((v)->{
+            getActivity().getSupportFragmentManager().popBackStack();
         });
         renderEvent();
         renderUser();
@@ -216,60 +224,46 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     }
     @Override
     public void renderEvent() {
-        eventList = getParentEventList();
-        if(eventList!=null){
-            upcomming_event.setAdapter(new EventAdapter(eventList));
-        }
+        ArrayList<String> eventIDs = new ArrayList<String>();
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String,Boolean> map = (HashMap) snapshot.getValue();
+                Log.d("event",map.toString());
+                Bundle bd = new Bundle();
+                if(map!=null){
+                    for(String k : map.keySet()){
+                        if(map.get(k)){eventIDs.add(k);}
+                    }
+                }
+                if(eventIDs!=null){
+                    upcomming_event.setAdapter(new EventAdapter(eventIDs));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseAPI.getFirebaseData("AttendingList/"+pageUserID,eventListener);
+
     }
 
     @Override
     public void renderUser() {
-        user = getParentUser();
+        User.loadProfileImage(getContext(),pageUserID,profileImage);
         FirebaseAPI.getFirebaseData("User/" + pageUserID, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChild("username")) {
-                    setName(snapshot.child("username").getValue(String.class));
+                pageUser = snapshot.getValue(User.class);
+                setName(pageUser.username);
+                setAboutMe(pageUser.about);
+                if(pageUser.getLocation()!=null){
+                    setLocation(pageUser.getLocation().getAddress());
                 }
-                if (snapshot.hasChild("about")) {
-                    setAboutMe(snapshot.child("about").getValue(String.class));
-                }
-                if (snapshot.hasChild("location")) {
-                    setLocation(snapshot.child("location").child("address").getValue(String.class));
-                }
-                /*
-                // load profile image
-                holder.setProfile(userID);
-                holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewUserProfile();
-                    }
-                });
 
-                // view user's profile
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewUserProfile();
-                    }
-                });
-
-                // follow this user
-                holder.followBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        followUser(userID);
-                    }
-                });
-
-                // send message to this user
-                holder.messageBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        chat(userID, snapshot.child("username").getValue().toString(), v);
-                    }
-                });*/
+                bar.setTitle(pageUser.username);
 
             }
             @Override
