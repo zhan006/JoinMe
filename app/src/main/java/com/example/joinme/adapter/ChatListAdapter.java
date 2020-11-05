@@ -182,14 +182,32 @@ public class ChatListAdapter {
                         if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
                             msg = "Image";
                         }
-
+                        Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
 
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                        String msg = null;
+                        boolean seen = false;
+                        String type = "text";
+                        if (snapshot.hasChild("messageContent")) {
+                            msg = snapshot.child("messageContent").getValue().toString();
+                        }
+                        if (snapshot.hasChild("seen")) {
+                            seen = (boolean) snapshot.child("seen").getValue();
+                            conversationListRef.child(chatUserID).child("seen").setValue(seen);
+                        }
+                        if (snapshot.hasChild("time")) {
+                            Time time = snapshot.child("time").getValue(Time.class);
+                            holder.setLatestMsgTime(time.time());
+                        }
+                        if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
+                            msg = "Image";
+                        }
+                        Log.d(TAG, "onChildChanged: "+seen);;
+                        holder.setLatestMsg(msg, seen);
                     }
 
                     @Override

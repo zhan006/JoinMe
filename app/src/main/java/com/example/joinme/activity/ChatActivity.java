@@ -148,41 +148,12 @@ public class ChatActivity extends AppCompatActivity {
         messageRecyclerView.setAdapter(messageAdapter);
     }
 
-    // hardcode testing data
-    void initMessages() {
-        messageList.add(new Message("hello message 1", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 1-1", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-        messageList.add(new Message("hello message 2", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 3", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 3-3", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-
-        messageList.add(new Message("hello message 4", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 5", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 6", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 7", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        Message message = new Message("hello message 8", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false);
-        messageList.add(message);
-
-        Log.d(TAG, "onDataChange: datasnapshot message => "+message.toString());
-    }
-
     // add to conversation list
     void add2Conversation(Time time) {
-        Conversation conversation = new Conversation(false, time);
-        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).setValue(conversation);
-        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid).setValue(conversation);
+        Conversation currentConversation = new Conversation(true, time);
+        Conversation friendConversation = new Conversation(false, time);
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).setValue(currentConversation);
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid).setValue(friendConversation);
     }
 
     void loadMessages() {
@@ -324,7 +295,7 @@ public class ChatActivity extends AppCompatActivity {
         if (photoFile != null) {
 
             // get uri of the file
-            // remembeer to add the permision
+            // remember to add the permission
             Uri photoURI = FileProvider.getUriForFile(this,
                     "com.example.joinme.fileprovider",
                     photoFile);

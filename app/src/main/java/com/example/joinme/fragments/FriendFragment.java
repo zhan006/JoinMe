@@ -83,16 +83,6 @@ public class FriendFragment extends Fragment {
         chatListAdapter.startListening();
     }
 
-//    List<Conversation> initFriend(){
-//        ArrayList<Conversation> conversationArrayList = new ArrayList<>();
-//        conversationArrayList.add(new Conversation("Abby",new Message("Yuema","text","userA",new Time(), false)));
-//        conversationArrayList.add(new Conversation("Jinping",new Message("Laqingdan","text","userA",new Time(), false)));
-//        conversationArrayList.add(new Conversation("Ming",new Message("gou","text","userA",new Time(),false)));
-//        conversationArrayList.add(new Conversation("Shit",new Message("niubiniubi","text","userA",new Time(),false)));
-//        conversationArrayList.add(new Conversation("Shino",new Message("Nilaidangzhuxi","text","userA",new Time(),false)));
-//        return conversationArrayList;
-//    }
-
     /**
      * Replace by Add Friend Fragment
      */
