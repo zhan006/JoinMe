@@ -216,7 +216,6 @@ public class AddFriendAdapter{
         };
     }
 
-    // TODO: direct to profile page
     private void viewUserProfile(String userID) {
         FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         utils.replaceFragment(fm, new visitorProfileFragment(userID), null);

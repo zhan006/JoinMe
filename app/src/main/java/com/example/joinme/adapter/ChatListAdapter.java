@@ -175,7 +175,7 @@ public class ChatListAdapter {
                         }
                         Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
-                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
+//                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
                     }
 
                     @Override
@@ -191,7 +191,7 @@ public class ChatListAdapter {
                         }
                         Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
-                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
+//                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
 
                     }
 

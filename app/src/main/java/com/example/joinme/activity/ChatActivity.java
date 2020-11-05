@@ -157,7 +157,7 @@ public class ChatActivity extends AppCompatActivity {
                 // if chat user doesn't have any chat with current user, create one and add it to Firebase
                 if (!dataSnapshot.hasChild(friendUid)){
                     Log.d(TAG, "onDataChange: add friend chat branch"+friendUid);
-                    Conversation currentConversation = new Conversation(false, time);
+                    Conversation currentConversation = new Conversation(time);
 
                     Map conversations = new HashMap();
                     conversations.put("ConversationList/" + currentUid + "/" +friendUid, currentConversation);
@@ -247,7 +247,7 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
+//        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
     }
 
     void sendMessage() {
