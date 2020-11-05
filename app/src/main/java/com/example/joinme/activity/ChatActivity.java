@@ -82,6 +82,8 @@ public class ChatActivity extends AppCompatActivity {
     private FileInputStream is = null;
     private Bitmap bitmap;
 
+    private ValueEventListener chatListener;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +130,10 @@ public class ChatActivity extends AppCompatActivity {
         // set friend username in title bar
         TitleBar titleBar = findViewById(R.id.chat_title_bar);
         titleBar.setTitle(this.friendUsername);
-        titleBar.setOnClickBackListener((v)->finish());
+        titleBar.setOnClickBackListener((v)-> {
+            FirebaseAPI.rootRef.child("Chat").child(currentUid).child(friendUid).removeEventListener(chatListener);
+            finish();
+        });
 
         messageRecyclerView = findViewById(R.id.chat_message_list);
         inputText = findViewById(R.id.chat_input_message);
@@ -228,8 +233,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void markMessageAsSeen(){
-        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
-                this.friendUid, new ValueEventListener() {
+        Log.d(TAG, "markMessageAsSeen: current "+currentUid + "    friend "+friendUid);
+        chatListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // update all messages under this chat to be seen
@@ -246,7 +251,9 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
+                this.friendUid, chatListener);
 //        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
     }
 
@@ -270,6 +277,7 @@ public class ChatActivity extends AppCompatActivity {
 
             // Push current message to both current user's chat and friend's chat path
             Map<String, Object> messagePush = new HashMap<>();
+            Log.d(TAG, "sendMessage: message sent => "+message);
             messagePush.put(currentUserChatPath + "/" + messageID, message);
             messagePush.put(friendChatPath + "/" + messageID, message);
 
@@ -490,4 +498,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }
