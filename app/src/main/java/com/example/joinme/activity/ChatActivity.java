@@ -41,6 +41,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -148,41 +149,37 @@ public class ChatActivity extends AppCompatActivity {
         messageRecyclerView.setAdapter(messageAdapter);
     }
 
-    // hardcode testing data
-    void initMessages() {
-        messageList.add(new Message("hello message 1", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 1-1", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-        messageList.add(new Message("hello message 2", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 3", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 3-3", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-
-        messageList.add(new Message("hello message 4", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 5", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 6", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 7", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        Message message = new Message("hello message 8", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false);
-        messageList.add(message);
-
-        Log.d(TAG, "onDataChange: datasnapshot message => "+message.toString());
-    }
-
-    // add to conversation list
     void add2Conversation(Time time) {
-        Conversation conversation = new Conversation(false, time);
-        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).setValue(conversation);
-        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid).setValue(conversation);
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // if chat user doesn't have any chat with current user, create one and add it to Firebase
+                if (!dataSnapshot.hasChild(friendUid)){
+                    Log.d(TAG, "onDataChange: add friend chat branch"+friendUid);
+                    Conversation currentConversation = new Conversation(false, time);
+
+                    Map conversations = new HashMap();
+                    conversations.put("ConversationList/" + currentUid + "/" +friendUid, currentConversation);
+                    conversations.put("ConversationList/" + friendUid + "/" + currentUid, currentConversation);
+
+                    FirebaseAPI.updateBatchData(conversations, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError != null){
+                                Log.d("CREATE_CONVERSATION", databaseError.getMessage().toString());
+                            }
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void loadMessages() {
@@ -204,6 +201,8 @@ public class ChatActivity extends AppCompatActivity {
                 // update last message time
                 TextView dateTime = findViewById(R.id.chat_time);
                 dateTime.setText(msg.getTime().toString());
+
+                markMessageAsSeen();
             }
 
             @Override
@@ -229,7 +228,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void markMessageAsSeen(){
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
+                this.friendUid, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // update all messages under this chat to be seen
@@ -246,9 +246,8 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        };
-        FirebaseAPI.getFirebaseData("Chat/"+this.currentUid+"/"+
-                this.friendUid, valueEventListener );
+        });
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
     }
 
     void sendMessage() {
@@ -324,7 +323,7 @@ public class ChatActivity extends AppCompatActivity {
         if (photoFile != null) {
 
             // get uri of the file
-            // remembeer to add the permision
+            // remember to add the permission
             Uri photoURI = FileProvider.getUriForFile(this,
                     "com.example.joinme.fileprovider",
                     photoFile);

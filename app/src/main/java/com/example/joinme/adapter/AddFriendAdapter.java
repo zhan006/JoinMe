@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
-import com.example.joinme.fragments.visitorProfileFragment;
 import com.example.joinme.objects.User;
 import com.example.joinme.utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -218,7 +217,7 @@ public class AddFriendAdapter{
 
     // TODO: direct to profile page
     private void viewUserProfile(String userID) {
-        FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
     }
 
