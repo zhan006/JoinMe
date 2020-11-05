@@ -91,7 +91,9 @@ public class DiscoverEventAdapter extends RecyclerView.Adapter<DiscoverEventAdap
         Event event = eventList.get(position);
         ((ViewHolder) holder).title.setText(event.getEventName());
         if(event.getDatetime()!=null) ((ViewHolder) holder).time.setText(event.getDatetime().toString());
-        if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(event.getLocation().getAddress()+" "+Math.round(event.getLocation().distanceTo(loc))+" meters");
+        if(event.getLocation()!=null) ((ViewHolder) holder).address.setText(
+                event.getLocation().getAddress()+"       "+
+                        String.format("%.2f", (Math.round(event.getLocation().distanceTo(loc))/1000.0))+" km");
 
     }
 

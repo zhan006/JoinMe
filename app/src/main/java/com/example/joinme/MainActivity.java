@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.fragments.HomePageFragment;
 import com.example.joinme.interfaces.EventRenderable;
+import com.example.joinme.interfaces.LocationRenderable;
 import com.example.joinme.interfaces.UserRenderable;
 import com.example.joinme.objects.Event;
 import com.example.joinme.objects.User;
@@ -229,6 +230,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("location", location.getLatitude()+"");
+                    Fragment f = getCurrentFragment();
+                    if(f instanceof LocationRenderable){
+                        ((LocationRenderable)f).initEvents();
+                    }
                 }
 
                 @Override

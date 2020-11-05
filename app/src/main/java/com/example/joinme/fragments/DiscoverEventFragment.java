@@ -28,6 +28,7 @@ import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.DiscoverEventAdapter;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.interfaces.LocationRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
 import com.example.joinme.reusableComponent.NavBar;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class  DiscoverEventFragment extends Fragment {
+public class  DiscoverEventFragment extends Fragment implements LocationRenderable {
 
     public RecyclerView eventRecyclerView;
     private Button study,entertainment, dailyLife;
@@ -281,30 +282,10 @@ public class  DiscoverEventFragment extends Fragment {
 
 
 
-    void initEvents(){
+    public void initEvents(){
+        curLoc = curLocation();
 
-        events = new ArrayList<>();/*
-        ArrayList<String> eventNames = new ArrayList<>();
-        ArrayList<location> locations = new ArrayList<>();
-        ArrayList<DateTime> datetimes = new ArrayList<>();
-        ArrayList<String> categorys = new ArrayList<>();
-        ArrayList<String> usr_ids = new ArrayList<>();
-        ArrayList<String> descriptions = new ArrayList<>();
-        ArrayList<String> ids = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            eventNames.add("EVENT"+Integer.toString(i));
-            locations.add(new location(38+0.003*i, -147+0.003*i,"Unimelb"));
-            datetimes.add(new DateTime());
-            categorys.add("Study");
-            usr_ids.add("1");
-            descriptions.add("");
-            ids.add(Integer.toString(i));
-        }
-        for(int i=0;i<5;i++){
-            Event e = new Event(eventNames.get(i),locations.get(i),datetimes.get(i),categorys.get(i),usr_ids.get(i),descriptions.get(i),ids.get(i));
-            events.add(e);
-
-        }*/
+        events = new ArrayList<>();
         DateTime curDate = new DateTime();
         Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+Long.valueOf(curDate.getTimeStamp()));
         FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
