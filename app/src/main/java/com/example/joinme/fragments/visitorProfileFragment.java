@@ -115,6 +115,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         location = view.findViewById(R.id.location);
         followButton = view.findViewById(R.id.edit_profile);
         seeFriend = view.findViewById(R.id.see_Friend);
+        seeFriend.setVisibility(View.GONE);
         friends = view.findViewById(R.id.friend_gallery);
         addAlbum.setVisibility(View.GONE);
         imageUrls = new ArrayList<>();
@@ -151,7 +152,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
             follow();
             followButton.setText("Already followed");
         });
-        seeFriend.setVisibility(View.GONE);
+
     }
 
     @Override
