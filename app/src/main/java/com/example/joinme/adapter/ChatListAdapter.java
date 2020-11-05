@@ -84,7 +84,6 @@ public class ChatListAdapter {
             } else {
                 return;
             }
-            Log.d(TAG, "setLatestMsg: current last msg=> "+latestMsg.getTypeface().toString());
             Log.d(TAG, "setLatestMsg: seen? "+seen);
             if (seen) {
                 unreadIcon.setVisibility(View.GONE);
@@ -93,7 +92,6 @@ public class ChatListAdapter {
                 unreadIcon.setVisibility(View.VISIBLE);
                 latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.BOLD);
             }
-            Log.d(TAG, "setLatestMsg: unread visibility: "+unreadIcon.getVisibility());
         }
 
         public ImageView getProfilePhoto() {
@@ -165,49 +163,36 @@ public class ChatListAdapter {
                 latestMsgQuery.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        String msg = null;
-                        boolean seen = false;
-                        String type = "text";
-                        if (snapshot.hasChild("messageContent")) {
-                            msg = snapshot.child("messageContent").getValue().toString();
-                        }
-                        if (snapshot.hasChild("seen")) {
-                            seen = (boolean) snapshot.child("seen").getValue();
-                            conversationListRef.child(chatUserID).child("seen").setValue(seen);
-                        }
+
                         if (snapshot.hasChild("time")) {
                             Time time = snapshot.child("time").getValue(Time.class);
                             holder.setLatestMsgTime(time.time());
                         }
+                        String msg = snapshot.child("messageContent").getValue().toString();
+                        boolean seen = (boolean) snapshot.child("seen").getValue();
                         if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
                             msg = "Image";
                         }
                         Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
-
+                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        String msg = null;
-                        boolean seen = false;
-                        String type = "text";
-                        if (snapshot.hasChild("messageContent")) {
-                            msg = snapshot.child("messageContent").getValue().toString();
-                        }
-                        if (snapshot.hasChild("seen")) {
-                            seen = (boolean) snapshot.child("seen").getValue();
-                            conversationListRef.child(chatUserID).child("seen").setValue(seen);
-                        }
                         if (snapshot.hasChild("time")) {
                             Time time = snapshot.child("time").getValue(Time.class);
                             holder.setLatestMsgTime(time.time());
                         }
+                        String msg = snapshot.child("messageContent").getValue().toString();
+                        boolean seen = (boolean) snapshot.child("seen").getValue();
                         if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
                             msg = "Image";
                         }
-                        Log.d(TAG, "onChildChanged: "+seen);;
+                        Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
+                        conversationListRef.child(chatUserID).child("seen").setValue(seen);
+
                     }
 
                     @Override
