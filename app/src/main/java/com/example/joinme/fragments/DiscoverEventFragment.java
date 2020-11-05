@@ -31,7 +31,6 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.LocationRenderable;
 import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,38 +40,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+//This fragment is used for event discovering. Users can select their interested events in this page.
 public class  DiscoverEventFragment extends Fragment implements LocationRenderable {
 
     public RecyclerView eventRecyclerView;
-    private Button study,entertainment, dailyLife;
-    private Button distance1,distance2,distance3;
-    private Button oneDay, oneWeek, oneMonth;
-    private String topic = "";
-    private int distanceLimit = Integer.MAX_VALUE;
-    private String date="";
-    private ArrayList<Event> events = new ArrayList<>();
-    private Editable target;
-    public Location curLoc;
+    private Button study,entertainment, dailyLife; //Buttons for selection
+    private Button distance1,distance2,distance3; //Buttons for selection
+    private Button oneDay, oneWeek, oneMonth; //Buttons for selection
+    private String topic = ""; //record the selected topic
+    private int distanceLimit = Integer.MAX_VALUE; //record the selected distanceLimit
+    private String date=""; //record the selected date limit
+    private ArrayList<Event> events = new ArrayList<>(); //record all events
+    private Editable target; //the searching target
+    public Location curLoc; //current Location
     public TitleBar bar;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
+
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int prev = ((NavBar) getActivity().findViewById(R.id.navbar)).getPrevSelected();
+        //int prev = ((NavBar) getActivity().findViewById(R.id.navbar)).getPrevSelected();
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.slide_in));
         setExitTransition(inflater.inflateTransition(R.transition.slide_out));
-
     }
     public DiscoverEventFragment(){
         super();
     }
+
+    //set the initial searching target
     public DiscoverEventFragment(Editable t){
         super();
         target=t;
-//        search();
     }
     @Nullable
     @Override
@@ -81,10 +83,10 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         EditText searchBar = v.findViewById(R.id.search_text);
         searchBar.setHint("search by name or ID");
         bar = v.findViewById(R.id.search_event_title);
-        bar.setOnClickBackListener((view)->{
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-        });
+        bar.setOnClickBackListener((view)-> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
         ImageButton searchButton = v.findViewById(R.id.search_button);
+
+        //click the search button to search
         searchButton.setOnClickListener(v1 -> {
             target = searchBar.getText();
             search();
@@ -96,10 +98,13 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         initEvents();
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLocation()));
         initButtons(v);
+        // when initialized with a searching task, call search() to show the result
         if(target!=null&&!target.toString().equals(""))
             search();
         return v;
     }
+
+    //initialize the buttons;
     private void initButtons(View v){
         study = v.findViewById( R.id.study_button);
         entertainment = v.findViewById(R.id.entertainment_button);
@@ -121,17 +126,19 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         setDateListener(oneDay,"oneDay");
         setDateListener(oneWeek,"oneWeek");
         setDateListener(oneMonth,"oneMonth");
-
-
     }
+
+    //set listener for topic buttons
     private void setTopicListener(Button b){
         b.setOnClickListener(v -> {
-            if(topic.equals(b.getText())){
+            if(topic.contentEquals(b.getText())){
+                //cancel selecting if the button is already selected;
                 topic="";
                 refreshRV();
                 b.setPressed(false);
             }
             else{
+                //cancel selecting other topic buttons
                 study.setPressed(false);
                 entertainment.setPressed(false);
                 dailyLife.setPressed(false);
@@ -142,14 +149,18 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
 
         });
     }
+
+    //set listener for distance limit buttons
     private void setDistanceLimitListener(Button b, int i){
         b.setOnClickListener(v->{
             if(distanceLimit==i){
+                //cancel selecting if the button is already selected;
                 distanceLimit = Integer.MAX_VALUE;
                 refreshRV();
                 b.setPressed(false);
             }
             else{
+                //cancel selecting other distance limit buttons
                 distance1.setPressed(false);
                 distance2.setPressed(false);
                 distance3.setPressed(false);
@@ -159,14 +170,18 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
             }
         });
     }
+
+    //set listener for date selecting buttons
     private void setDateListener (Button b, String d){
         b.setOnClickListener(v->{
             if(date.equals(d)){
+                //cancel selecting if the button is already selected;
                 date = "";
                 refreshRV();
                 b.setPressed(false);
             }
             else{
+                //cancel selecting other date selecting buttons
                 oneDay.setPressed(false);
                 oneWeek.setPressed(false);
                 oneMonth.setPressed(false);
@@ -177,6 +192,7 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
         });
     }
 
+    //search events with the given key word in its title or description
     public void search() {
         List<Event> selected = new ArrayList<>();
         initEvents();
@@ -190,83 +206,54 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
     }
 
 
+    //select the interested events
     private void refreshRV(){
         //Log.println(Log.INFO,"Discover configure:::",topic+" "+Integer.valueOf(distanceLimit)+" "+date);
-
         List<Event> selected = new ArrayList<>();
-
         for(int i=0;i<events.size();i++){
             Event e = events.get(i);
             if(!topic.equals("")&&!e.getEventCategory().equals(topic)){
                 continue;
             }
-
             if(e.getLocation().distanceTo(curLocation())>distanceLimit){
                 continue;
             }
-
             if(!date.equals("")){
                 long timestampDifference = e.getDatetime().getTimeStamp()-new DateTime().getTimeStamp();
                 Log.println(Log.INFO,"timestampDifference",timestampDifference+" "+timestampDifference / 1000 / 60 / 60 / 24);
                 if(e.getDatetime()==null)
                     continue;
-                if(date.equals("oneDay")){
-                    if(timestampDifference>((long)24)*60*60*1000){
-                        continue;
-                    }
-                }
-                else if(date.equals("oneWeek")){
-                    if(timestampDifference>((long)7)*24*60*60*1000){
-                        continue;
-                    }
-                }
-                else if(date.equals("oneMonth")){
-                    if(timestampDifference>((long)30)*24*60*60*1000){
-                        continue;
-                    }
+                switch (date) {
+                    case "oneDay":
+                        if (timestampDifference > ((long) 24) * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
+                    case "oneWeek":
+                        if (timestampDifference > ((long) 7) * 24 * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
+                    case "oneMonth":
+                        if (timestampDifference > ((long) 30) * 24 * 60 * 60 * 1000) {
+                            continue;
+                        }
+                        break;
                 }
             }
             selected.add(e);
         }
         eventRecyclerView.setAdapter(new DiscoverEventAdapter(selected,curLocation()));
-  }
-
-
-    /*
-    private void initTopicList(View v) {
-        RecyclerView topicRecyclerView = v.findViewById(R.id.topic_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        topicRecyclerView.setLayoutManager(layoutManager);
-        topicRecyclerView.setAdapter(new DiscoverConditionAdapter(initTopics(),this));
     }
-
-    private void initDistanceList(View v) {
-        RecyclerView disRecyclerView = v.findViewById(R.id.distance_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        disRecyclerView.setLayoutManager(layoutManager);
-        disRecyclerView.setAdapter(new DiscoverConditionAdapter(initDistances(),this));
-
-    }
-
-    private void initDateList(View v) {
-        RecyclerView datetimeRecyclerView = v.findViewById(R.id.date_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        datetimeRecyclerView.setLayoutManager(layoutManager);
-        datetimeRecyclerView.setAdapter(new DiscoverConditionAdapter(initDates(),this));
-    }*/
-
 
     public Location curLocation(){
         /*
         if(curLoc!=null){
             return curLoc;
         }*/
-        ActivityCompat.requestPermissions(getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
                 1);
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -281,19 +268,18 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
     }
 
 
-
+    //initialize the events by reading database
     public void initEvents(){
         curLoc = curLocation();
-
         events = new ArrayList<>();
         DateTime curDate = new DateTime();
-        Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+Long.valueOf(curDate.getTimeStamp()));
+        Log.println(Log.INFO,"datetime",curDate.getDate()+" "+curDate.getTime()+" "+ curDate.getTimeStamp());
         FirebaseAPI.rootRef.child("Event").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Event event = snapshot.getValue(Event.class);
-                DateTime edt = event.getDatetime();
-
+                //only collect the upcoming events
+                assert event != null;
                 if(curDate.getTimeStamp()<event.getDatetime().getTimeStamp())
                     events.add(event);
                 eventRecyclerView.setAdapter(new DiscoverEventAdapter(events,curLoc));
