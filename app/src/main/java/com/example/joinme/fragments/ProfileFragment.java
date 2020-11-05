@@ -250,13 +250,16 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String, Boolean> map = (HashMap<String, Boolean>) snapshot.getValue();
-                for(String id:map.keySet()){
-                    if(map.get(id)){
-                        followingUids.add(id);
-                        friendAdapter.notifyDataSetChanged();
-                        Log.d("Profile","getFollowing=>"+followingUids.toString());
+                if(map!=null){
+                    for(String id:map.keySet()){
+                        if(map.get(id)){
+                            followingUids.add(id);
+                            friendAdapter.notifyDataSetChanged();
+                            Log.d("Profile","getFollowing=>"+followingUids.toString());
+                        }
                     }
                 }
+
             }
 
             @Override
