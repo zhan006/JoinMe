@@ -83,6 +83,7 @@ public class ChatActivity extends AppCompatActivity {
     private Bitmap bitmap;
 
     private ValueEventListener chatListener;
+    private DatabaseReference messageListRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,11 +128,23 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        messageListRef = FirebaseAPI.rootRef.child("Chat").child(currentUid).child(friendUid);
         // set friend username in title bar
         TitleBar titleBar = findViewById(R.id.chat_title_bar);
         titleBar.setTitle(this.friendUsername);
         titleBar.setOnClickBackListener((v)-> {
-            FirebaseAPI.rootRef.child("Chat").child(currentUid).child(friendUid).removeEventListener(chatListener);
+            messageListRef.removeEventListener(chatListener);
+//            messageListRef.removeEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    Log.d(TAG, "onDataChange: remove !!!!!");
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
             finish();
         });
 
@@ -188,7 +201,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void loadMessages() {
-        FirebaseAPI.rootRef.child("Chat").child(this.currentUid).child(this.friendUid).addChildEventListener(new ChildEventListener() {
+        messageListRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String messageID = snapshot.getKey();
