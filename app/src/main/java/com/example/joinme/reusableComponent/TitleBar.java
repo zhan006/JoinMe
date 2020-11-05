@@ -50,6 +50,10 @@ public class TitleBar extends LinearLayout {
     public void setOnClickBackListener(OnClickListener listener){
         back.setOnClickListener(listener);
     }
+    public void setBackable(boolean visible){
+        if(visible) back.setVisibility(View.VISIBLE);
+        else back.setVisibility(View.INVISIBLE);
+    }
     public void setIconListener(OnClickListener listener){
         iconBtn.setOnClickListener(listener);
     }

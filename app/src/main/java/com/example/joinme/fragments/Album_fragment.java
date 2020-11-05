@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.adapter.AlbumAdapter;
 import com.example.joinme.database.FirebaseAPI;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class Album_fragment extends Fragment {
     private TitleBar bar;
     private RecyclerView album;
-    private ArrayList<String> imageUrls;
+    private ArrayList<String> imageUrls,imageKeys;
     private String uid;
     private AlbumAdapter adapter;
     public Album_fragment(String uid){
@@ -40,6 +41,7 @@ public class Album_fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.from(getContext()).inflate(R.layout.activity_photo_gallery,container,false);
         imageUrls = new ArrayList<String>();
+        imageKeys = new ArrayList<String>();
         initView(view);
         initAlbum();
         return view;
@@ -52,7 +54,10 @@ public class Album_fragment extends Fragment {
         });
         StaggeredGridLayoutManager lm = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
         album.setLayoutManager(lm);
-        adapter = new AlbumAdapter(imageUrls,getContext());
+        Log.d("album_frag",uid);
+        boolean isYou = uid.equals(((MainActivity) getActivity()).getUid());
+        Log.d("album","isYou"+isYou);
+        adapter = new AlbumAdapter(imageUrls,imageKeys,getContext(),uid,isYou);
         album.setAdapter(adapter);
     }
     public void initAlbum(){
@@ -60,8 +65,10 @@ public class Album_fragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String url = snapshot.getValue(String.class);
+                String key = snapshot.getKey();
                 Log.d("Profile", "onDataChange: photoUrl => "+url);
                 imageUrls.add(url);
+                imageKeys.add(key);
                 adapter.notifyDataSetChanged();
             }
 
