@@ -111,7 +111,6 @@
                 <TextView
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/friend_icon"
-
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Friends"
@@ -171,11 +170,11 @@
                 android:paddingRight="25dp"
                 android:text="I am a food Lover"/>
             <RelativeLayout
-                android:id = "@+id/text_upcoming_event"
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id = "@+id/text_upcoming_event"
                     android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_width="wrap_content"

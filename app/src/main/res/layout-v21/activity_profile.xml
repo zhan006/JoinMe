@@ -98,6 +98,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_marginTop="15dp"
+                android:id = "@+id/friend_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
