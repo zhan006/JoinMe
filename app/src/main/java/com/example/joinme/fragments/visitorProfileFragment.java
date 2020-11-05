@@ -149,6 +149,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
         renderEvent();
         renderUser();
         initAlbum();
+        initFriends(1);
         return view;
     }
 
@@ -156,8 +157,10 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         followButton.setText("follow");
+        isMyFollowing();
         followButton.setOnClickListener((v)->{
-            follow();
+            if(followButton.getText().equals("follow")) follow();
+            else unfollow();
             followButton.setText("Already followed");
         });
 
@@ -167,11 +170,31 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
+    private void isMyFollowing(){
+        String muid = ((MainActivity)getActivity()).getUid();
+        FirebaseAPI.getFirebaseData("UserFollowing/" + muid, new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String,Boolean> map = (HashMap)snapshot.getValue();
+                if(map.getOrDefault(pageUserID,false)) followButton.setText("Already followed");
+                else followButton.setText("follow");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     }
-
+    void unfollow(){
+        String uid = ((MainActivity)getActivity()).getUid();
+        FirebaseAPI.rootRef.child("UserFollowing").child(uid).child(pageUserID).setValue(false);
+    }
     public void setName(String name){
         this.name.setText(name);
     }
@@ -181,47 +204,7 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
     public void setAboutMe(String text){
         aboutMe.setText(text);
     }
-    /*
-    public void addAlbum(int image){
-        File output = new File(getContext().getExternalCacheDir(),"output.jpg");
-        try{
-            if(output.exists()){
-                output.delete();
-            }
-            output.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(Build.VERSION.SDK_INT>=24){
-            imageUri = FileProvider.getUriForFile(getActivity(),"com.example.joinme.fileprovider",output);
-        }
-        else{imageUri = Uri.fromFile(output);}
 
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-        startActivityForResult(intent,1);
-    }*/
-    public void addFriends(int image){
-        if(albums.getChildCount()<FRIEND_DISPLAY){
-            ImageView v= new ImageView(getContext());
-            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-            v.setImageResource(image);
-            albums.addView(v);
-        }
-    }
-    public List<Event> initDummyEvents(){
-        ArrayList<Event> events = new ArrayList<Event>();
-        events.add(new Event("Hang out together","38 Little Lonsdale",new DateTime()));
-        events.add(new Event("Eat dinner","1 Bouverie",new DateTime()));
-        events.add(new Event("League of Legends","netfish cafe",new DateTime()));
-        return events;
-    }
-    public ArrayList<Event> getParentEventList(){
-        return ((MainActivity)getActivity()).getEventList();
-    }
-    public User getParentUser(){
-        return ((MainActivity)getActivity()).getUser();
-    }
     @Override
     public void renderEvent() {
         ArrayList<String> eventIDs = new ArrayList<String>();
@@ -229,8 +212,6 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String,Boolean> map = (HashMap) snapshot.getValue();
-                Log.d("event",map.toString());
-                Bundle bd = new Bundle();
                 if(map!=null){
                     for(String k : map.keySet()){
                         if(map.get(k)){eventIDs.add(k);}
@@ -268,6 +249,29 @@ public class visitorProfileFragment extends Fragment implements UserRenderable, 
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    public void initFriends(int image){
+        FirebaseAPI.rootRef.child("FollowingUser").child(pageUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String, Boolean> map = (HashMap<String, Boolean>) snapshot.getValue();
+                if(map!=null){
+                    for(String id:map.keySet()){
+                        if(map.get(id)){
+                            followingUids.add(id);
+                            friendAdapter.notifyDataSetChanged();
+                            Log.d("Profile","getFollowing=>"+followingUids.toString());
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

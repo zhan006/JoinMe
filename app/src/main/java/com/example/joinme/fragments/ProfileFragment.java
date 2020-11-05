@@ -244,23 +244,6 @@ public class ProfileFragment extends Fragment implements UserRenderable, EventRe
             Toast.makeText(getContext(),"Activity not found",Toast.LENGTH_SHORT);
             // display error state to the user
         }
-//        File output = new File(getContext().getExternalCacheDir(),"output.jpg");
-//        try{
-//            if(output.exists()){
-//                output.delete();
-//            }
-//            output.createNewFile();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if(Build.VERSION.SDK_INT>=24){
-//            imageUri = FileProvider.getUriForFile(getActivity(),"com.example.joinme.fileprovider",output);
-//        }
-//        else{imageUri = Uri.fromFile(output);}
-//
-//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-//        startActivityForResult(intent,1);
     }
     public void initFriends(int image){
         FirebaseAPI.rootRef.child("FollowingUser").child(uid).addValueEventListener(new ValueEventListener() {

@@ -12,13 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.fragments.visitorProfileFragment;
 import com.example.joinme.objects.User;
+import com.example.joinme.utils;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +68,9 @@ public class AddFriendAdapter{
                 name = "";
             }
             this.name.setText(name.toString());
+        }
+        public void setItemViewListener(View.OnClickListener listener){
+            this.itemView.setOnClickListener(listener);
         }
 
         public TextView getAbout() {
@@ -114,6 +121,15 @@ public class AddFriendAdapter{
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
                 // retrieve user uid
                 String userID = getRef(position).getKey();
+
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Log.d("addfriend",userID);
+//                        FragmentManager fm = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
+//                        utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
+//                    }
+//                });
 //                Log.d(TAG, "addFriendAdaptor: userID => " + userID);
                 FirebaseAPI.getFirebaseData("User/" + userID, new ValueEventListener() {
                     @Override
@@ -130,15 +146,16 @@ public class AddFriendAdapter{
                         holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewUserProfile();
+                                viewUserProfile(userID);
                             }
                         });
+
 
                         // view user's profile
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewUserProfile();
+                                viewUserProfile(userID);
                             }
                         });
 
@@ -200,8 +217,9 @@ public class AddFriendAdapter{
     }
 
     // TODO: direct to profile page
-    private void viewUserProfile() {
-
+    private void viewUserProfile(String userID) {
+        FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
+        utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
     }
 
     private void followUser(String userID) {
