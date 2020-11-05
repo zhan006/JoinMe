@@ -12,12 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
+import com.example.joinme.fragments.AddFriendFragment;
+import com.example.joinme.fragments.visitorProfileFragment;
 import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -130,7 +134,7 @@ public class AddFriendAdapter{
                         holder.profilePhoto.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewUserProfile();
+                                viewUserProfile(v, userID);
                             }
                         });
 
@@ -138,7 +142,7 @@ public class AddFriendAdapter{
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewUserProfile();
+                                viewUserProfile(v, userID);
                             }
                         });
 
@@ -199,9 +203,15 @@ public class AddFriendAdapter{
         };
     }
 
-    // TODO: direct to profile page
-    private void viewUserProfile() {
+    private void viewUserProfile(View v, String userID) {
+        FragmentManager fragmentManager = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
 
+        visitorProfileFragment visitorProfileFragment = new visitorProfileFragment(userID);
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.main_fragment_container, visitorProfileFragment, null)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void followUser(String userID) {
