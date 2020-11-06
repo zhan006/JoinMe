@@ -115,7 +115,7 @@ public class AddFriendAdapter{
 
     public FirebaseRecyclerAdapter<User, ViewHolder> addFriendAdaptor(Query userQuery) {
 
-        Query test = FirebaseAPI.rootRef.child("User").child("gender").equalTo("Female");
+//        Query test = FirebaseAPI.rootRef.child("User").child("gender").equalTo("Female");
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(userQuery, User.class)
                 .build();
