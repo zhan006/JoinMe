@@ -107,28 +107,30 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 ((LeftMessageViewHolder) holder).setMessageImage(message.getMessageContent());
             }
         }
-
-        // after load message & image, update all messages as seen for current user
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // update all messages under this chat to be seen
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    if (dataSnapshot.hasChild("seen")) {
-                        Log.d(TAG, "onDataChange: child seen => "+
-                                dataSnapshot.child("seen").getValue().toString());
-                        dataSnapshot.child("seen").getRef().setValue(true);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        FirebaseAPI.getFirebaseData("Chat/"+this.currentUid+"/"+
-                this.friendUid, valueEventListener );
+//        if (!message.isSeen()) {
+//            // after load message & image, update all messages as seen for current user
+//            ValueEventListener valueEventListener = new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    // update all messages under this chat to be seen
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        if (dataSnapshot.hasChild("seen")) {
+//                            Log.d(TAG, "onDataChange: child seen => " +
+//                                    dataSnapshot.child("seen").getValue().toString());
+//                            dataSnapshot.child("seen").getRef().setValue(true);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            };
+//            FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
+//                    this.friendUid, valueEventListener);
+//            FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
+//        }
     }
 
     @Override

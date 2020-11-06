@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +17,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Time;
+import com.example.joinme.objects.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.FirebaseOptions;
@@ -40,9 +44,11 @@ public class ChatListAdapter {
     private String currentUid;
     private DatabaseReference chatRef;
     private DatabaseReference conversationListRef;
+    private User user;
 
-    public ChatListAdapter(Context context) {
+    public ChatListAdapter(Context context, User user) {
         this.context = context;
+        this.user = user;
         currentUid = FirebaseAPI.getUser().getUid();
         chatRef = FirebaseAPI.rootRef.child("Chat").child(currentUid);
         chatRef.keepSynced(true);
@@ -84,16 +90,14 @@ public class ChatListAdapter {
             } else {
                 return;
             }
-            Log.d(TAG, "setLatestMsg: current last msg=> "+latestMsg.getTypeface().toString());
             Log.d(TAG, "setLatestMsg: seen? "+seen);
             if (seen) {
                 unreadIcon.setVisibility(View.GONE);
-                latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.NORMAL);
+                latestMsg.setTypeface(null, Typeface.NORMAL);
             } else {
                 unreadIcon.setVisibility(View.VISIBLE);
                 latestMsg.setTypeface(latestMsg.getTypeface(), Typeface.BOLD);
             }
-            Log.d(TAG, "setLatestMsg: unread visibility: "+unreadIcon.getVisibility());
         }
 
         public ImageView getProfilePhoto() {
@@ -145,9 +149,10 @@ public class ChatListAdapter {
         }
     }
 
-    public FirebaseRecyclerAdapter<Conversation, ChatListViewHolder> chatListAdaptor() {
+    public FirebaseRecyclerAdapter<Conversation, ChatListViewHolder> chatListAdaptor(Query chatListQuery) {
+
         // order all messages by timestamp
-        Query chatListQuery = conversationListRef.orderByChild("time/timestamp");
+//        Query chatListQuery = conversationListRef.orderByChild("time/timestamp");
         chatListQuery.keepSynced(true);
         FirebaseRecyclerOptions<Conversation> options =
                 new FirebaseRecyclerOptions.Builder<Conversation>()
@@ -165,31 +170,40 @@ public class ChatListAdapter {
                 latestMsgQuery.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        String msg = null;
-                        boolean seen = false;
-                        String type = "text";
-                        if (snapshot.hasChild("messageContent")) {
-                            msg = snapshot.child("messageContent").getValue().toString();
-                        }
-                        if (snapshot.hasChild("seen")) {
-                            seen = (boolean) snapshot.child("seen").getValue();
-                            conversationListRef.child(chatUserID).child("seen").setValue(seen);
-                        }
+
                         if (snapshot.hasChild("time")) {
                             Time time = snapshot.child("time").getValue(Time.class);
                             holder.setLatestMsgTime(time.time());
+//                            conversationListRef.child(chatUserID).child("time").setValue(time);
+//                            FirebaseAPI.rootRef.child("ConversationList").child(chatUserID)
                         }
+                        String msg = snapshot.child("messageContent").getValue().toString();
+                        boolean seen = (boolean) snapshot.child("seen").getValue();
                         if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
                             msg = "Image";
                         }
-
+                        Log.d(TAG, "onChildAdded: "+seen);
                         holder.setLatestMsg(msg, seen);
-
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                        Log.d(TAG, "onChildChanged: child seen changed!!!!!!"+snapshot.child("seen").getValue().toString());
+//                        if (snapshot.hasChild("time")) {
+//                            Time time = snapshot.child("time").getValue(Time.class);
+//                            holder.setLatestMsgTime(time.time());
+//                        }
+                        String msg = snapshot.child("messageContent").getValue().toString();
+                        boolean seen = (boolean) snapshot.child("seen").getValue();
+                        if (snapshot.hasChild("type") && snapshot.child("type").getValue().toString().equals("image")) {
+                            msg = "Image";
+                        }
+                        if (seen) {
+                            Log.d(TAG, "onChildChanged: ");
+                            holder.latestMsg.setTypeface(holder.latestMsg.getTypeface(), Typeface.NORMAL);
+                        }
+                        Log.d(TAG, "onChildChanged: "+seen);
+                        holder.setLatestMsg(msg, seen);
                     }
 
                     @Override
@@ -227,6 +241,7 @@ public class ChatListAdapter {
                                 Intent chatIntent = new Intent(context, ChatActivity.class);
                                 chatIntent.putExtra("friendUid", chatUserID);
                                 chatIntent.putExtra("friendUsername", finalFriendUsername);
+                                chatIntent.putExtra("currentUsername", user.getUsername());
                                 context.startActivity(chatIntent);
                             }
                         });

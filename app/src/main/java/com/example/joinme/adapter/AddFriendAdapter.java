@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.joinme.MainActivity;
 import com.example.joinme.R;
 import com.example.joinme.activity.ChatActivity;
 import com.example.joinme.database.FirebaseAPI;
@@ -38,9 +39,12 @@ public class AddFriendAdapter{
     private static final String TAG = "AddFriendAdapter";
     private static final String currentUid = FirebaseAPI.getUser().getUid();
     private Context context;
+    private User user;
 
-    public AddFriendAdapter(Context context) {
+
+    public AddFriendAdapter(Context context, User user) {
         this.context = context;
+        this.user = user;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -109,28 +113,19 @@ public class AddFriendAdapter{
         }
     }
 
-    public FirebaseRecyclerAdapter<User, ViewHolder> addFriendAdaptor() {
-        // TODO: order users based on search condition
-        Query userQuery = FirebaseAPI.rootRef.child("User");
+    public FirebaseRecyclerAdapter<User, ViewHolder> addFriendAdaptor(Query userQuery) {
+
+        Query test = FirebaseAPI.rootRef.child("User").child("gender").equalTo("Female");
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(userQuery, User.class)
                 .build();
-//        Log.d(TAG, "addFriendAdaptor: userQuery => " + userQuery.toString());
+
         return new FirebaseRecyclerAdapter<User, ViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
                 // retrieve user uid
                 String userID = getRef(position).getKey();
 
-//                holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.d("addfriend",userID);
-//                        FragmentManager fm = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
-//                        utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
-//                    }
-//                });
-//                Log.d(TAG, "addFriendAdaptor: userID => " + userID);
                 FirebaseAPI.getFirebaseData("User/" + userID, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -216,9 +211,8 @@ public class AddFriendAdapter{
         };
     }
 
-    // TODO: direct to profile page
     private void viewUserProfile(String userID) {
-        FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         utils.replaceFragment(fm, new visitorProfileFragment(userID), null);
     }
 
@@ -235,6 +229,7 @@ public class AddFriendAdapter{
         chatActivity.putExtra("friendUid", userID);
         chatActivity.putExtra("friendUsername",
                 username);
+        chatActivity.putExtra("currentUsername", user.getUsername());
         context.startActivity(chatActivity);
     }
 }

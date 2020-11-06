@@ -32,6 +32,7 @@ import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.objects.Conversation;
 import com.example.joinme.objects.Message;
 import com.example.joinme.objects.Time;
+import com.example.joinme.objects.User;
 import com.example.joinme.reusableComponent.TitleBar;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +42,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -67,6 +69,7 @@ public class ChatActivity extends AppCompatActivity {
     private String friendUid;
     private String friendUsername;
     private String currentUid;
+    private String currentUsername;
 
     private MessageAdapter messageAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -81,6 +84,11 @@ public class ChatActivity extends AppCompatActivity {
     private FileInputStream is = null;
     private Bitmap bitmap;
 
+    private ChildEventListener loadMsgListener;
+    private ValueEventListener chatListener;
+    private DatabaseReference messageListRef;
+    private TitleBar titleBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,14 +96,15 @@ public class ChatActivity extends AppCompatActivity {
 
         friendUid = getIntent().getStringExtra("friendUid");
         friendUsername = getIntent().getStringExtra("friendUsername");
+        currentUsername = getIntent().getStringExtra("currentUsername");
         currentUid = FirebaseAPI.getUser().getUid();
-
 
         initView();
         initData();
 
         // monitor firebase messages
         loadMessages();
+        markMessageAsSeen();
 
         // send message
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -123,11 +132,26 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy ");
+        messageListRef.removeEventListener(loadMsgListener);
+        messageListRef.removeEventListener(chatListener);
+        super.onDestroy();
+    }
+
     private void initView() {
+        messageListRef = FirebaseAPI.rootRef.child("Chat").child(currentUid).child(friendUid);
         // set friend username in title bar
-        TitleBar titleBar = findViewById(R.id.chat_title_bar);
+        titleBar = findViewById(R.id.chat_title_bar);
         titleBar.setTitle(this.friendUsername);
-        titleBar.setOnClickBackListener((v)->finish());
+        titleBar.setOnClickBackListener((v)-> {
+            Log.d(TAG, "initView: ");
+            messageListRef.removeEventListener(loadMsgListener);
+            messageListRef.removeEventListener(chatListener);
+
+            finish();
+        });
 
         messageRecyclerView = findViewById(R.id.chat_message_list);
         inputText = findViewById(R.id.chat_input_message);
@@ -148,45 +172,54 @@ public class ChatActivity extends AppCompatActivity {
         messageRecyclerView.setAdapter(messageAdapter);
     }
 
-    // hardcode testing data
-    void initMessages() {
-        messageList.add(new Message("hello message 1", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 1-1", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-        messageList.add(new Message("hello message 2", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 3", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 3-3", "text",
-                "dVPWSkIeVHT3SPDfSMYPbAf52Pz2", new Time(), false));
-
-        messageList.add(new Message("hello message 4", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-
-        messageList.add(new Message("hello message 5", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 6", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        messageList.add(new Message("hello message 7", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false));
-        Message message = new Message("hello message 8", "text",
-                "qa6KACdJ0RYZfVDXLtpKL2HcxJ43", new Time(), false);
-        messageList.add(message);
-
-        Log.d(TAG, "onDataChange: datasnapshot message => "+message.toString());
-    }
-
-    // add to conversation list
     void add2Conversation(Time time) {
-        Conversation conversation = new Conversation(false, time);
-        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).setValue(conversation);
-        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid).setValue(conversation);
+
+        // update conversation time and name to get correct order
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid)
+                .child("time").setValue(time);
+        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid)
+                .child("username").setValue(friendUsername);
+
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
+            .child("time").setValue(time);
+        FirebaseAPI.rootRef.child("ConversationList").child(friendUid).child(currentUid)
+                .child("username").setValue(currentUsername);
+
+//        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                // if chat user doesn't have any chat with current user, create one and add it to Firebase
+////                if (!dataSnapshot.hasChild(friendUid)){
+//                Log.d(TAG, "onDataChange: add friend chat branch"+friendUid);
+//                Conversation currentConversation = new Conversation(time, friendUsername);
+//                Conversation friendConversation = new Conversation(time, currentUsername);
+//
+//                Map conversations = new HashMap();
+//                conversations.put("ConversationList/" + currentUid + "/" +friendUid, currentConversation);
+//                conversations.put("ConversationList/" + friendUid + "/" + currentUid, friendConversation);
+//
+//                FirebaseAPI.updateBatchData(conversations, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                        if (databaseError != null){
+//                            Log.d("CREATE_CONVERSATION", databaseError.getMessage().toString());
+//                        }
+//                    }
+//                });
+//
+//            }
+////            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     void loadMessages() {
-        FirebaseAPI.rootRef.child("Chat").child(this.currentUid).child(this.friendUid).addChildEventListener(new ChildEventListener() {
+        loadMsgListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String messageID = snapshot.getKey();
@@ -225,11 +258,12 @@ public class ChatActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        messageListRef.addChildEventListener(loadMsgListener);
     }
 
     void markMessageAsSeen(){
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        chatListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // update all messages under this chat to be seen
@@ -244,11 +278,13 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d(TAG, "onCancelled: cancel listener!");
             }
         };
-        FirebaseAPI.getFirebaseData("Chat/"+this.currentUid+"/"+
-                this.friendUid, valueEventListener );
+        messageListRef.addValueEventListener(chatListener);
+//        FirebaseAPI.getFirebaseData("Chat/" + this.currentUid + "/" +
+//                this.friendUid, chatListener);
+//        FirebaseAPI.rootRef.child("ConversationList").child(currentUid).child(friendUid).child("seen").setValue(true);
     }
 
     void sendMessage() {
@@ -271,6 +307,7 @@ public class ChatActivity extends AppCompatActivity {
 
             // Push current message to both current user's chat and friend's chat path
             Map<String, Object> messagePush = new HashMap<>();
+            Log.d(TAG, "sendMessage: message sent => "+message);
             messagePush.put(currentUserChatPath + "/" + messageID, message);
             messagePush.put(friendChatPath + "/" + messageID, message);
 
@@ -324,7 +361,7 @@ public class ChatActivity extends AppCompatActivity {
         if (photoFile != null) {
 
             // get uri of the file
-            // remembeer to add the permision
+            // remember to add the permission
             Uri photoURI = FileProvider.getUriForFile(this,
                     "com.example.joinme.fileprovider",
                     photoFile);
@@ -491,4 +528,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

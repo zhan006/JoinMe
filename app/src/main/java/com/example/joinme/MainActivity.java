@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String,Boolean> map = (HashMap) snapshot.getValue();
+//                Log.d("event",map.toString());
                 Bundle bd = new Bundle();
                 ArrayList attendingList = new ArrayList();
                 if(map!=null){
