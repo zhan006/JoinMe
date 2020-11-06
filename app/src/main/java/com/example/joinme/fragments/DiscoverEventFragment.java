@@ -195,9 +195,12 @@ public class  DiscoverEventFragment extends Fragment implements LocationRenderab
     //search events with the given key word in its title or description
     public void search() {
         List<Event> selected = new ArrayList<>();
-        initEvents();
+        //initEvents();
+        Log.println(Log.INFO,"target=",target.toString());
+        Log.println(Log.INFO,"eventsize=",Integer.toString(events.size()));
         for(int i=0;i<events.size();i++){
             Event e = events.get(i);
+
             if(e.getEventName().contains(target.toString())||e.getDescription().contains(target.toString())){
                 selected.add(e);
             }
