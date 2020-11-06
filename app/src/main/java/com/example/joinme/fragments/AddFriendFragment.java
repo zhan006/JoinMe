@@ -68,8 +68,8 @@ public class AddFriendFragment extends Fragment {
         });
 
         initUserList(v);
-        initGenderList(v);
-        initAgeList(v);
+//        initGenderList(v);
+//        initAgeList(v);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,21 +90,21 @@ public class AddFriendFragment extends Fragment {
         addFriendAdapter.startListening();
     }
 
-    private void initGenderList(View v) {
-        RecyclerView genderRecyclerView = v.findViewById(R.id.gender_search_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        genderRecyclerView.setLayoutManager(layoutManager);
-        genderRecyclerView.setAdapter(new SearchConditionAdapter(initGender()));
-    }
-
-    private void initAgeList(View v) {
-        RecyclerView ageRecyclerView = v.findViewById(R.id.age_search_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        ageRecyclerView.setLayoutManager(layoutManager);
-        ageRecyclerView.setAdapter(new SearchConditionAdapter(initAge()));
-    }
+//    private void initGenderList(View v) {
+//        RecyclerView genderRecyclerView = v.findViewById(R.id.gender_search_list);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        genderRecyclerView.setLayoutManager(layoutManager);
+//        genderRecyclerView.setAdapter(new SearchConditionAdapter(initGender()));
+//    }
+//
+//    private void initAgeList(View v) {
+//        RecyclerView ageRecyclerView = v.findViewById(R.id.age_search_list);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        ageRecyclerView.setLayoutManager(layoutManager);
+//        ageRecyclerView.setAdapter(new SearchConditionAdapter(initAge()));
+//    }
 
     void loadUsers() {
         FirebaseAPI.rootRef.child("User").addChildEventListener(new ChildEventListener() {
@@ -158,7 +158,6 @@ public class AddFriendFragment extends Fragment {
         } else {
             userQuery = FirebaseAPI.rootRef.child("User").orderByChild("username").startAt(target).endAt(target+"\uf8ff");
         }
-//        FirebaseAPI.rootRef.child("User").runTransaction();
         addFriendAdapter = adapter.addFriendAdaptor(userQuery);
         userRecyclerView.setAdapter(addFriendAdapter);
         addFriendAdapter.startListening();
