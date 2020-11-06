@@ -72,8 +72,10 @@ public class ManageEventAdapter extends RecyclerView.Adapter {
         if(mEventList!=null){
             Event event = mEventList.get(position);
             ((ViewHolder)holder).eventName.setText(event.getEventName());
+
             if(event.getDatetime()!=null) ((ViewHolder)holder).eventDatetime.setText(event.getDatetime().toString());
             if(event.getLocation()!=null) ((ViewHolder)holder).eventLocation.setText(event.getLocation().getAddress());
+            ((ViewHolder)holder).update.setText("Details");
             ((ViewHolder)holder).update.setOnClickListener((v)->{
                 EventDetailFragment f = new EventDetailFragment();
                 Bundle bd = new Bundle();
