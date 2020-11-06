@@ -16,12 +16,6 @@
         custom:backable="true" />
 
 
-
-
-
-
-
-
     <ScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -32,15 +26,11 @@
         >
 
 
-
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             >
-
-
 
 
             <TextView
@@ -102,12 +92,6 @@
                         android:textSize="15sp"
 
                         />
-
-
-
-
-
-
 
 
                 </RelativeLayout>
@@ -373,10 +357,6 @@
                         />
                 </LinearLayout>
 
-
-
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -409,13 +389,7 @@
                         android:layout_marginStart="120dp"
                         />
 
-
-
-
-
-
                 </LinearLayout>
-
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -430,39 +404,12 @@
                     >
                 </androidx.recyclerview.widget.RecyclerView>
 
-
-
-
-
-
-
             </LinearLayout>
-
-
 
 
         </LinearLayout>
 
     </ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </LinearLayout>

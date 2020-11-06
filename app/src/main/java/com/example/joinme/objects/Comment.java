@@ -1,9 +1,5 @@
 package com.example.joinme.objects;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,16 +7,6 @@ public class Comment {
     private static final String TAG = "Comment";
     private String commentID, userID, profileImgID, firstName, commentContent, dateTime, eventID;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Comment(String firstName, String lastName, String profileImgID, String commentContent){
-        this.firstName = firstName;
-        this.commentContent = commentContent;
-        this.profileImgID = profileImgID;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        this.dateTime = dateFormat.format(new Date());
-
-    }
 
     public Comment(User user, String userID, String eventID, String commentContent){
         this.userID = userID;

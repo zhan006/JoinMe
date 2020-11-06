@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,19 +29,14 @@ import com.example.joinme.R;
 import com.example.joinme.adapter.ManageEventAdapter;
 import com.example.joinme.database.FirebaseAPI;
 import com.example.joinme.interfaces.EventRenderable;
-import com.example.joinme.objects.DateTime;
 import com.example.joinme.objects.Event;
-import com.example.joinme.objects.Time;
-import com.example.joinme.reusableComponent.NavBar;
 import com.example.joinme.utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class EventManagementFragment extends Fragment implements EventRenderable {
     private EditText searchText;
@@ -125,7 +119,7 @@ public class EventManagementFragment extends Fragment implements EventRenderable
     public void renderEvent() {
         String uid = ((MainActivity)getActivity()).getUid();
         attendingEvent = getParentEvents();
-        Log.d("EventManagement",attendingEvent.toString());
+//        Log.d("EventManagement",attendingEvent.toString());
         if(attendingEvent!=null){
             eventRecycler.setAdapter(new ManageEventAdapter(this.attendingEvent,uid, ManageEventAdapter.EventType.ATTEND));
         }

@@ -64,27 +64,6 @@ public class CommentAdapter extends RecyclerView.Adapter{
     }
 
 
-//    public void addNewComment(Comment newComment){
-//        if(newComment != null){
-//            commentList.add(newComment);
-//            notifyDataSetChanged();
-//        }else{
-//            throw new IllegalArgumentException("Empty Comment!");
-//        }
-//    }
-
-    public void addNewReply(Comment newReply, int position){
-        pushReply(newReply);
-//        if(newReply != null){
-//            Log.d(TAG, "Refresh required! ");
-//            commentList.add(position+1,newReply);
-//            notifyDataSetChanged();
-//        }else{
-//            throw new IllegalArgumentException("Empty reply!");
-//        }
-    }
-
-
 
     @NonNull
     @Override
@@ -98,8 +77,7 @@ public class CommentAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Comment comment = commentList.get(position);
         String replyTo = "@" + comment.getFirstName() + " ";
-        String profileImgID = comment.getProfileImageId();
-        String commentContent = comment.getCommentContent();
+
 
 //      Load user's profile (user is the one who commented)
         User.loadProfileImage(context, comment.getUserID(), ((ViewHolder) holder).profilePhoto);
@@ -110,7 +88,6 @@ public class CommentAdapter extends RecyclerView.Adapter{
         ((ViewHolder) holder).replyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "You clicked Reply!", Toast.LENGTH_SHORT).show();
                 View commentView = LayoutInflater.from(view.getContext()).inflate(R.layout.event_comment_dialog, null);
                 dialog = new BottomSheetDialog(commentView.getContext());
                 EditText commentText = (EditText) commentView.findViewById(R.id.comment_dialog_textArea);
@@ -165,17 +142,13 @@ public class CommentAdapter extends RecyclerView.Adapter{
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if(error == null){
-//                    Snackbar.make(getView(),"Success!",Snackbar.LENGTH_SHORT).show();
                     Log.d(TAG, "onComplete: The comment is pushed online");
-
                 }
                 else{
-//                    Snackbar.make(getView(),error.getDetails(),Snackbar.LENGTH_SHORT).show();
-                    Log.d(TAG, "mission failed!!!!!!");
+                    Log.d(TAG, "Reply pushing failed!");
                 }
             }
         });
-
     }
 
 

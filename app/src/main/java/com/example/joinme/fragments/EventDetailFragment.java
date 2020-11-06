@@ -85,7 +85,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         View v = LayoutInflater.from(getContext()).inflate(R.layout.event_details, container, false);
         uid = ((MainActivity) getActivity()).getUid();
 
-
         TitleBar bar = v.findViewById(R.id.event_title_bar);
         bar.setOnClickBackListener((view)->{
             getActivity().getSupportFragmentManager().popBackStack();
@@ -150,7 +149,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
         eventHost = (TextView) v.findViewById(R.id.event_host_text);
 
         hostProfileBtn = (ImageButton) v.findViewById(R.id.event_organizer_profile_btn);
-//        organiserProfile.setOnClickListener(this);
 
         followOrganiser = (ImageButton) v.findViewById(R.id.event_follow_btn);
         followOrganiser.setOnClickListener(this);
@@ -167,7 +165,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
 
         makeComment = (Button) v.findViewById(R.id.event_details_comment_btn);
         makeComment.setOnClickListener(this);
-
 
         commentRecyclerView = v.findViewById(R.id.event_comments_area);
     }
@@ -188,14 +185,6 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
 
                 break;
 
-            case R.id.event_organizer_profile_btn:
-//                ProfileFragment f = new ProfileFragment();
-//                Bundle bd = new Bundle();
-//                bd.putSerializable("user", getOrganiser());
-//                f.setArguments(bd);
-//                FragmentManager fm = getActivity().getSupportFragmentManager();
-//                utils.replaceFragment(fm, f, "organiser_profile");
-                break;
 
             case R.id.event_message_icon:
                 // jump to chat activity
@@ -225,9 +214,8 @@ public class EventDetailFragment extends Fragment implements View.OnClickListene
                             dialog.dismiss();
                             user = ((MainActivity) getActivity()).getUser();
                             Comment newComment = new Comment(user, uid,currentEventID,replyContent);
-//                            addCommentAdapter.addNewComment(newComment);
                             createComment(newComment);
-                            Toast.makeText(getActivity(), "Comment successfully!",Toast.LENGTH_SHORT).show();
+
 
                         }else{
                             Toast.makeText(view.getContext(), "Cannot reply nothing", Toast.LENGTH_SHORT).show();
